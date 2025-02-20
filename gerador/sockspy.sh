@@ -30,7 +30,7 @@ tcpbypass_fun () {
 [[ -d $HOME/socks ]] && rm -rf $HOME/socks > /dev/null 2>&1
 cd $HOME && mkdir socks > /dev/null 2>&1
 cd socks
-patch="https://raw.githubusercontent.com/ELITE-MUNDIAL/main/ArchUt/backsocz"
+patch="https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/backsocz"
 arq="backsocz"
 wget $patch -o /dev/null
 unzip $arq > /dev/null 2>&1
