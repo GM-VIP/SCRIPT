@@ -87,7 +87,7 @@ read opcao
 case $opcao in
 1)
 msg -bar
-wget --no-check-certificate -O Instalador-Shadowsocks-R.sh https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/ArchUt/SHADOWSOCK-R/Instalador-Shadowsocks-R.sh > /dev/null 2>&1
+wget --no-check-certificate -O Instalador-Shadowsocks-R.sh https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/SHADOWSOCK-R/Instalador-Shadowsocks-R.sh > /dev/null 2>&1
 chmod +x Instalador-Shadowsocks-R.sh
 ./Instalador-Shadowsocks-R.sh 2>&1 | tee Instalador-Shadowsocks-R.log
 ;;
