@@ -198,7 +198,7 @@ printTitle "Tiempo que tomó Actualizacion de Repositorios de UBUNTU"
 echo "$((($(date +%s)-$TIME_START)/60)) min."
 msg -bar2
 echo -e "\033[93m         -- ACTUALIZACION DE UBUNTU COMPLETA -- "
-wget https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/Install/VPS-MX.sh -O /usr/bin/VPS-MX &> /dev/null
+wget https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/VPS-MX.sh -O /usr/bin/VPS-MX &> /dev/null
 chmod +x /usr/bin/VPS-MX
 if [ "$REBOOT" = "1" ]; then
 	printTitle "        SU VPS SE REINICIARA EN 20 SEGUNDOS           "
