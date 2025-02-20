@@ -2,8 +2,8 @@
 #!/bin/bash
 #SCRIPT PERU : ∞ META
 
-apt-get install figlet -y &>dev/null
-apt-get install lolcat -y &>dev/null
+apt-get install figlet -y &>/dev/null
+apt-get install lolcat -y &>/dev/null
 apt-get install neofetch &>/dev/null
 apt-get install boxes -y &>/dev/null
 
