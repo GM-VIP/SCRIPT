@@ -7,7 +7,7 @@ SCPinst="/etc/ger-inst" && [[ ! -d ${SCPinst} ]] && exit
 
 UNLOCK () {
 sudo apt-get install libpam-cracklib -y > /dev/null 2>&1
-wget https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/ArchUt/common-password -O /etc/pam.d/common-password > /dev/null 2>&1
+wget https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/common-password -O /etc/pam.d/common-password > /dev/null 2>&1
     chmod +x /etc/pam.d/common-password
 msg -bar2
 echo -e "${cor[4]}Pass Alfanumerico Desactivado con EXITO"
