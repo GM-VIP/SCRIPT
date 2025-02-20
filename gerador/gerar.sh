@@ -1,10 +1,24 @@
+## ACTUALIZACIÓN 20/02/2025
 #!/bin/bash
-# MODD BY: DESARROLLADOR
 
 clear
 [[ -e /etc/newadm-instalacao ]] && BASICINST="$(cat /etc/newadm-instalacao)" || 
 BASICINST="ADMbot.sh apacheon.sh blockBT.sh budp.sh Crear-Demo.sh C-SSR.sh dns-netflix.sh dropbear.sh fai2ban.sh gestor.sh menu message.txt openvpn.sh paysnd.sh PDirect.py PGet.py POpen.py ports.sh PPriv.py PPub.py shadowsocks.sh Shadowsocks-libev.sh Shadowsocks-R.sh sockspy.sh speed.sh speedtest.py squid.sh squidpass.sh ssl.sh sslorig.sh tcp.sh ultrahost Unlock-Pass-VULTR.sh usercodes utils.sh v2ray.sh"
 IVAR="/etc/http-instas"
+
+# CONFIGURACIÓN GENERAL
+VERSION="2.0"
+AUTOR="GOSHT_DEV"
+GITHUB="ADM-PERU/VIP"
+
+# CONFIGURACIÓN DE COLORES
+CO_TITULO="\033[1;36m"
+CO_MENU="\033[1;37m"
+CO_SELECCION="\033[1;32m"
+CO_ADVERTENCIA="\033[1;31m"
+CO_INFO="\033[1;33m"
+CO_RESET="\033[0m"
+
 mine_port4 () {
 PT=$(lsof -V -i tcp -P -n | grep -v "ESTABLISHED" |grep -v "COMMAND" | grep "LISTEN")
 for porta in `echo -e "$PT" | cut -d: -f2 | cut -d' ' -f1 | uniq`; do
@@ -13,17 +27,25 @@ for porta in `echo -e "$PT" | cut -d: -f2 | cut -d' ' -f1 | uniq`; do
 done
 }
 
-BARRA="\033[1;36m-----------------------------------------------------------------\033[0m"
-
-echo -e "$BARRA"
 mine_port4
-echo -e "$BARRA"
-cat << EOF
 
-           KEY GENERADOR : 🐲𝐎𝐖𝐍𝐄𝐑 : 𝐆𝐇𝐎𝐒𝐓🐲          
-           INSTALACIONES: $(cat $IVAR)
-           
-EOF
+# FUNCIONES DE INTERFAZ
+draw_header() {
+    clear
+    echo -e "${CO_TITULO}"
+    echo -e "╔══════════════════════════════════════════════════════════╗"
+    echo -e "║             🐲 GENERADOR DE KEYS - V${VERSION} 🐲             ║"
+    echo -e "║                Desarrollado por: ${AUTOR}               ║"
+    echo -e "╚══════════════════════════════════════════════════════════╝${CO_RESET}"
+    echo -e ""
+}
+
+draw_line() {
+    echo -e "${CO_TITULO}══════════════════════════════════════════════════════════${CO_RESET}"
+}
+
+BARRA="\033[1;36m══════════════════════════════════════════════════════════\033[0m"
+
 SCPT_DIR="/etc/SCRIPT"
 [[ ! -e ${SCPT_DIR} ]] && mkdir ${SCPT_DIR}
 INSTA_ARQUIVOS="ADMVPS.zip"
@@ -35,6 +57,9 @@ MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1
 MIP2=$(wget -qO- ipv4.icanhazip.com)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
 }
+
+meu_ip
+
 mudar_instacao () {
 while [[ ${var[$value]} != 0 ]]; do
 [[ -e /etc/newadm-instalacao ]] && BASICINST="$(cat /etc/newadm-instalacao)" || BASICINST="menu PGet.py ports.sh ADMbot.sh message.txt usercodes sockspy.sh POpen.py PPriv.py PPub.py PDirect.py speedtest.py speed.sh utils.sh dropbear.sh apacheon.sh openvpn.sh shadowsocks.sh ssl.sh squid.sh"
@@ -66,12 +91,15 @@ echo "$BASICINST ${var[$value]}" > /etc/newadm-instalacao
 fi
 done
 }
+
 bot_menu () {
 source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/BOT/main/confbot.sh)
 }
+
 encript () {
 source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/ENCRYPTOR/main/Obsf-Lite.sh)
 }
+
 fun_list () {
 rm ${SCPT_DIR}/*.x.c &> /dev/null
 unset KEY
@@ -337,27 +365,34 @@ rm $HOME/instger.sh &>/dev/null
 }
 
 #MENU PRINCIPAL GENERADOR
-meu_ip
+main_menu() {
+while true; do
+clear && clear
+draw_header
 unset PID_GEN
 PID_GEN=$(ps x|grep -v grep|grep "http-server.sh")
-[[ ! $PID_GEN ]] && PID_GEN="\033[1;31m OFFLINE" || PID_GEN="\033[1;32m ONLINE"
-echo -e "$BARRA"
+[[ ! $PID_GEN ]] && PID_GEN="\033[1;31m Offline\033[0m" || PID_GEN="\033[1;32m Online\033[0m"
 echo -e "Directorio de los archivos repasados \033[1;31m${SCPT_DIR}\033[0m"
-echo -e "$BARRA"
-echo -e "[1] ➳ GENERAR 1 KEY ALEATORIA"
-echo -e "[2] ➳ ELIMINAR-VERIFICAR KEYS"
-echo -e "[3] ➳ LIMPIAR REGISTRO DE KEYS USADAS"
-echo -e "[4] ➳ ALTERAR ARCHIVOS DE KEY BASICA"
-echo -e "[5] ➳ ENCENDER - APAGAR GENERADOR $PID_GEN\033[0m"
-echo -e "[6] ➳ VER REGISTRO"
-echo -e "[7] ➳ CAMBIAR CREDITOS"
-echo -e "[8] ➳ ACTUALIZAR GENERADOR   "
-echo -e "[9] ➳ DESINTALAR GENERADOR   "
-echo -e "[10]➳ MENU : BOT TELEGRAM   "
-echo -e "[11]➳ ENCRIPTADOR SHC-LITE [BY:RAZHIEL]   "
-echo -e "[0] ➳ SALIR"
-echo -e "$BARRA"
-echo -n "Opción: "
+echo -e "                INSTALACIONES: $(cat $IVAR)               "
+echo
+draw_line
+echo -e "[1] ➳ GENERAR 1 KEY ALEATORIA "
+echo -e "[2] ➳ ELIMINAR-VERIFICAR KEYS "
+echo -e "[3] ➳ LIMPIAR REGISTRO DE KEYS USADAS "
+echo -e "[4] ➳ ALTERAR ARCHIVOS DE KEY BASICA "
+draw_line
+echo -e "[5] ➳ ENCENDER/APAGAR - GENERADOR: $PID_GEN "
+echo -e "[6] ➳ VER REGISTRO "
+echo -e "[7] ➳ CAMBIAR CREDITOS "
+draw_line
+echo -e "[8] ➳ ACTUALIZAR GENERADOR "
+echo -e "[9] ➳ DESINTALAR GENERADOR "
+draw_line
+echo -e "[10]➳ MENU BOT GENERADOR "
+echo -e "[11]➳ ENCRIPTADOR SHC-Lite "
+echo -e "[0] ➳ SALIR "
+draw_line
+echo -n ">>> Opción: "
 read opcion
 case $opcion in
 1)gerar_key;;
@@ -372,8 +407,15 @@ case $opcion in
 9)desint_geb;;
 10)bot_menu;;
 11)encript;;
-0)exit;;
+0)cd $HOME && clear
+  clear
+  exit 0
+  ;;
 esac
-/usr/bin/gerar.sh
+done
+}
 
+# INICIAR MENÚ PRINCIPAL
+main_menu
+/usr/bin/gerar.sh
 #fin
