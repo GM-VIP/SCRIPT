@@ -67,10 +67,10 @@ fi
 done
 }
 bot_menu () {
-source <(curl -sSL https://raw.githubusercontent.com/ELITE-MUNDIAL/BOT/main/confbot.sh)
+source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/BOT/main/confbot.sh)
 }
 encript () {
-source <(curl -sSL https://raw.githubusercontent.com/ELITE-MUNDIAL/LITE/main/Obsf-Lite.sh)
+source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/ENCRYPTOR/main/Obsf-Lite.sh)
 }
 fun_list () {
 rm ${SCPT_DIR}/*.x.c &> /dev/null
@@ -329,7 +329,7 @@ fi
 }
 
 atualizar_geb () {
-wget -O $HOME/instger.sh https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/instgerador.sh &>/dev/null
+wget -O $HOME/instger.sh https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/instgerador.sh &>/dev/null
 chmod +x $HOME/instger.sh
 cd $HOME
 ./instger.sh
