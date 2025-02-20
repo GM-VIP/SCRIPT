@@ -116,7 +116,7 @@ SCPidioma="${SCPdir}/idioma"
 local LINGUAGE=$(cat ${SCPidioma})
 [[ -z $LINGUAGE ]] && LINGUAGE=es
 [[ $LINGUAGE = "es" ]] && echo "$@" && return
-[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/Install/trans &> /dev/null
+[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 [[ ! -e /etc/texto-adm ]] && touch /etc/texto-adm
 source /etc/texto-adm
 if [[ -z "$(echo ${texto[$@]})" ]]; then
@@ -166,7 +166,7 @@ tput clear && clear
     }
      function_verify () {
   ### INTALAR VERCION DE SCRIPT
-  v1=$(curl -sSL "https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/VerScrpt/VercOld")
+  v1=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercOld")
   echo "$v1" > /etc/versin_script
   [[ ! -e /usr/local/lib/lsystembin2 ]] && touch /usr/local/lib/lsystembin2
   }
@@ -1173,7 +1173,7 @@ echo -ne "➳ DISFRUTE DE SU VPS•PERU Y GRACIAS POR CONTAR CON NOSOTROS.   \n"
 echo -ne "➳ 🔰[ADMINISTRATOR]🔰 : 🐲[GHOST]🐲           \n"
 echo -ne "➳ 🔰PARTNES : [LATINOAMERICA] ✓ [✦҈͜͡➳👻𝕲𝔥𝔬𝔰𝔱•✓☆ۣۜۜ͜͡🌹]           \n"
 echo -ne "➳ PORFAVOR CUALQUIER ERROR DE LA SCRIPT CONTACTAR VIA TELEGRAM CON:          \n"
-echo -ne "➳ @GENKEY_BOT       \n"
+echo -ne "➳ @JS_Developer_PY       \n"
 msg -bar
 }
 
