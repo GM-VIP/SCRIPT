@@ -2,7 +2,7 @@
 #19/06/2021
 
 echo "/root/velocity" > /bin/vlc && chmod +x /bin/vlc > /dev/null 2>&1
-link_bin="https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/gerador/speedtest"
+link_bin="https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/gerador/speedtest"
 [[ ! -e /bin/speedtest ]] && wget -O /bin/speedtest ${link_bin} > /dev/null 2>&1 && chmod +x /bin/speedtest
 
 inst_components () {
