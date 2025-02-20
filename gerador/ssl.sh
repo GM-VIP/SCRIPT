@@ -408,7 +408,7 @@ echo -e "Creando Directorios" | pv -qL 30
 [[ -d /bin/ejecutar ]] && rm -f /bin/ejecutar/proxy3.js || mkdir /bin/ejecutar
 cd /bin/ejecutar
 echo -e "Descargando Ficheros JS" | pv -qL 30
-wget -q https://raw.githubusercontent.com/ADM-PERU/VIP/main/ArchUt/proxy3.js
+wget -q https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/proxy3.js
 echo -e "\033[1;32mHabilitando NODE WS" | pv -qL 30
 #
 echo -e "Iniciando NODE WS" | pv -qL 30
@@ -470,7 +470,7 @@ echo -e "Creando Directorios" | pv -qL 15
 [[ -d /bin/ejecutar ]] && echo "Fichero Existente" || mkdir /bin/ejecutar
 cd /bin/ejecutar
 echo -e "Descargando Ficheros JS" | pv -qL 15
-wget -O httpsProxy.js -q https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/ArchUt/proxy3.js
+wget -O httpsProxy.js -q https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/proxy3.js
 echo -e "\033[1;32mHabilitando NODE WS" | pv -qL 15
 #
 echo -e "Iniciando NODE WS" | pv -qL 15
