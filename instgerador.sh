@@ -5,30 +5,88 @@ SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0dNLVZJUC9TQ1JJUFQvbWFpbi9
 SUB_DOM='base64 -d'
 rm $(pwd)/$0
 
+# Función para limpiar archivos temporales
+cleanup() {
+    rm -rf $HOME/lista-arq
+    rm -rf $HOME/gerar.sh
+    rm -rf $HOME/http-server.py
+    history -c
+    echo "Limpieza completada."
+}
+
+trap cleanup EXIT
+
 if [ `whoami` != 'root' ] 
 then 
 clear && clear
-echo
-echo -e "\e[1;31m AL PARECER TU VPS NO POSEE PERMISOS ROOT PARA INSTALAR \e[0m"
+tput cup 6 0
+echo -e "\e[1;31m PARA PODER USAR EL INSTALADOR ES NECESARIO SER ROOT\n AUN NO SABES COMO INICAR COMO ROOT?\n DIGITA ESTE COMANDO EN TU TERMINAL \e[1;32m( sudo -i )\e[0m" 
+rm * 
 sleep 1
-echo
-echo -e  "\033[1;47;30m       APLICANDO ACCESO ROOT       \033[0m"
-sudo service ssh restart
+checkroot
+fi
+
+###ROOT_ACCESS
+checkroot (){
+clear && clear
+tput cup 6 0
+echo -e "\e[1;33m     DESEAS APLICAR ACCESO ROOT FORMAL A TU VPS???   \e[0m"
+read -p "    Responde [ s | n ] : " -e -i "n" x
+[[ $x = @(s|S|y|Y) ]] && vpsroot || exit
+vpsroot () {
+clear && clear
+tput cup 6 0
+echo -e  "\033[1;32m             >>>> APLICANDO ACCESO ROOT <<<<<                  \033[1;34m "
+msg -bar
+sudo service ssh restart > /dev/null 2>&1
 sed -i "s;PermitRootLogin prohibit-password;PermitRootLogin yes;g" /etc/ssh/sshd_config
 sed -i "s;PermitRootLogin without-password;PermitRootLogin yes;g" /etc/ssh/sshd_config
 sed -i "s;PasswordAuthentication no;PasswordAuthentication yes;g" /etc/ssh/sshd_config
-echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-echo -e " Escriba su contraseña root actual o cambiela"
-echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
+msg -bar
+echo -e "\e[4;49;37m Escriba su contraseña root actual o coloque una nueva. \e[0m"
+msg -bar
 read  -p " Nuevo passwd: " pass
-(echo $pass; echo $pass)|passwd >/dev/null
+(echo $pass; echo $pass)|passwd 2>/dev/null
 sleep 1s
-echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-echo -e "\e[32m Configuraciones aplicadas con exito!"
-echo -e "\e[32m Su contraseña ahora es: \e[33m$pass\e[0m"
-sudo service ssh restart > /dev/null
-echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-fi
+msg -bar
+echo -e "\e[1;32m CONFIGURACIONES APLICADAS CON EXITO!!!! "
+echo -e "\e[1;32m Su contraseña ahora es: \e[1;31m$pass\e[0m"
+sudo service ssh restart > /dev/null 2>&1
+msg -bar
+}
+}
+
+os_system() {
+  system=$(cat -n /etc/issue | grep 1 | cut -d ' ' -f6,7,8 | sed 's/1//' | sed 's/      //')
+  distro=$(echo "$system" | awk '{print $1}')
+
+  case $distro in
+  Debian) vercin=$(echo $system | awk '{print $3}' | cut -d '.' -f1) ;;
+  Ubuntu) vercin=$(echo $system | awk '{print $2}' | cut -d '.' -f1,2) ;;
+  esac
+}
+
+repo() {
+ link="https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/Source-List/$1.list"
+  case $1 in
+  8 | 9 | 10 | 11 | 16.04 | 18.04 | 20.04 | 20.10 | 21.04 | 21.10 | 22.04 | 24.04) wget -O /etc/apt/sources.list ${link} &>/dev/null ;;
+  esac
+}
+
+entrada (){
+echo "====================================================="
+echo -e "                     \e[93mB I E N V E N I D O !!!\e[0m"
+echo "====================================================="
+tput bold
+echo "
+INSTALARAS EL GENERADOR OFICIAL DE LLAVES PARA LOS SCRIPT
+VIP-GHOST. HAS BUEN USO DE LAS LLAVES Y DEL GENERADOR....."
+echo "====================================================="
+echo
+sleep 1.5
+echo -e "     \e[1;97m     IDENTIFICANDO SISTEMA OPERATIVO   \e[0m"
+echo -e "          \e[1;32m         | $distro $vercin |"
+}
 
 check_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
@@ -65,9 +123,9 @@ function_verify () {
   }
 }
 
-#echo -e "verificando..."
-#check_ip
-#function_verify
+echo -e " ✓Verificando: "
+check_ip
+function_verify
 
 ofus () {
 unset server
