@@ -1,4 +1,6 @@
+## Actualización 20/02/2025
 #!/bin/bash
+
 IVAR="/etc/http-instas"
 SCPT_DIR="/etc/SCRIPT"
 SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0dNLVZJUC9TQ1JJUFQvbWFpbi9nZXJhZG9y"
