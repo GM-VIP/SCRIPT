@@ -1,7 +1,7 @@
 #!/bin/bash
 IVAR="/etc/http-instas"
 SCPT_DIR="/etc/SCRIPT"
-SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0VMSVRFLU1VTkRJQUwvVklQL21haW4vZ2VyYWRvcg=="
+SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0dNLVZJUC9TQ1JJUFQvbWFpbi9nZXJhZG9y"
 SUB_DOM='base64 -d'
 rm $(pwd)/$0
 
@@ -40,7 +40,7 @@ echo "$IP" > /usr/bin/vendor_code
 function_verify () {
 #echo -e "verificando..."
 # check_ip
- permited=$(curl -sSL "https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/Control/Control-IP")
+ permited=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Control/Control-IP")
   [[ $(echo $permited|grep "${IP}") = "" ]] && {
   clear
   echo -e "\n\n\n\e[31m====================================================="
@@ -58,9 +58,9 @@ function_verify () {
   echo -e "\e[32m=====================================================\n\n\n\e[0m"
   sleep 5
   CIDdir=/etc/ADM-db && [[ ! -d ${CIDdir} ]] && mkdir ${CIDdir}
-  v1=$(curl -sSL "https://raw.githubusercontent.com/ELITE-MUNDIAL/BOT/main/Vercion")
+  v1=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Vercion")
   echo "$v1" > /etc/ADM-db/vercion
-  echo "@GENKEY_BOT" > ${CIDdir}/resell
+  echo "@VIP_GENKEY_BOT" > ${CIDdir}/resell
   
   }
 }
@@ -130,7 +130,7 @@ echo -e "\033[1;31m ▪︎\033[1;32mRecibido Con Éxito!!!"
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 } || echo -e "\033[1;31m ▪︎\033[1;31mFallo (No Se Recibió)"
 done
-[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/Install/trans &> /dev/null
+[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 [[ -e /bin/http-server.py ]] && mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
 [[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
