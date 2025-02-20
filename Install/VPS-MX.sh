@@ -1,3 +1,4 @@
+## ACTUALIZACIÓN 20/02/2025
 #!/bin/bash
 #SCRIPT PERU : ∞ META
 
@@ -39,109 +40,35 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 }
 
 ### PAQUETES PRINCIPALES 
-clear && clear
-echo
+dependencias() {
+  dpkg --configure -a >/dev/null 2>&1
+  apt -f install -y >/dev/null 2>&1
+  soft="sudo bsdmainutils zip unzip ufw curl grep python python3 python3-pip screen openssl cron iptables lsof pv boxes cowsay at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less "
+  for i in $soft; do
+    paquete="$i"
+    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || apt-get install $i -y &>/dev/null
+    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+   echo -e "\033[97m       $ESTATUS................. $i "
+  done
+}
+
+### PAQUETES PRINCIPALES 
+tput clear
 msg -bar
-echo -e "\033[41m  INSTALACION DE PAQUETES NECESARIOS PARA VPS-PERU  \e[0m"
-echo -e "\033[100m               ESPERE PORFAVOR...                    \e[0m"
+echo -e "\033[97m"
+echo -e "\033[41m >>INSTALACION DE PAQUETES NECESARIOS PARA VPS-PERU<< "
+echo -e "\033[0;37m             \033[100m ESPERE PORFAVOR... "
+echo -e "\033[97m"
 msg -bar
-echo
-#grep
-apt-get install grep -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "grep"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "grep"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando grep................. $ESTATUS "
-#net-tools
-apt-get install net-tools -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "net-tools"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "net-tools"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando net-tools............ $ESTATUS "
-#gawk
-apt-get install gawk -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando gawk................. $ESTATUS "
-#mlocate
-apt-get install mlocate -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando mlocate.............. $ESTATUS "
-#lolcat gem
-apt-get install lolcat -y &>/dev/null
-sudo gem install lolcat &>/dev/null
-[[ $(dpkg --get-selections|grep -w "lolcat"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "lolcat"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando lolcat............... $ESTATUS "
-#at
-[[ $(dpkg --get-selections|grep -w "at"|head -1) ]] || apt-get install at -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "at"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "at"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando at................... $ESTATUS "
-#nano
-[[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || apt-get install nano -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando nano................. $ESTATUS "
-#bc
-[[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando bc................... $ESTATUS "
-#lsof
-[[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] || apt-get install lsof -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando lsof................. $ESTATUS "
-#figlet
-[[ $(dpkg --get-selections|grep -w "figlet"|head -1) ]] || apt-get install figlet -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "figlet"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "figlet"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando figlet............... $ESTATUS "
-#cowsay
-[[ $(dpkg --get-selections|grep -w "cowsay"|head -1) ]] || apt-get install cowsay -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "cowsay"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "cowsay"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando cowsay............... $ESTATUS "
-#screen
-[[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando screen............... $ESTATUS "
-#python
-[[ $(dpkg --get-selections|grep -w "python"|head -1) ]] || apt-get install python -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "python"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "python"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando python............... $ESTATUS "
-#python3
-[[ $(dpkg --get-selections|grep -w "python3"|head -1) ]] || apt-get install python3 -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "python3"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "python3"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando python3.............. $ESTATUS "
-#python3-pip
-[[ $(dpkg --get-selections|grep -w "python3-pip"|head -1) ]] || apt-get install python3-pip -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "python3-pip"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "python3-pip"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando python3-pip.......... $ESTATUS "
-#curl
-[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || apt-get install curl -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando curl................. $ESTATUS "
-#ufw
-[[ $(dpkg --get-selections|grep -w "ufw"|head -1) ]] || apt-get install ufw -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "ufw"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "ufw"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando ufw.................. $ESTATUS "
-#unzip
-[[ $(dpkg --get-selections|grep -w "unzip"|head -1) ]] || apt-get install unzip -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "unzip"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "unzip"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando unzip................ $ESTATUS "
-#zip
-[[ $(dpkg --get-selections|grep -w "zip"|head -1) ]] || apt-get install zip -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "zip"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-[[ $(dpkg --get-selections|grep -w "zip"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando zip.................. $ESTATUS "
+dependencias
+#IpTables
+echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections 
+echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections 
+[[ $(dpkg --get-selections|grep -w "iptables-persistent"|head -1) ]] || apt-get install iptables-persistent -y &>/dev/null 
+[[ $(dpkg --get-selections|grep -w "iptables-persistent"|head -1) ]] || ESTATUS=`echo -e   "\033[91mPAQ ERROR"` &>/dev/null 
+[[ $(dpkg --get-selections|grep -w "iptables-persistent"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null 
+echo -e "\033[97m       $ESTATUS................. Iptables "
 #apache2
 [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] || {
  apt-get install apache2 -y &>/dev/null
@@ -150,9 +77,10 @@ echo -e "\033[97m    # Instalando zip.................. $ESTATUS "
  }
 [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
 [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m    # Instalando apache2.............. $ESTATUS "
+echo -e "\033[97m       $ESTATUS................. apache2 "
 msg -bar2
-echo -e "\033[0;37m »»» Presiona \033[0;37m\033[41m ENTER \033[0;37m Para continuar." && read enter
+echo -e "\033[1;39m Presiona Enter Para continuar" && read enter
+
 
 ### FIXEADOR PARA SISTEMAS 86_64
 idfix64_86 () {
@@ -199,6 +127,7 @@ MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1
 MIP2=$(wget -qO- ifconfig.me)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
 }  
+
 function_verify () {
   ### INTALAR VERCION DE SCRIPT
   v1=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercOld")
