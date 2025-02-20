@@ -1,6 +1,6 @@
 ## ACTUALIZACIÓN 20/02/2025
+# SCRIPT PERU : ∞ META
 #!/bin/bash
-#SCRIPT PERU : ∞ META
 
 apt-get install figlet -y &>/dev/null
 apt-get install lolcat -y &>/dev/null
@@ -43,7 +43,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
-  soft="sudo bsdmainutils zip unzip ufw curl grep python python3 python3-pip screen openssl cron iptables lsof pv boxes cowsay at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less "
+  soft="sudo bsdmainutils zip unzip ufw curl grep python python3 python3-pip screen openssl cron iptables lsof pv boxes cowsay at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential vnstat less "
   for i in $soft; do
     paquete="$i"
     [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || apt-get install $i -y &>/dev/null
