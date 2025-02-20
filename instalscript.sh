@@ -80,7 +80,7 @@ os_system() {
 }
 
 repo() {
- link="https://raw.githubusercontent.com/ADM-PERU/VIP/main/Install/Source-List/$1.list"
+ link="https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/Source-List/$1.list"
   case $1 in
   8 | 9 | 10 | 11 | 16.04 | 18.04 | 20.04 | 20.10 | 21.04 | 21.10 | 22.04 | 24.04) wget -O /etc/apt/sources.list ${link} &>/dev/null ;;
   esac
