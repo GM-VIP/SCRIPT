@@ -14,7 +14,6 @@ cleanup() {
 
 trap cleanup EXIT
 
-cp .bashrc .bashrc.backup
 killall apt apt-get
 dpkg --configure -a
 apt-get install software-properties-common -y
@@ -100,7 +99,6 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
   "-bar2"|"-bar")cor="${VERMELHO}————————————————————————————————————————————————————" && echo -e "${SEMCOR}${cor}${SEMCOR}";;
  esac
 }
-
 
 tput clear
 os_system
