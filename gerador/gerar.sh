@@ -92,11 +92,11 @@ done
 }
 
 bot_menu () {
-source <(curl -sSL https://raw.githubusercontent.com/ADM-PERU/MGRBOT/main/confbot.sh)
+source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/BOT/main/confbot.sh)
 }
 
 encript () {
-source <(curl -sSL https://raw.githubusercontent.com/ADM-PERU/LITE/main/Obsf-Lite.sh)
+source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/ENCRYPTOR/main/Obsf-Lite.sh)
 }
 
 fun_list () {
