@@ -17,11 +17,20 @@ SCPfrm="/etc/ger-frm"
 SCPinst="/etc/ger-inst"
 
 service apache2 restart > /dev/null 2>&1
+apt-get install boxes -y &>/dev/null
+apt install net-tools -y &>/dev/null
+echo "nameserver 1.1.1.1" >/etc/resolv.conf
+echo "nameserver 1.0.0.1" >>/etc/resolv.conf
+
 myip=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | head -n1`;
 myint=`ifconfig | grep -B1 "inet addr:$myip" | head -n1 | awk '{print $1}'`;
 mkdir -p /etc/B-ADMuser &>/dev/null
 rm -rf /etc/localtime &>/dev/null
 ln -s /usr/share/zoneinfo/America/Lima /etc/localtime &>/dev/null
+[[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] || apt-get install gawk -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] || apt-get install mlocate -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || apt-get install curl -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "boxes"|head -1) ]] || apt-get install boxes -y &>/dev/null
 rm $(pwd)/$0 &> /dev/null
 
 ### COLORES Y BARRA 
