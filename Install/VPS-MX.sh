@@ -2,11 +2,6 @@
 # SCRIPT PERU : ∞ META
 #!/bin/bash
 
-apt-get install figlet -y &>/dev/null
-apt-get install lolcat -y &>/dev/null
-apt-get install neofetch &>/dev/null
-apt-get install boxes -y &>/dev/null
-
 clear
 cd $HOME
 SCPdir="/etc/newadm"
@@ -15,6 +10,11 @@ SCPidioma="${SCPdir}/idioma"
 SCPusr="${SCPdir}/ger-user"
 SCPfrm="/etc/ger-frm"
 SCPinst="/etc/ger-inst"
+
+apt-get install figlet -y &>/dev/null
+apt-get install lolcat -y &>/dev/null
+apt-get install neofetch &>/dev/null
+apt-get install boxes -y &>/dev/null
 
 service apache2 restart > /dev/null 2>&1
 apt-get install boxes -y &>/dev/null
