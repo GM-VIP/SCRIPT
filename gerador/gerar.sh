@@ -1,25 +1,10 @@
-## Actualizado 10/02/2025
-# MODD BY: DESARROLLADOR
 #!/bin/bash
+# MODD BY: DESARROLLADOR
 
-clear && clear
+clear
 [[ -e /etc/newadm-instalacao ]] && BASICINST="$(cat /etc/newadm-instalacao)" || 
 BASICINST="ADMbot.sh apacheon.sh blockBT.sh budp.sh Crear-Demo.sh C-SSR.sh dns-netflix.sh dropbear.sh fai2ban.sh gestor.sh menu message.txt openvpn.sh paysnd.sh PDirect.py PGet.py POpen.py ports.sh PPriv.py PPub.py shadowsocks.sh Shadowsocks-libev.sh Shadowsocks-R.sh sockspy.sh speed.sh speedtest.py squid.sh squidpass.sh ssl.sh sslorig.sh tcp.sh ultrahost Unlock-Pass-VULTR.sh usercodes utils.sh v2ray.sh"
 IVAR="/etc/http-instas"
-
-# CONFIGURACIÓN GENERAL
-VERSION="2.0"
-AUTOR="GOSHT_DEV"
-GITHUB="ADM-PERU/VIP"
-
-# CONFIGURACIÓN DE COLORES
-CO_TITULO="\033[1;36m"
-CO_MENU="\033[1;37m"
-CO_SELECCION="\033[1;32m"
-CO_ADVERTENCIA="\033[1;31m"
-CO_INFO="\033[1;33m"
-CO_RESET="\033[0m"
-
 mine_port4 () {
 PT=$(lsof -V -i tcp -P -n | grep -v "ESTABLISHED" |grep -v "COMMAND" | grep "LISTEN")
 for porta in `echo -e "$PT" | cut -d: -f2 | cut -d' ' -f1 | uniq`; do
@@ -28,21 +13,17 @@ for porta in `echo -e "$PT" | cut -d: -f2 | cut -d' ' -f1 | uniq`; do
 done
 }
 
-# FUNCIONES DE INTERFAZ
-draw_header() {
-    clear
-    echo -e "${CO_TITULO}"
-    echo -e "╔══════════════════════════════════════════════════════════╗"
-    echo -e "║             🐲 GENERADOR DE KEYS - V${VERSION} 🐲             ║"
-    echo -e "║                Desarrollado por: ${AUTOR}               ║"
-    echo -e "╚══════════════════════════════════════════════════════════╝${CO_RESET}"
-    echo -e ""
-}
+BARRA="\033[1;36m-----------------------------------------------------------------\033[0m"
 
-draw_line() {
-    echo -e "${CO_TITULO}══════════════════════════════════════════════════════════${CO_RESET}"
-}
+echo -e "$BARRA"
+mine_port4
+echo -e "$BARRA"
+cat << EOF
 
+           KEY GENERADOR : 🐲𝐎𝐖𝐍𝐄𝐑 : 𝐆𝐇𝐎𝐒𝐓🐲          
+           INSTALACIONES: $(cat $IVAR)
+           
+EOF
 SCPT_DIR="/etc/SCRIPT"
 [[ ! -e ${SCPT_DIR} ]] && mkdir ${SCPT_DIR}
 INSTA_ARQUIVOS="ADMVPS.zip"
@@ -55,17 +36,13 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
 }
 
-meu_ip
-
 mudar_instacao () {
 while [[ ${var[$value]} != 0 ]]; do
 [[ -e /etc/newadm-instalacao ]] && BASICINST="$(cat /etc/newadm-instalacao)" || BASICINST="menu PGet.py ports.sh ADMbot.sh message.txt usercodes sockspy.sh POpen.py PPriv.py PPub.py PDirect.py speedtest.py speed.sh utils.sh dropbear.sh apacheon.sh openvpn.sh shadowsocks.sh ssl.sh squid.sh"
 clear
-draw_line
-#echo -e $BARRA
+echo -e $BARRA
 echo -e "MENÚ SELECCIÓN DE INSTALACIÓN"
-draw_line
-#echo -e $BARRA
+echo -e $BARRA
 echo "[0] - FINALIZAR PROCEDIMIENTO"
 i=1
 for arqx in `ls ${SCPT_DIR}`; do
@@ -98,7 +75,6 @@ source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/BOT/main/confbot.sh)
 encript () {
 source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/ENCRYPTOR/main/Obsf-Lite.sh)
 }
-
 fun_list () {
 rm ${SCPT_DIR}/*.x.c &> /dev/null
 unset KEY
@@ -114,7 +90,7 @@ echo -e "[$i] -> ${arqx}"
 arq_list[$i]="${arqx}"
 let i++
 done
-echo -e "[x] -> \033[0;33mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
+echo -e "[x] -> \033[0;31mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
 echo -e "[b] -> \033[0;33mINSTALADOR SCRIPT VIP (VPS-GHOST) VIP\033[0m"
 read -p "Seleccione los archivos a ser repasados: " readvalue
 #CRIA KEY
@@ -158,11 +134,9 @@ fi
 rm ${SCPT_DIR}/*.x.c &> /dev/null
 echo "$nombrevalue" > ${DIR}/${KEY}.name
 [[ ! -z $IPFIX ]] && echo "$IPFIX" > ${DIR}/${KEY}/keyfixa
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 echo -e "Key Activa, y Esperando Instalacion!"
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 }
 
 ofus () {
@@ -193,13 +167,13 @@ gerar_key () {
 valuekey="$(date | md5sum | head -c10)"
 valuekey+="$(echo $(($RANDOM*10))|head -c 5)"
 fun_list "$valuekey"
+#oUP=$(wget -qO- ipv4.icanhazip.com)
+#keyfinal="$(ofus "$oUP:8888/${valuekey}/$LIST")"
 keyfinal=$(ofus "$IP:8888/$valuekey/$LIST")
 echo -e "KEY: $keyfinal\nGenerada Con Exito!"
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 read -p " Presiona [Enter] para Finalizar!!!"
 }
-
 att_gen_key () {
 i=0
 rm ${SCPT_DIR}/*.x.c &> /dev/null
@@ -216,8 +190,7 @@ let i++
 fi
 done
 keys=($keys)
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 while [[ -z ${keys[$value]} || -z $value ]]; do
 read -p "Seleccione qué Actualizar[t=todos]: " -e -i 0 value
 done
@@ -242,8 +215,7 @@ rm $KEYDIR/*.x.c &> /dev/null
 let i++
 done
 rm ${SCPT_DIR}/*.x.c &> /dev/null
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 echo -ne "\033[0m" && read -p "Enter"
 return 0
 fi
@@ -305,8 +277,7 @@ arqsx=$(ofus "$IP:8888/$arqs/$LIST")
  fi
 let i++
 done
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 echo -ne "\033[0m" && read -p "Enter"
 }
 
@@ -323,8 +294,7 @@ fi
 message_gen () {
 read -p "NUEVO MENSAJE: " MSGNEW
 echo "$MSGNEW" > ${SCPT_DIR}/message.txt
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 }
 
 rmv_iplib () {
@@ -341,18 +311,15 @@ echo "$ip" >> /var/www/html/newlib && echo -e " \033[1;36m[ACTUALIZADO]"
 fi
 done
 echo "104.238.135.147" >> /var/www/html/newlib
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 read -p "Enter"
 }
 
 desint_geb () {
 clear
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 echo " !SEGURO DE PROCEDER A DESINTALAR GENERADOR??: "
-draw_line
-#echo -e "$BARRA"
+echo -e "$BARRA"
 while [[ ${yesno} != @(s|S|y|Y|n|N) ]]; do
 read -p " [S/N]: " yesno
 tput cuu1 && tput dl1
@@ -372,37 +339,28 @@ cd $HOME
 rm $HOME/instger.sh &>/dev/null
 }
 
-main_menu() {
-while true; do
-clear && clear
-draw_header
+#MENU PRINCIPAL GENERADOR
+meu_ip
 unset PID_GEN
 PID_GEN=$(ps x|grep -v grep|grep "http-server.sh")
-[[ ! $PID_GEN ]] && PID_GEN="\033[1;31m Offline\033[0m" || PID_GEN="\033[1;32m Online\033[0m"
+[[ ! $PID_GEN ]] && PID_GEN="\033[1;31m OFFLINE" || PID_GEN="\033[1;32m ONLINE"
+echo -e "$BARRA"
 echo -e "Directorio de los archivos repasados \033[1;31m${SCPT_DIR}\033[0m"
-echo -e "                INSTALACIONES: $(cat $IVAR)               "
-mine_port4
-echo
-draw_line
-#echo -e "$BARRA"
-echo -e "[1] ➳ GENERAR 1 KEY ALEATORIA "
-echo -e "[2] ➳ ELIMINAR-VERIFICAR KEYS "
-echo -e "[3] ➳ LIMPIAR REGISTRO DE KEYS USADAS "
-echo -e "[4] ➳ ALTERAR ARCHIVOS DE KEY BASICA "
-draw_line
-echo -e "[5] ➳ ENCENDER/APAGAR - GENERADOR: $PID_GEN "
-echo -e "[6] ➳ VER REGISTRO "
-echo -e "[7] ➳ CAMBIAR CREDITOS "
-draw_line
-echo -e "[8] ➳ ACTUALIZAR GENERADOR "
-echo -e "[9] ➳ DESINTALAR GENERADOR "
-draw_line
-echo -e "[10]➳ MENU BOT GENERADOR "
-echo -e "[11]➳ ENCRIPTADOR SHC-Lite "
-echo -e "[0] ➳ SALIR "
-draw_line
-#echo -e "$BARRA"
-echo -n ">>> Opción: "
+echo -e "$BARRA"
+echo -e "[1] ➳ GENERAR 1 KEY ALEATORIA"
+echo -e "[2] ➳ ELIMINAR-VERIFICAR KEYS"
+echo -e "[3] ➳ LIMPIAR REGISTRO DE KEYS USADAS"
+echo -e "[4] ➳ ALTERAR ARCHIVOS DE KEY BASICA"
+echo -e "[5] ➳ ENCENDER/APAGAR GENERADOR $PID_GEN\033[0m"
+echo -e "[6] ➳ VER REGISTRO"
+echo -e "[7] ➳ CAMBIAR CREDITOS"
+echo -e "[8] ➳ ACTUALIZAR GENERADOR"
+echo -e "[9] ➳ DESINTALAR GENERADOR"
+echo -e "[10]➳ MENU BOT GENERADOR"
+echo -e "[11]➳ ENCRIPTADOR SHC-Lite By: RAZHIEL"
+echo -e "[0] ➳ SALIR"
+echo -e "$BARRA"
+echo -n "Opción: "
 read opcion
 case $opcion in
 1)gerar_key;;
@@ -417,15 +375,8 @@ case $opcion in
 9)desint_geb;;
 10)bot_menu;;
 11)encript;;
-0)cd $HOME && clear
-  clear
-  exit 0
-  ;;
+0)exit;;
 esac
-done
-}
-
-# INICIAR MENÚ PRINCIPAL
-main_menu
 /usr/bin/gerar.sh
+
 #fin
