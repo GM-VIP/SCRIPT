@@ -137,7 +137,7 @@ tput clear && clear
         "menu"|"message.txt"|"menu.enc")ARQ="${SCPdir}/";; #Menu
         "usercodes")ARQ="${SCPusr}/";; #Panel SSRR
         "C-SSR.sh")ARQ="${SCPinst}/";; #Instalacao
-        #"openssh.sh")ARQ="${SCPinst}/";; #Instalacao
+        "openssh.sh")ARQ="${SCPinst}/";; #Instalacao
         "squid.sh")ARQ="${SCPinst}/";; #Instalacao
         "dropbear.sh")ARQ="${SCPinst}/";; #Instalacao
         "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao
@@ -1173,7 +1173,7 @@ echo -ne "➳ DISFRUTE DE SU VPS•PERU Y GRACIAS POR CONTAR CON NOSOTROS.   \n"
 echo -ne "➳ 🔰[ADMINISTRATOR]🔰 : 🐲[GHOST]🐲           \n"
 echo -ne "➳ 🔰PARTNES : [LATINOAMERICA] ✓ [✦҈͜͡➳👻𝕲𝔥𝔬𝔰𝔱•✓☆ۣۜۜ͜͡🌹]           \n"
 echo -ne "➳ PORFAVOR CUALQUIER ERROR DE LA SCRIPT CONTACTAR VIA TELEGRAM CON:          \n"
-echo -ne "➳ @JS_Developer_PY       \n"
+echo -ne "➳ @GENKEY_BOT       \n"
 msg -bar
 }
 
