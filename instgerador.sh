@@ -1,5 +1,3 @@
-## Actualizado 10/02/2025
-
 #!/bin/bash
 IVAR="/etc/http-instas"
 SCPT_DIR="/etc/SCRIPT"
@@ -7,88 +5,30 @@ SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0dNLVZJUC9TQ1JJUFQvbWFpbi9
 SUB_DOM='base64 -d'
 rm $(pwd)/$0
 
-# Función para limpiar archivos temporales
-cleanup() {
-    rm -rf $HOME/lista-arq
-    rm -rf $HOME/gerar.sh
-    rm -rf $HOME/http-server.py
-    history -c
-    echo "Limpieza completada."
-}
-
-trap cleanup EXIT
-
 if [ `whoami` != 'root' ] 
 then 
 clear && clear
-tput cup 6 0
-echo -e "\e[1;31m PARA PODER USAR EL INSTALADOR ES NECESARIO SER ROOT\n AUN NO SABES COMO INICAR COMO ROOT?\n DIGITA ESTE COMANDO EN TU TERMINAL \e[1;32m( sudo -i )\e[0m" 
-rm * 
+echo
+echo -e "\e[1;31m AL PARECER TU VPS NO POSEE PERMISOS ROOT PARA INSTALAR \e[0m"
 sleep 1
-checkroot
-fi
-
-###ROOT_ACCESS
-checkroot (){
-clear && clear
-tput cup 6 0
-echo -e "\e[1;33m     DESEAS APLICAR ACCESO ROOT FORMAL A TU VPS???   \e[0m"
-read -p "    Responde [ s | n ] : " -e -i "n" x
-[[ $x = @(s|S|y|Y) ]] && vpsroot || exit
-vpsroot () {
-clear && clear
-tput cup 6 0
-echo -e  "\033[1;32m             >>>> APLICANDO ACCESO ROOT <<<<<                  \033[1;34m "
-msg -bar
-sudo service ssh restart > /dev/null 2>&1
+echo
+echo -e  "\033[1;47;30m       APLICANDO ACCESO ROOT       \033[0m"
+sudo service ssh restart
 sed -i "s;PermitRootLogin prohibit-password;PermitRootLogin yes;g" /etc/ssh/sshd_config
 sed -i "s;PermitRootLogin without-password;PermitRootLogin yes;g" /etc/ssh/sshd_config
 sed -i "s;PasswordAuthentication no;PasswordAuthentication yes;g" /etc/ssh/sshd_config
-msg -bar
-echo -e "\e[4;49;37m Escriba su contraseña root actual o coloque una nueva. \e[0m"
-msg -bar
+echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
+echo -e " Escriba su contraseña root actual o cambiela"
+echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 read  -p " Nuevo passwd: " pass
-(echo $pass; echo $pass)|passwd 2>/dev/null
+(echo $pass; echo $pass)|passwd >/dev/null
 sleep 1s
-msg -bar
-echo -e "\e[1;32m CONFIGURACIONES APLICADAS CON EXITO!!!! "
-echo -e "\e[1;32m Su contraseña ahora es: \e[1;31m$pass\e[0m"
-sudo service ssh restart > /dev/null 2>&1
-msg -bar
-}
-}
-
-os_system() {
-  system=$(cat -n /etc/issue | grep 1 | cut -d ' ' -f6,7,8 | sed 's/1//' | sed 's/      //')
-  distro=$(echo "$system" | awk '{print $1}')
-
-  case $distro in
-  Debian) vercin=$(echo $system | awk '{print $3}' | cut -d '.' -f1) ;;
-  Ubuntu) vercin=$(echo $system | awk '{print $2}' | cut -d '.' -f1,2) ;;
-  esac
-}
-
-repo() {
- link="https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/Source-List/$1.list"
-  case $1 in
-  8 | 9 | 10 | 11 | 16.04 | 18.04 | 20.04 | 20.10 | 21.04 | 21.10 | 22.04 | 24.04) wget -O /etc/apt/sources.list ${link} &>/dev/null ;;
-  esac
-}
-
-entrada (){
-echo "====================================================="
-echo -e "                     \e[93mB I E N V E N I D O !!!\e[0m"
-echo "====================================================="
-tput bold
-echo "
-INSTALARAS EL GENERADOR OFICIAL DE LLAVES PARA LOS SCRIPT
-VIP-GHOST. HAS BUEN USO DE LAS LLAVES Y DEL GENERADOR....."
-echo "====================================================="
-echo
-sleep 1.5
-echo -e "     \e[1;97m     IDENTIFICANDO SISTEMA OPERATIVO   \e[0m"
-echo -e "          \e[1;32m         | $distro $vercin |"
-}
+echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
+echo -e "\e[32m Configuraciones aplicadas con exito!"
+echo -e "\e[32m Su contraseña ahora es: \e[33m$pass\e[0m"
+sudo service ssh restart > /dev/null
+echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
+fi
 
 check_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
@@ -98,6 +38,8 @@ echo "$IP" > /usr/bin/vendor_code
 }
 
 function_verify () {
+#echo -e "verificando..."
+# check_ip
  permited=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Control/Control-IP")
   [[ $(echo $permited|grep "${IP}") = "" ]] && {
   clear
@@ -123,9 +65,9 @@ function_verify () {
   }
 }
 
-echo -e " ✓Verificando: "
-check_ip
-function_verify
+#echo -e "verificando..."
+#check_ip
+#function_verify
 
 ofus () {
 unset server
@@ -165,13 +107,6 @@ chmod +x ${ARQ}/$1
 }
 
 tput clear
-os_system
-repo "${vercin}"
-entrada
-sleep 3
-tput clear
-meu_ip
-
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 meu_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
@@ -179,10 +114,10 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
 echo "$IP" > /usr/bin/vendor_code
 }
+
 meu_ip
 echo -e "\033[1;33m Descargando archivos para GENERADOR..."
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-
 cd $HOME
 REQUEST=$(echo $SCPresq|$SUB_DOM)
 wget -O "$HOME/lista-arq" ${REQUEST}/GERADOR > /dev/null 2>&1
@@ -195,7 +130,7 @@ echo -e "\033[1;31m ▪︎\033[1;32mRecibido Con Éxito!!!"
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 } || echo -e "\033[1;31m ▪︎\033[1;31mFallo (No Se Recibió)"
 done
-[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
+[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/Install/trans &> /dev/null
 [[ -e /bin/http-server.py ]] && mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
 [[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
@@ -216,8 +151,8 @@ rm $HOME/lista-arq
 sed -i -e 's/\r$//' /usr/bin/gerar.sh
 echo
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-echo "/usr/bin/gerar.sh" > /usr/bin/gerar && chmod +x /usr/bin/gerar
-echo -e "\033[1;33m Excelente!!!, Use el Comando \033[1;31mgerar.sh o gerar \033[1;33mPara Administrar Sus Keys y/o Actualizar la Base del Servidor"
+echo "/usr/bin/gerar.sh" > /usr/bin/BOT && chmod +x /usr/bin/BOT
+echo -e "\033[1;33m Excelente!!!\033[1;31m Clave de acceso con @GENKEY_BOT (Via telegram) \033[1;33mPara administrar sus keys y/o Actualizar la base del servidor."
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 } || {
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
