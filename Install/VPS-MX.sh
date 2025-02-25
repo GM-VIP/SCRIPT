@@ -311,7 +311,7 @@ case $1 in
 "menu"|"message.txt"|"menu.enc")ARQ="${SCPdir}/";;#MENU
 "usercodes")ARQ="${SCPusr}/";; #Panel SSRR
 "C-SSR.sh")ARQ="${SCPinst}/";; #Instalacao
-#"openssh.sh")ARQ="${SCPinst}/";; #Instalacao
+"openssh.sh")ARQ="${SCPinst}/";; #Instalacao
 "squid.sh")ARQ="${SCPinst}/";; #Instalacao
 "dropbear.sh")ARQ="${SCPinst}/";; #Instalacao
 "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao
