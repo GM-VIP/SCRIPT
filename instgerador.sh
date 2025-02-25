@@ -1,6 +1,6 @@
-## Actualización 20/02/2025
-#!/bin/bash
+## Actualizado 10/02/2025
 
+#!/bin/bash
 IVAR="/etc/http-instas"
 SCPT_DIR="/etc/SCRIPT"
 SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0dNLVZJUC9TQ1JJUFQvbWFpbi9nZXJhZG9y"
@@ -98,8 +98,6 @@ echo "$IP" > /usr/bin/vendor_code
 }
 
 function_verify () {
-#echo -e "verificando..."
-# check_ip
  permited=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Control/Control-IP")
   [[ $(echo $permited|grep "${IP}") = "" ]] && {
   clear
@@ -118,9 +116,9 @@ function_verify () {
   echo -e "\e[32m=====================================================\n\n\n\e[0m"
   sleep 5
   CIDdir=/etc/ADM-db && [[ ! -d ${CIDdir} ]] && mkdir ${CIDdir}
-  v1=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Vercion")
+  v1=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/BOT/main/Vercion")
   echo "$v1" > /etc/ADM-db/vercion
-  echo "@VIP_GENKEY_BOT" > ${CIDdir}/resell
+  echo "@GENKEY_BOT" > ${CIDdir}/resell
   
   }
 }
@@ -172,19 +170,19 @@ repo "${vercin}"
 entrada
 sleep 3
 tput clear
+meu_ip
 
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-
 meu_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 MIP2=$(wget -qO- ipv4.icanhazip.com)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
 echo "$IP" > /usr/bin/vendor_code
 }
-
 meu_ip
 echo -e "\033[1;33m Descargando archivos para GENERADOR..."
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
+
 cd $HOME
 REQUEST=$(echo $SCPresq|$SUB_DOM)
 wget -O "$HOME/lista-arq" ${REQUEST}/GERADOR > /dev/null 2>&1
@@ -218,8 +216,8 @@ rm $HOME/lista-arq
 sed -i -e 's/\r$//' /usr/bin/gerar.sh
 echo
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-echo "/usr/bin/gerar.sh" > /usr/bin/BOT && chmod +x /usr/bin/BOT
-echo -e "\033[1;33m Excelente!!!\033[1;31m Clave de acceso con @GENKEY_BOT (Via telegram) \033[1;33mPara administrar sus keys y/o Actualizar la base del servidor."
+echo "/usr/bin/gerar.sh" > /usr/bin/gerar && chmod +x /usr/bin/gerar
+echo -e "\033[1;33m Excelente!!!, Use el Comando \033[1;31mgerar.sh o gerar \033[1;33mPara Administrar Sus Keys y/o Actualizar la Base del Servidor"
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 } || {
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
@@ -229,4 +227,3 @@ echo -e "\033[1;36m-------------------------------------------------------------
 echo -ne "\033[0m"
 echo "qra-atsilK?29@%6087%?66d5K8888:%05+08+@@?+91" > /etc/key-gerador
 apt-get install netcat -y &>/dev/null
-
