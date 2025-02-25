@@ -1,7 +1,5 @@
-## Actualizado 20/02/2025
+## Actualizado 10/02/2025
 #!/bin/bash
-
-cp .bashrc .bashrc.backup
 
 # Función para limpiar archivos temporales
 cleanup() {
@@ -14,6 +12,7 @@ cleanup() {
 
 trap cleanup EXIT
 
+cp .bashrc .bashrc.backup
 killall apt apt-get
 dpkg --configure -a
 apt-get install software-properties-common -y
@@ -104,8 +103,8 @@ tput clear
 os_system
 repo "${vercin}"
  msg -bar2
- msg -ama "        [ VPS - GHOST - SCRIPT \033[1;97m ❗ WELCOME❗\033[1;33m ]"
- echo -e  "\033[1;97m               EJECUTANDO ACTUALIZADOR  \033[1;34m "
+ msg -ama "         [ VPS - GHOST - SCRIPT \033[1;97m ❗ WELCOME ❗\033[1;33m ]"
+ echo -e  "        \033[1;97m     EJECUTANDO ACTUALIZADOR  \033[1;34m "
  msg -bar2
  echo -e "         \e[1;97m   🔎 IDENTIFICANDO SISTEMA OPERATIVO   \e[0m"
 echo -e "          \e[1;32m         | $distro $vercin |"
@@ -145,7 +144,7 @@ if [ ! -d "$INSTALL_DIR" ]; then
 else
 	echo ""
 fi
-sleep 2
+sleep 5
 
 ## Restore working directory
 cd $WORKING_DIR_ORIGINAL
