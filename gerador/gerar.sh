@@ -167,13 +167,12 @@ gerar_key () {
 valuekey="$(date | md5sum | head -c10)"
 valuekey+="$(echo $(($RANDOM*10))|head -c 5)"
 fun_list "$valuekey"
-#oUP=$(wget -qO- ipv4.icanhazip.com)
-#keyfinal="$(ofus "$oUP:8888/${valuekey}/$LIST")"
 keyfinal=$(ofus "$IP:8888/$valuekey/$LIST")
 echo -e "KEY: $keyfinal\nGenerada Con Exito!"
 echo -e "$BARRA"
 read -p " Presiona [Enter] para Finalizar!!!"
 }
+
 att_gen_key () {
 i=0
 rm ${SCPT_DIR}/*.x.c &> /dev/null
