@@ -98,7 +98,7 @@ source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/BOT/main/confbot.sh)
 }
 
 encript () {
-source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/ENCRIPTOR/main/Obsf-Lite.sh)
+source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/ENCRYPTOR/main/Obsf-Lite.sh)
 }
 
 fun_list () {
