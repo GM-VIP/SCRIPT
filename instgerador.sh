@@ -167,7 +167,14 @@ chmod +x ${ARQ}/$1
 }
 
 tput clear
+os_system
+repo "${vercin}"
+entrada
+sleep 3
+tput clear
+
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
+
 meu_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 MIP2=$(wget -qO- ipv4.icanhazip.com)
