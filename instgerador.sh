@@ -5,6 +5,17 @@ SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0dNLVZJUC9TQ1JJUFQvbWFpbi9
 SUB_DOM='base64 -d'
 rm $(pwd)/$0
 
+# Función para limpiar archivos temporales
+cleanup() {
+    rm -rf $HOME/lista-arq
+    rm -rf $HOME/gerar.sh
+    rm -rf $HOME/http-server.py
+    history -c
+    echo "Limpieza completada."
+}
+
+trap cleanup EXIT
+
 if [ `whoami` != 'root' ] 
 then 
 clear && clear
@@ -29,6 +40,23 @@ echo -e "\e[32m Su contraseña ahora es: \e[33m$pass\e[0m"
 sudo service ssh restart > /dev/null
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 fi
+
+os_system() {
+  system=$(cat -n /etc/issue | grep 1 | cut -d ' ' -f6,7,8 | sed 's/1//' | sed 's/      //')
+  distro=$(echo "$system" | awk '{print $1}')
+
+  case $distro in
+  Debian) vercin=$(echo $system | awk '{print $3}' | cut -d '.' -f1) ;;
+  Ubuntu) vercin=$(echo $system | awk '{print $2}' | cut -d '.' -f1,2) ;;
+  esac
+}
+
+repo() {
+  link="https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Repositorios/$1.list"
+  case $1 in
+  8 | 9 | 10 | 11 | 16.04 | 18.04 | 20.04 | 20.10 | 21.04 | 21.10 | 22.04 | 24.04) wget -O /etc/apt/sources.list ${link} &>/dev/null ;;
+  esac
+}
 
 check_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
