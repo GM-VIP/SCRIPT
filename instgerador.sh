@@ -158,7 +158,7 @@ echo -e "\033[1;31m ▪︎\033[1;32mRecibido Con Éxito!!!"
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 } || echo -e "\033[1;31m ▪︎\033[1;31mFallo (No Se Recibió)"
 done
-[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/ELITE-MUNDIAL/VIP/main/Install/trans &> /dev/null
+[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 [[ -e /bin/http-server.py ]] && mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
 [[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
@@ -180,6 +180,7 @@ sed -i -e 's/\r$//' /usr/bin/gerar.sh
 echo
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 echo "/usr/bin/gerar.sh" > /usr/bin/BOT && chmod +x /usr/bin/BOT
+echo "/usr/bin/gerar.sh" > /usr/bin/BOT && chmod +x /usr/bin/gerar
 echo -e "\033[1;33m Excelente!!!\033[1;31m Clave de acceso con @GENKEY_BOT (Via telegram) \033[1;33mPara administrar sus keys y/o Actualizar la base del servidor."
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 } || {
