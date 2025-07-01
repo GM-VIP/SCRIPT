@@ -172,6 +172,7 @@ echo -e "KEY: $keyfinal\nGenerada Con Exito!"
 echo -e "$BARRA"
 read -p " Presiona [Enter] para Finalizar!!!"
 }
+
 att_gen_key () {
 i=0
 rm ${SCPT_DIR}/*.x.c &> /dev/null
