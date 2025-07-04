@@ -167,9 +167,6 @@ echo -e "          \e[1;97m 🔎 IDENTIFICANDO SISTEMA OPERATIVO   \e[0m"
 echo -e "          \e[1;32m           | $distro $vercin |"
 sleep 3
 
-tput clear
-echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-
 meu_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 MIP2=$(wget -qO- ipv4.icanhazip.com)
@@ -177,9 +174,10 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 
+tput clear
 meu_ip
-
-echo -e "\033[1;33m Descargando archivos para GENERADOR..."
+echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
+echo -e "             \033[1;33m>>>   Instalando Archivos Necesarios   <<< "
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 cd $HOME
 REQUEST=$(echo $SCPresq|$SUB_DOM)
