@@ -65,6 +65,20 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 
+introcab (){
+echo "#################################################################"
+echo -e "                     \e[93m  V I P _ P E R U    !!!\e[0m"
+echo "#################################################################"
+tput bold
+echo "
+GENERADOR OFICIAL >>> GHOST_S.O. MODS <<<. HAS BUEN USO DE LAS LLAVES
+DE INSTALACIÓN, NO SATURES EL REGISTRO Y DISFRUTA DE LA EXPERIENCIA
+( V I P _ P E R U ) SCRIPT By: GHOST..."
+echo "################################################################"
+echo
+echo -e "                     \e[3;92m   t.me:@GMVIP    \e[0m"
+}
+
 function_verify () {
 #echo -e "verificando..."
 # check_ip
