@@ -474,44 +474,60 @@ msg -bar2
 msg -ama "     [ VPS - GHOST - SCRIPT \033[1;97m ✨MAQUINA VIRTUAL✨\033[1;33m ]"
 msg -ama "  \033[1;96m    🔰Usar Ubuntu 18 a 64 De Preferencia🔰  "
 msg -bar2
+
 [[ $1 = "" ]] && funcao_idioma || {
 [[ ${#1} -gt 2 ]] && funcao_idioma || id="$1"
  }
  
 error_fun () {
-msg -bar2 && msg -verm " ERROR de enlace VPS<-->GENERADOR" && msg -bar2
-echo -e "NO HAY CONEXIÓN ENTRE GENERADOR Y SCRIPT\n PORT (8888, 81 TCP) HA COLAPZADO" | boxes -d parchment
+msg -bar2 && msg -verm " ERROR DE ENLACE: VPS <==> GENERADOR" && msg -bar2
+echo -e "\e[1;31m ◇ ERROR (PORT 8888, 81 TCP) ◇, FALLA DE ENLACE CON GENERADOR \n - \e[3;33m KEYGEN PUDO HABER COLAPZADO\e[0m - " && msg -bar2
 [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
 rm -rf lista-arq
-echo -e " "
-echo -e "  \033[1;44m Deseas Reintentar Colocar La Key O Probar Nueva Key? : \033[0m"
-echo -ne "\033[0;32m " 
-read -p "    Responde [ s | n ] : " -e -i "s" x
-[[ $x = @(s|S|y|Y) ]] && int_fun || exit
+echo -e "  \033[1;44m          Deseas Reintentar con Otra Llave?          \033[0m"
+echo -ne "\033[0;32m "
+read -p "    Responde [ s | n ] : " -e -i "n" x
+[[ $x = @(s|S|y|Y) ]] && retry_fun || 
+clear && clear
+msgi -bar2
+msgi -bar2
+rm -rf lista-arq
+echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
+msgi -bar2
+msgi -bar2
+exit 1
 }
 
 invalid_key () {
-msg -bar2 && msg -verm "Code Invalido -- #¡Key Invalida!# " && msg -bar2
-echo -e " ERROR DE LA KEY O FUE UTILIZADA\n RECIENTEMENTE, O KEYGEN HA COLAPZADO " | boxes -d parchment
+msg -bar2 && msg -verm " #¡Key Invalida#! " && msg -bar2
+echo -e "\e[1;31m KEY INCORRECTA, O YA FUE USADA!! PUEDE SER ERROR DE KEYGEN \n • HAS UN REBOOT AL KEYGEN PARA RESTABLECER • " && msg -bar2
 [[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
-echo -e " "
-echo -e "  \033[1;44m Deseas Reintentar Colocar La Key O Probar Nueva Key? : \033[0m"
-echo -ne "\033[0;32m " 
-read -p "    Responde [ s | n ] : " -e -i "s" x
-[[ $x = @(s|S|y|Y) ]] && int_fun || exit
+echo -e "  \033[1;44m          Deseas Reintentar con Otra Llave?          \033[0m"
+echo -ne "\033[0;32m "
+read -p "    Responde [ s | n ] : " -e -i "n" x
+[[ $x = @(s|S|y|Y) ]] && retry_fun || 
+clear && clear
+msgi -bar2
+msgi -bar2
+rm -rf lista-arq
+echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
+msgi -bar2
+msgi -bar2
+exit 1
 }
 
 while [[ ! $Key ]]; do
-msg -bar2 && msg -ne "\033[1;96m            >>> INTRODUZCA LA KEY ABAJO <<<\n   \033[1;31m" && read Key
-        tput cuu1 && tput dl1
+unset Key
+echo -e "\e[1;33m     # INGRESA LA KEY DE INSTALACION OBTENIDA #\n\e[0m"
+echo -ne "\e[1;32m    Key: \e[0m" && read Key
+tput cuu1 && tput dl1
 done
-msg -ne "# Verificando Key # : "
+msg -ne "        # Verificando Key # : "
 cd $HOME
-wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m Code Correcto de KEY" || {
-   echo -e "\033[0;31m Code Incorrecto de KEY"
+wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[3;32m    Key Completada   \033[0m" || {
+   echo -e "\033[3;91m    Key Incompleta    \033[0m"
    invalid_key
-  }
-   
+   }
 IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/vendor_code
 sleep 1s
 function_verify
