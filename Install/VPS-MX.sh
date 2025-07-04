@@ -145,8 +145,9 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VPS PERU-" | lolcat 
-echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
+figlet -f smslant "      -VIP_PERU-" | lolcat
+msg -verd "  \033[1;96m       💻 Preferible: Ubuntu 18.04 al 22.04 💻   "
+echo -e "           SCRIPT TRADUCIDO A IDIOMA LATINO"
 msg -bar2
 pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
@@ -158,8 +159,9 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VPS PERU-" | lolcat 
-echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<" | lolcat
+figlet -f smslant "      -VIP_PERU-" | lolcat
+msg -verd "  \033[1;96m       💻 Preferible: Ubuntu 18.04 al 22.04 💻   "
+echo -e "           SCRIPT TRADUCIDO A IDIOMA LATINO"
 msg -bar2
 pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
