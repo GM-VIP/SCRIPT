@@ -92,7 +92,7 @@ let i++
 done
 echo -e "[x] -> \033[0;31mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
 echo -e "[b] -> \033[0;33mINSTALADOR SCRIPT VIP (VPS-GHOST) VIP\033[0m"
-msg -bar
+echo -e "$BARRA"
 echo
 read -p "Selecciona tu opción : " -e -i b readvalue
 #CRIA KEY
