@@ -256,12 +256,9 @@ echo 'DATE=$(date +"%d-%m-%y")' >> .bashrc
 echo 'TIME=$(date +"%T")' >> .bashrc
 sleep 1
 clear
-echo 'echo ""' >> .bashrc
-echo 'echo -e "\033[0;31m        __     ______  ____       ____  _____ _____  _   _          " '>> .bashrc
-echo 'echo -e "\033[0;31m        \ \   / /  _ \/ ___|     |  _ \| ____|  _  \| | | |         " '>> .bashrc
-echo 'echo -e "\033[0;31m  _______\ \ / /| |_) \___ \     | |_) |  _| | |_)  | | | |_______  " '>> .bashrc
-echo 'echo -e "\033[0;31m |________\ V / |  __/ ___) | 🚀 |  __/| |___|  _  <| |_| |_______| " '>> .bashrc
-echo 'echo -e "\033[0;31m           \_/  |_|   |____/     |_|   |_____|_|  \_\\____/         " '>> .bashrc 
+msg -bar
+figlet -f smslant "      VIP_PERU By GHOST" | lolcat
+msg -bar
 echo 'echo "" '>> .bashrc
 echo 'mess1="$(cat /etc/newadm/message.txt)" ' >> .bashrc
 echo 'echo "" '>> .bashrc
@@ -384,7 +381,7 @@ mv -f ${SCPinstal}/$1 ${ARQ}/$1
 chmod +x ${ARQ}/$1
 }
 
-fun_ipe
+fun_ip
 
 wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 wget -O /bin/Desbloqueo.sh https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/Desbloqueo.sh &> /dev/null
