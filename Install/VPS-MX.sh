@@ -341,8 +341,30 @@ echo 'echo "" '>> .bashrc
 echo
 echo -e "   ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL: "
 echo -e "\033[0;37m                   \033[1;41m menu \033[0m" && msg -bar2
-sleep 1
-exit
+[[ ! -e /etc/autostart ]] && {
+	echo '#!/bin/bash
+clear
+#INICIO AUTOMATICO' >/etc/autostart
+	chmod +x /etc/autostart
+} || {
+	for proc in $(ps x | grep 'dmS' | grep -v 'grep' | awk {'print $1'}); do
+		screen -r -S "$proc" -X quit
+	done
+	screen -wipe >/dev/null
+	echo '#!/bin/bash
+clear
+#INICIO AUTOMATICO' >/etc/autostart
+	chmod +x /etc/autostart
+}
+crontab -r >/dev/null 2>&1
+(
+	crontab -l 2>/dev/null
+	echo "@reboot /etc/autostart"
+	echo "* * * * * /etc/autostart"
+) | crontab -
+service ssh restart &>/dev/null
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games/
+sleep 3
 }
 
 ofus () {
