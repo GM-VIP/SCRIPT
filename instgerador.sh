@@ -149,6 +149,25 @@ chmod +x ${ARQ}/$1
 }
 
 tput clear
+tput cup 20 0
+introcab
+sleep 3
+os_system
+tput clear
+tput cup 22 1
+echo -e "\033[1;36m----------------------------------------------------------------\033[0m"
+tput cup 23 1
+tput rev
+echo "          GENERADOR DE LLAVES (GHOST_S.O SYSTEM) By: GHOST      "
+tput sgr0 
+tput cup 24 1
+echo -e "\033[1;36m----------------------------------------------------------------\033[0m"
+echo
+echo -e "          \e[1;97m 🔎 IDENTIFICANDO SISTEMA OPERATIVO   \e[0m"
+echo -e "          \e[1;32m           | $distro $vercin |"
+sleep 3
+
+tput clear
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 
 meu_ip () {
