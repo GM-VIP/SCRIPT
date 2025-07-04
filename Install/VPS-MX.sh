@@ -207,6 +207,9 @@ function_verify () {
 }
 
 funcao_idioma () {
+tput clear
+unset Key > /dev/null 2>&1
+unset Key
 msg -bar2
 figlet " -VPS PERU-" | lolcat 
 echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
