@@ -1,5 +1,7 @@
 #!/bin/bash
+#MODS SCRIPT BY: Razhiel && Ghost
 #SCRIPT PERU : ∞ META
+#04/07/2025
 
 clear
 cd $HOME
@@ -77,7 +79,6 @@ echo -e "\033[97m       $ESTATUS................. apache2 "
 msg -bar2
 echo -e "\033[1;39m Presiona Enter Para continuar" && read enter
 
-
 ### FIXEADOR PARA SISTEMAS 86_64
 idfix64_86 () {
 msg -bar2
@@ -91,6 +92,7 @@ apt-get install cowsay -y
 apt-get install bc -y
 apt-get install python -y
 apt-get install at 
+apt-get install jq
 sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
 service apache2 restart
 clear
@@ -109,15 +111,10 @@ clear
 
 msg -bar2
 echo -e "\033[1;97m  ¿PRESENTO ALGUN ERROR ALGUN PAQUETE ANTERIOR?" 
+echo -e "\e[1;32m Presionar S para reinstalar Paquetes (Fixer) \e[0m\n \e[1;31mPresionar N o enter para continuar la instalación\e[0m"
 msg -bar2
-echo -e "\033[1;32m 1- Escoja:(N) No. Para Instalacion Normal"
-echo -e "\033[1;31m 2- Escoja:(S) Si. Saltaron errores."
-msg -bar2
-echo -e "\033[1;39m Al preciona enter continuara la instalacion Normal"
-msg -bar2
-read -p " [ S | N ]: " idfix64_86   
-[[ "$idfix64_86" = "s" || "$idfix64_86" = "S" ]] && idfix64_86
-
+read -p " Escoge [ S | N ]: " idfix64_86   
+[[ "$idfix64_86" = "s" || "$idfix64_86" = "S" || "$idfix64_86" = "y" || "$idfix64_86" = "Y" ]] && idfix64_86
 clear
 
 fun_ip () {
