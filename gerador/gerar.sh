@@ -92,13 +92,17 @@ let i++
 done
 echo -e "[x] -> \033[0;31mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
 echo -e "[b] -> \033[0;33mINSTALADOR SCRIPT VIP (VPS-GHOST) VIP\033[0m"
-read -p "Seleccione los archivos a ser repasados: " readvalue
+msg -bar
+echo
+read -p "Selecciona tu opción : " -e -i b readvalue
 #CRIA KEY
 [[ ! -e ${DIR}/${KEY} ]] && mkdir ${DIR}/${KEY}
 #PASSA ARQS
 [[ -z $readvalue ]] && readvalue="b"
 read -p "Nombre de usuario ( KEYS OWNER ): " nombrevalue
 [[ -z $nombrevalue ]] && nombrevalue="SIN NOMBRE"
+read -p "Key Fija? [S/N]: " -e -i n fixakey
+[[ $fixakey = @(s|S|y|Y) ]] && read -p "Digita la IP FIJA: " IPFIX && nombrevalue+=[FIXA]
 if [[ $readvalue = @(b|B) ]]; then
 #ADM BASIC
  arqslist="$BASICINST"
@@ -340,6 +344,7 @@ rm $HOME/instger.sh &>/dev/null
 
 #MENU PRINCIPAL GENERADOR
 meu_ip
+
 unset PID_GEN
 PID_GEN=$(ps x|grep -v grep|grep "http-server.sh")
 [[ ! $PID_GEN ]] && PID_GEN="\033[1;31m OFFLINE" || PID_GEN="\033[1;32m ONLINE"
