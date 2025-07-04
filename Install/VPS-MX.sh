@@ -367,6 +367,36 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/ga
 sleep 3
 }
 
+NOTIFY () {
+msg -bar
+msg -ama " Notify-BOT (Notificasion Remota)| VPS-GHOST "
+msg -bar
+echo -e "\033[1;94m Es una opcion para notificar cuando\n un usuario sea bloquedo o este expirado, e info de VPS."
+echo -e "\033[1;97m Debe mantenerse atento a posible actualizaciónes"
+echo -e "\033[1;92m Para obtener su ID contacte a @GENKEY_BOT"
+echo -e "\033[1;92m OWNER : GHOST"
+msg -bar
+echo -e "\033[1;97m >>> Ingrese un nombre para el ADMIN - VPS:\033[0;37m"; read -p " " nombr
+echo "${nombr}" > /etc/newadm/ger-user/nombre.log
+echo -e "\033[1;97m >>> Ingrese su ID 👤:\033[0;37m"; read -p " " idbot
+echo "${idbot}" > /etc/newadm/ger-user/IDT.log 
+msg -bar
+echo -e "\033[1;32m         ID AGREGADO CON EXITO"
+msg -bar
+NOM="$(less /etc/newadm/ger-user/nombre.log)"
+NOM1="$(echo $NOM)"
+IDB1=`less /etc/newadm/ger-user/IDT.log` > /dev/null 2>&1
+IDB2=`echo $IDB1` > /dev/null 2>&1
+
+KEY="862633455:AAGJ9BBJanzV6yYwLSemNAZAVwn7EyjrtcY"
+URL="https://api.telegram.org/bot$KEY/sendMessage"
+MSG="⚠️ AVISO DE VPS: $NOM1 ⚠️
+👉 MENSAJE DE PRUEBA
+🔰 EXITOSO... SALUDOS"
+curl -s --max-time 10 -d "chat_id=$IDB2&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
+echo -e "\033[1;34mSE ENVIO MENSAJE DE PRUEBA SI NO LLEGA CONTACTE A @EliteMasterGO"
+}
+
 ofus () {
 unset server
 server=$(echo ${txt_ofuscatw}|cut -d':' -f1)
@@ -418,36 +448,8 @@ mv -f ${SCPinstal}/$1 ${ARQ}/$1
 chmod +x ${ARQ}/$1
 }
 
-NOTIFY () {
-msg -bar
-msg -ama " Notify-BOT (Notificasion Remota)| VPS-GHOST "
-msg -bar
-echo -e "\033[1;94m Es una opcion para notificar cuando\n un usuario sea bloquedo o este expirado, e info de VPS."
-echo -e "\033[1;97m Debe mantenerse atento a posible actualizaciónes"
-echo -e "\033[1;92m Para obtener su ID contacte a @GENKEY_BOT"
-echo -e "\033[1;92m OWNER : GHOST"
-msg -bar
-echo -e "\033[1;97m >>> Ingrese un nombre para el ADMIN - VPS:\033[0;37m"; read -p " " nombr
-echo "${nombr}" > /etc/newadm/ger-user/nombre.log
-echo -e "\033[1;97m >>> Ingrese su ID 👤:\033[0;37m"; read -p " " idbot
-echo "${idbot}" > /etc/newadm/ger-user/IDT.log 
-msg -bar
-echo -e "\033[1;32m         ID AGREGADO CON EXITO"
-msg -bar
-NOM="$(less /etc/newadm/ger-user/nombre.log)"
-NOM1="$(echo $NOM)"
-IDB1=`less /etc/newadm/ger-user/IDT.log` > /dev/null 2>&1
-IDB2=`echo $IDB1` > /dev/null 2>&1
-
-KEY="862633455:AAGJ9BBJanzV6yYwLSemNAZAVwn7EyjrtcY"
-URL="https://api.telegram.org/bot$KEY/sendMessage"
-MSG="⚠️ AVISO DE VPS: $NOM1 ⚠️
-👉 MENSAJE DE PRUEBA
-🔰 EXITOSO... SALUDOS"
-curl -s --max-time 10 -d "chat_id=$IDB2&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
-echo -e "\033[1;34mSE ENVIO MENSAJE DE PRUEBA SI NO LLEGA CONTACTE A @EliteMasterGO"
-}
 fun_ip
+
 wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 wget -O /bin/Desbloqueo.sh https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/Desbloqueo.sh &> /dev/null
 chmod +x /bin/Desbloqueo.sh
@@ -462,6 +464,7 @@ msg -bar2
 [[ $1 = "" ]] && funcao_idioma || {
 [[ ${#1} -gt 2 ]] && funcao_idioma || id="$1"
  }
+ 
 error_fun () {
 msg -bar2 && msg -verm " ERROR de enlace VPS<-->GENERADOR" && msg -bar2
 echo -e "NO HAY CONEXIÓN ENTRE GENERADOR Y SCRIPT\n PORT (8888, 81 TCP) HA COLAPZADO" | boxes -d parchment
@@ -473,6 +476,7 @@ echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "s" x
 [[ $x = @(s|S|y|Y) ]] && int_fun || exit
 }
+
 invalid_key () {
 msg -bar2 && msg -verm "Code Invalido -- #¡Key Invalida!# " && msg -bar2
 echo -e " ERROR DE LA KEY O FUE UTILIZADA\n RECIENTEMENTE, O KEYGEN HA COLAPZADO " | boxes -d parchment
@@ -483,6 +487,7 @@ echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "s" x
 [[ $x = @(s|S|y|Y) ]] && int_fun || exit
 }
+
 while [[ ! $Key ]]; do
 msg -bar2 && msg -ne "\033[1;96m            >>> INTRODUZCA LA KEY ABAJO <<<\n   \033[1;31m" && read Key
         tput cuu1 && tput dl1
