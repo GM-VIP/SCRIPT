@@ -185,11 +185,11 @@ wget -O "$HOME/lista-arq" ${REQUEST}/GERADOR > /dev/null 2>&1
 sleep 1s
 [[ -e $HOME/lista-arq ]] && {
 for arqx in `cat $HOME/lista-arq`; do
-echo -ne "\033[1;33m ▪︎Bajando Lista.... \033[1;31m[$arqx] "
+echo -ne "\033[1;33mDESCARGANDO: \033[1;31m[$arqx] "
 wget -O $HOME/$arqx ${REQUEST}/${arqx} > /dev/null 2>&1 && {
-echo -e "\033[1;31m ▪︎\033[1;32mRecibido Con Éxito!!!"
+echo -e "\033[1;31m- \033[1;32mDescarga Lista!!"
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
-} || echo -e "\033[1;31m ▪︎\033[1;31mFallo (No Se Recibió)"
+} || echo -e "\033[1;31m- \033[1;31mERROR! (No Descargado!)"
 done
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 [[ -e /bin/http-server.py ]] && mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
