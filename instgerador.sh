@@ -182,8 +182,7 @@ sed -i -e 's/\r$//' /usr/bin/gerar.sh
 echo
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 echo "/usr/bin/gerar.sh" > /usr/bin/BOT && chmod +x /usr/bin/BOT
-echo "/usr/bin/gerar.sh" > /usr/bin/BOT && chmod +x /usr/bin/gerar
-echo -e "\033[1;33m Excelente!!!\033[1;31m Clave de acceso con @GENKEY_BOT (Via telegram) \033[1;33mPara administrar sus keys y/o Actualizar la base del servidor."
+echo -e "\033[1;33m Excelente!!!\033[1;31m Clave de acceso al Panel: BOT \033[1;33mPara administrar sus keys y/o Actualizar la base del servidor."
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 } || {
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
