@@ -1,11 +1,6 @@
 #!/bin/bash
 #SCRIPT PERU : ∞ META
 
-apt-get install figlet -y &>/dev/null
-apt-get install lolcat -y &>/dev/null
-apt-get install neofetch &>/dev/null
-apt-get install boxes -y &>/dev/null
-
 clear
 cd $HOME
 SCPdir="/etc/newadm"
@@ -16,6 +11,12 @@ SCPfrm="/etc/ger-frm"
 SCPinst="/etc/ger-inst"
 
 service apache2 restart > /dev/null 2>&1
+apt-get install boxes -y &>/dev/null
+apt install net-tools -y &>/dev/null
+apt-get install figlet -y &>/dev/null
+apt-get install lolcat -y &>/dev/null
+apt-get install neofetch &>/dev/null
+
 myip=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | head -n1`;
 myint=`ifconfig | grep -B1 "inet addr:$myip" | head -n1 | awk '{print $1}'`;
 mkdir -p /etc/B-ADMuser &>/dev/null
@@ -309,7 +310,7 @@ wget -O /bin/resetsshdrop https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/A
 chmod +x /bin/resetsshdrop
 wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null
 msg -bar2
-clear; clear
+tput clear
 echo
 msg -bar
 echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
