@@ -231,15 +231,17 @@ pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
 byinst="true"
 while [[ ! $Key ]]; do
-msg -bar2 && msg -ne "\033[1;96m            >>> INTRODUZCA LA KEY ABAJO <<<\n   \033[1;31m" && read Key
-        tput cuu1 && tput dl1
+unset Key
+echo -e "\e[1;33m     # INGRESA LA KEY DE INSTALACION OBTENIDA #\n\e[0m"
+echo -ne "\e[1;32m    Key: \e[0m" && read Key
+tput cuu1 && tput dl1
 done
-msg -ne " # Verificando Key # : "
+msg -ne "        # Verificando Key # : "
 cd $HOME
-wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[0;32m Code Correcto de KEY" || {
-   echo -e "\033[0;31m Code Incorrecto de KEY"
+wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[3;32m    Key Completa   \033[0m" || {
+   echo -e "\033[3;91m    Key Incompleta    \033[0m"
    invalid_key
-  }
+   }
 IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/vendor_code
 sleep 1s
 function_verify
