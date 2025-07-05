@@ -385,7 +385,7 @@ mv -f ${SCPinstal}/$1 ${ARQ}/$1
 chmod +x ${ARQ}/$1
 }
 
-fun_ip
+fun_ipe
 
 wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 wget -O /bin/Desbloqueo.sh https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/Desbloqueo.sh &> /dev/null

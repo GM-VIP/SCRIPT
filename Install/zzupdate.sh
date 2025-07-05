@@ -23,7 +23,7 @@ SCRIPT_NAME=vpsmxup
 
 ## Title and graphics
 msg -bar2
-echo "         VIP_PERU - $(date)"
+echo "         VPS-PERU - $(date)"
 msg -bar2
 sleep 1s
 
