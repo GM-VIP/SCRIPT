@@ -1,7 +1,5 @@
 #!/bin/bash
-#MODS SCRIPT BY: Razhiel && Ghost
 #SCRIPT PERU : ∞ META
-#04/07/2025
 
 clear
 cd $HOME
@@ -79,6 +77,7 @@ echo -e "\033[97m       $ESTATUS................. apache2 "
 msg -bar2
 echo -e "\033[1;39m Presiona Enter Para continuar" && read enter
 
+
 ### FIXEADOR PARA SISTEMAS 86_64
 idfix64_86 () {
 msg -bar2
@@ -92,7 +91,6 @@ apt-get install cowsay -y
 apt-get install bc -y
 apt-get install python -y
 apt-get install at 
-apt-get install jq
 sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
 service apache2 restart
 clear
@@ -111,10 +109,15 @@ clear
 
 msg -bar2
 echo -e "\033[1;97m  ¿PRESENTO ALGUN ERROR ALGUN PAQUETE ANTERIOR?" 
-echo -e "\e[1;32m Presionar S para reinstalar Paquetes (Fixer) \e[0m\n \e[1;31mPresionar N o enter para continuar la instalación\e[0m"
 msg -bar2
-read -p " Escoge [ S | N ]: " idfix64_86   
-[[ "$idfix64_86" = "s" || "$idfix64_86" = "S" || "$idfix64_86" = "y" || "$idfix64_86" = "Y" ]] && idfix64_86
+echo -e "\033[1;32m 1- Escoja:(N) No. Para Instalacion Normal"
+echo -e "\033[1;31m 2- Escoja:(S) Si. Saltaron errores."
+msg -bar2
+echo -e "\033[1;39m Al preciona enter continuara la instalacion Normal"
+msg -bar2
+read -p " [ S | N ]: " idfix64_86   
+[[ "$idfix64_86" = "s" || "$idfix64_86" = "S" ]] && idfix64_86
+
 clear
 
 fun_ip () {
@@ -145,9 +148,8 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet -f smslant "      -VIP_PERU-" | lolcat
-msg -verd "  \033[1;96m       💻 Preferible: Ubuntu 18.04 al 22.04 💻   "
-echo -e "           SCRIPT TRADUCIDO A IDIOMA LATINO"
+figlet " -VPS PERU-" | lolcat 
+echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
 msg -bar2
 pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
@@ -159,9 +161,8 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet -f smslant "      -VIP_PERU-" | lolcat
-msg -verd "  \033[1;96m       💻 Preferible: Ubuntu 18.04 al 22.04 💻   "
-echo -e "           SCRIPT TRADUCIDO A IDIOMA LATINO"
+figlet " -VPS PERU-" | lolcat 
+echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<" | lolcat
 msg -bar2
 pv="$(echo es)"
 [[ ${#id} -gt 2 ]] && id="es" || id="$pv"
@@ -222,9 +223,9 @@ fi
 install_fim () {
 msg -ama "               Finalizando Instalacion" && msg bar2
 rm -rf /etc/newadm/ger-user/nombre.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/nombre.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name IDT.log|grep -w "IDT.log"|head -1) ]] || wget -O /etc/newadm/ger-user/IDT.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/IDT.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name tiemlim.log|grep -w "tiemlim.log"|head -1) ]] || wget -O /etc/newadm/ger-user/tiemlim.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/tiemlim.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://www.dropbox.com/s/pvo7zneayjjtsgw/nombre.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name IDT.log|grep -w "IDT.log"|head -1) ]] || wget -O /etc/newadm/ger-user/IDT.log https://www.dropbox.com/s/vzsacahfbwwm0ow/IDT.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name tiemlim.log|grep -w "tiemlim.log"|head -1) ]] || wget -O /etc/newadm/ger-user/tiemlim.log https://www.dropbox.com/s/kkchh0ldtdt2yza/tiemlim.log &>/dev/null
 
 wget -O /bin/rebootnb https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/rebootnb &> /dev/null
 chmod +x /bin/rebootnb 
@@ -256,9 +257,12 @@ echo 'DATE=$(date +"%d-%m-%y")' >> .bashrc
 echo 'TIME=$(date +"%T")' >> .bashrc
 sleep 1
 clear
-msg -bar
-figlet -f smslant "      VIP_PERU By GHOST" | lolcat
-msg -bar
+echo 'echo ""' >> .bashrc
+echo 'echo -e "\033[0;31m        __     ______  ____       ____  _____ _____  _   _          " '>> .bashrc
+echo 'echo -e "\033[0;31m        \ \   / /  _ \/ ___|     |  _ \| ____|  _  \| | | |         " '>> .bashrc
+echo 'echo -e "\033[0;31m  _______\ \ / /| |_) \___ \     | |_) |  _| | |_)  | | | |_______  " '>> .bashrc
+echo 'echo -e "\033[0;31m |________\ V / |  __/ ___) | 🚀 |  __/| |___|  _  <| |_| |_______| " '>> .bashrc
+echo 'echo -e "\033[0;31m           \_/  |_|   |____/     |_|   |_____|_|  \_\\____/         " '>> .bashrc 
 echo 'echo "" '>> .bashrc
 echo 'mess1="$(cat /etc/newadm/message.txt)" ' >> .bashrc
 echo 'echo "" '>> .bashrc
@@ -381,7 +385,7 @@ mv -f ${SCPinstal}/$1 ${ARQ}/$1
 chmod +x ${ARQ}/$1
 }
 
-fun_ip
+fun_ipe
 
 wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 wget -O /bin/Desbloqueo.sh https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/Desbloqueo.sh &> /dev/null
