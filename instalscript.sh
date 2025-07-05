@@ -41,6 +41,23 @@ apt-get install figlet &>/dev/null
 rm $(pwd)/$0 &> /dev/null
 }
 
+os_system() {
+  system=$(cat -n /etc/issue | grep 1 | cut -d ' ' -f6,7,8 | sed 's/1//' | sed 's/      //')
+  distro=$(echo "$system" | awk '{print $1}')
+
+  case $distro in
+  Debian) vercin=$(echo $system | awk '{print $3}' | cut -d '.' -f1) ;;
+  Ubuntu) vercin=$(echo $system | awk '{print $2}' | cut -d '.' -f1,2) ;;
+  esac
+}
+
+repo() {
+   link="https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Repositorios/$1.list"
+  case $1 in
+  8 | 9 | 10 | 11 | 16.04 | 18.04 | 20.04 | 20.10 | 21.04 | 21.10 | 22.04 | 24.04 | 24.04) wget -O /etc/apt/sources.list ${link} &>/dev/null ;;
+  esac
+}
+
 ### COLORES Y BARRA 
 msg () {
 BRAN='\033[1;37m' && VERMELHO='\e[31m' && VERDE='\e[32m' && AMARELO='\e[33m'
