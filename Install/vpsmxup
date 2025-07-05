@@ -21,7 +21,7 @@ SCRIPT_NAME=vpsmxup
 
 ## Title and graphics
 msg -bar2
-echo "         VPS-PERU - $(date)"
+echo "         VIP_PERU - $(date)"
 msg -bar2
 sleep 1s
 
@@ -210,7 +210,7 @@ if [ "$REBOOT" = "1" ]; then
 fi
 
 tput clear
-printTitle "      ¡¡¡Ahora, Procedes a Instalar: VPS-MX!!!    "
+printTitle "      ¡¡¡Ahora, Procedes a Instalar: VIP_PERU!!!    "
 tput rev
 echo -e "    >>> Atento a los procedimientos siguientes a Instalar...<<<   "
 tput sgr0 
