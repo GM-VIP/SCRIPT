@@ -148,7 +148,7 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VPS PERU-" | lolcat 
+figlet " -VIP_PERU-" | lolcat 
 echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
 msg -bar2
 pv="$(echo es)"
@@ -161,7 +161,7 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VPS PERU-" | lolcat 
+figlet " -VIP_PERU-" | lolcat 
 echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<" | lolcat
 msg -bar2
 pv="$(echo es)"
@@ -395,7 +395,7 @@ chmod +x /bin/monitor.sh
 wget -O /var/www/html/estilos.css https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/Monitor-Service/estilos.css &> /dev/null
 msg -bar2
 msg -bar2
-msg -ama "     [ VPS - GHOST - SCRIPT \033[1;97m ✨MAQUINA VIRTUAL✨\033[1;33m ]"
+msg -ama "     [ VIP - GHOST - SCRIPT \033[1;97m ✨MAQUINA VIRTUAL✨\033[1;33m ]"
 msg -ama "  \033[1;96m    🔰Usar Ubuntu 18 a 64 De Preferencia🔰  "
 msg -bar2
 
