@@ -16,18 +16,23 @@ done
 
 BARRA="\033[1;36m-----------------------------------------------------------------\033[0m"
 
+# MODIFICACIÓN PERSONAL
 echo -e "$BARRA"
 mine_port4
 echo -e "$BARRA"
+instalaciones=$(cat "$IVAR")
+[[ -z "$instalaciones" ]] && instalaciones=0
+
 cat << EOF
            KEY GENERADOR : 🐲𝐎𝐖𝐍𝐄𝐑 : 𝐆𝐇𝐎𝐒𝐓🐲          
-           INSTALACIONES: $(cat $IVAR)          
+           INSTALACIONES: $instalaciones          
 EOF
 SCPT_DIR="/etc/SCRIPT"
 [[ ! -e ${SCPT_DIR} ]] && mkdir ${SCPT_DIR}
 INSTA_ARQUIVOS="ADMVPS.zip"
 DIR="/etc/http-shell"
 LIST="MDAKTSOHG"
+#  🔚 FIN DE MODIFICACIÓN PERSONAL
 
 meu_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
