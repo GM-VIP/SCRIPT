@@ -65,22 +65,6 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 
-introcab (){
-echo "#################################################################"
-echo -e "                     \e[93m  V I P _ P E R U    !!!\e[0m"
-echo "#################################################################"
-tput bold
-echo "
- GENERADOR OFICIAL >>> GHOST_S.O. MODS <<<. HAS BUEN USO 
- DE LAS LLAVES DE INSTALACIÓN, NO SATURES EL REGISTRO Y 
- DISFRUTA DE LA EXPERIENCIA.
- 
-          ( V I P _ P E R U ) SCRIPT By: GHOST..."
-echo "################################################################"
-echo
-echo -e "                     \e[3;92m   t.me:@GMVIP    \e[0m"
-}
-
 function_verify () {
 #echo -e "verificando..."
 # check_ip
@@ -151,23 +135,7 @@ chmod +x ${ARQ}/$1
 }
 
 tput clear
-tput cup 20 0
-introcab
-sleep 3
-os_system
-tput clear
-tput cup 22 1
-echo -e "\033[1;36m----------------------------------------------------------------\033[0m"
-tput cup 23 1
-tput rev
-echo "          GENERADOR DE LLAVES (GHOST_S.O SYSTEM) By: GHOST      "
-tput sgr0 
-tput cup 24 1
-echo -e "\033[1;36m----------------------------------------------------------------\033[0m"
-echo
-echo -e "          \e[1;97m 🔎 IDENTIFICANDO SISTEMA OPERATIVO   \e[0m"
-echo -e "          \e[1;32m           | $distro $vercin |"
-sleep 3
+echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 
 meu_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
@@ -176,10 +144,9 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 
-tput clear
 meu_ip
-echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
-echo -e "             \033[1;33m>>>   Instalando Archivos Necesarios   <<< "
+
+echo -e "\033[1;33m Descargando archivos para GENERADOR..."
 echo -e "\033[1;36m-----------------------------------------------------------------\033[0m"
 cd $HOME
 REQUEST=$(echo $SCPresq|$SUB_DOM)
@@ -187,11 +154,11 @@ wget -O "$HOME/lista-arq" ${REQUEST}/GERADOR > /dev/null 2>&1
 sleep 1s
 [[ -e $HOME/lista-arq ]] && {
 for arqx in `cat $HOME/lista-arq`; do
-echo -ne "\033[1;33m DESCARGANDO: \033[1;31m[$arqx] "
+echo -ne "\033[1;33m ▪︎Bajando Lista.... \033[1;31m[$arqx] "
 wget -O $HOME/$arqx ${REQUEST}/${arqx} > /dev/null 2>&1 && {
-echo -e "\033[1;31m- \033[1;32mDescarga Lista!!"
+echo -e "\033[1;31m ▪︎\033[1;32mRecibido Con Éxito!!!"
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
-} || echo -e "\033[1;31m- \033[1;31mERROR! (No Descargado!)"
+} || echo -e "\033[1;31m ▪︎\033[1;31mFallo (No Se Recibió)"
 done
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/trans &> /dev/null
 [[ -e /bin/http-server.py ]] && mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
