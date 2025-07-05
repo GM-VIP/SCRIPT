@@ -71,9 +71,11 @@ echo -e "                     \e[93m  V I P _ P E R U    !!!\e[0m"
 echo "#################################################################"
 tput bold
 echo "
-GENERADOR OFICIAL >>> GHOST_S.O. MODS <<<. HAS BUEN USO DE LAS LLAVES
-DE INSTALACIÓN, NO SATURES EL REGISTRO Y DISFRUTA DE LA EXPERIENCIA
-( V I P _ P E R U ) SCRIPT By: GHOST..."
+ GENERADOR OFICIAL >>> GHOST_S.O. MODS <<<. HAS BUEN USO 
+ DE LAS LLAVES DE INSTALACIÓN, NO SATURES EL REGISTRO Y 
+ DISFRUTA DE LA EXPERIENCIA.
+ 
+          ( V I P _ P E R U ) SCRIPT By: GHOST..."
 echo "################################################################"
 echo
 echo -e "                     \e[3;92m   t.me:@GMVIP    \e[0m"
@@ -185,7 +187,7 @@ wget -O "$HOME/lista-arq" ${REQUEST}/GERADOR > /dev/null 2>&1
 sleep 1s
 [[ -e $HOME/lista-arq ]] && {
 for arqx in `cat $HOME/lista-arq`; do
-echo -ne "\033[1;33mDESCARGANDO: \033[1;31m[$arqx] "
+echo -ne "\033[1;33m DESCARGANDO: \033[1;31m[$arqx] "
 wget -O $HOME/$arqx ${REQUEST}/${arqx} > /dev/null 2>&1 && {
 echo -e "\033[1;31m- \033[1;32mDescarga Lista!!"
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
