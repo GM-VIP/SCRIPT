@@ -124,17 +124,7 @@ fun_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 MIP2=$(wget -qO- ifconfig.me)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
-}  
-
-fun_ipe () { 
- MIP2=$(wget -qO- ifconfig.me) 
- MIP=$(wget -qO- whatismyip.akamai.com) 
- if [ $? -eq 0 ]; then 
- IP="$MIP" 
- else 
- IP="$MIP2" 
- fi 
- } 
+}
 
 function_verify () {
   ### INTALAR VERCION DE SCRIPT
@@ -148,7 +138,7 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VPS PERU-" | lolcat 
+figlet " -VIP_PERU-" | lolcat 
 echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
 msg -bar2
 pv="$(echo es)"
@@ -161,7 +151,7 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VPS PERU-" | lolcat 
+figlet " -VIP_PERU-" | lolcat 
 echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<" | lolcat
 msg -bar2
 pv="$(echo es)"
@@ -413,12 +403,12 @@ echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "n" x
 [[ $x = @(s|S|y|Y) ]] && retry_fun || 
 clear && clear
-msgi -bar2
-msgi -bar2
+msg -bar2
+msg -bar2
 rm -rf lista-arq
 echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
-msgi -bar2
-msgi -bar2
+msg -bar2
+msg -bar2
 exit 1
 }
 
@@ -431,12 +421,12 @@ echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "n" x
 [[ $x = @(s|S|y|Y) ]] && retry_fun || 
 clear && clear
-msgi -bar2
-msgi -bar2
+msg -bar2
+msg -bar2
 rm -rf lista-arq
 echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
-msgi -bar2
-msgi -bar2
+msg -bar2
+msg -bar2
 exit 1
 }
 
