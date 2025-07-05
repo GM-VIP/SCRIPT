@@ -101,7 +101,7 @@ sleep 1
 
 #Logo ADM_OS
 Logo () {
-figlet -f block "VIP_PERU" | lolcat
+figlet -f block "VIP_O.S" | lolcat
 echo -e "                  MODS_SCRIPT BY: GHOST"
 }
 
