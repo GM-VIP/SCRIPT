@@ -23,7 +23,7 @@ SCRIPT_NAME=vpsmxup
 
 ## Title and graphics
 msg -bar2
-echo "         VPS-PERU - $(date)"
+echo "         VIP_PERU - $(date)"
 msg -bar2
 sleep 1s
 
@@ -211,7 +211,7 @@ if [ "$REBOOT" = "1" ]; then
 	reboot
 fi
 
-printTitle " >>>> Se procede a Instalar VPS-PERU <<<<"
+printTitle " >>>> Se procede a Instalar VIP_PERU <<<<"
 echo $(date)
 msg -bar2
 sleep 2s
