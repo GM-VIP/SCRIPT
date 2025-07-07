@@ -49,14 +49,14 @@ _usop=$(printf '%-1s' "$(top -bn1 | awk '/Cpu/ { cpu = "" 100 - $8 "%" }; END { 
 _core=$(printf '%-1s' "$(grep -c cpu[0-9] /proc/stat)")
 _system=$(printf '%-14s' "$system")
 _hora=$(printf '%(%H:%M:%S)T')
-echo -e "\033[1;37mSISTEMA            MEMORIA RAM      PROCESSADOR \033[0m"
-echo -e "\033[1;37mOS: \033[1;33m$_system \033[1;37mTotal:\033[1;33m$_ram \033[1;37mNucleos: \033[1;33m$_core\033[0m"
-echo -e "\033[1;37mHora:\033[1;33m $_hora     \033[1;37mEn uso: \033[1;33m$_usor \033[1;37mEn uso: \033[1;33m$_usop\033[0m"
+echo -e "\033[1;37m SISTEMA            MEMORIA RAM      PROCESSADOR \033[0m"
+echo -e "\033[1;37m OS: \033[1;33m$_system \033[1;37mTotal:\033[1;33m$_ram \033[1;37mNucleos: \033[1;33m$_core\033[0m"
+echo -e "\033[1;37m Hora:\033[1;33m $_hora     \033[1;37mEn uso: \033[1;33m$_usor \033[1;37mEn uso: \033[1;33m$_usop\033[0m"
 }
 
 #Visualiza Barras
-BARRA="\033[1;33m⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊\033[0m"
-BARRA1="\033[1;37m\033[0m"
+BARRA="\033[1;33m ⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊\033[0m"
+BARRA1="\033[1;37m \033[0m"
 
 SCPT_DIR="/etc/SCRIPT"
 [[ ! -e ${SCPT_DIR} ]] && mkdir ${SCPT_DIR}
@@ -85,9 +85,9 @@ while [[ ${var[$value]} != 0 ]]; do
 [[ -e /etc/newadm-instalacao ]] && BASICINST="$(cat /etc/newadm-instalacao)" || BASICINST="menu PGet.py ports.sh ADMbot.sh message.txt usercodes sockspy.sh POpen.py PPriv.py PPub.py PDirect.py speedtest.py speed.sh utils.sh dropbear.sh apacheon.sh openvpn.sh shadowsocks.sh ssl.sh squid.sh"
 clear
 echo -e $BARRA
-echo -e "MENÚ SELECCIÓN DE INSTALACIÓN"
+echo -e " MENÚ SELECCIÓN DE INSTALACIÓN"
 echo -e $BARRA
-echo "[0] - FINALIZAR PROCEDIMIENTO"
+echo " [0] - FINALIZAR PROCEDIMIENTO"
 i=1
 for arqx in `ls ${SCPT_DIR}`; do
 [[ $arqx = @(gerar.sh|http-server.py) ]] && continue
@@ -95,7 +95,7 @@ for arqx in `ls ${SCPT_DIR}`; do
 var[$i]="$arqx"
 let i++
 done
-echo -ne "Seleccione el archivo [Agregar / Eliminar]: "
+echo -ne "nSeleccione el archivo [Agregar / Eliminar]: "
 read value
 [[ -z ${var[$value]} ]] && return
 if [[ $(echo $BASICINST|grep -w "${var[$value]}") ]]; then
@@ -136,16 +136,16 @@ arq_list[$i]="${arqx}"
 let i++
 done
 echo -e "$BARRA"
-echo -e "[x] -> \033[0;31mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
+echo -e " [x] -> \033[0;31mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
 echo -e "$BARRA"
-echo -e "[b] -> \033[0;33mINSTALADOR SCRIPT (VIP_PERU) VIP\033[0m"
+echo -e " [b] -> \033[0;33mINSTALADOR SCRIPT (VIP_PERU) VIP\033[0m"
 echo -e "$BARRA"
-read -p "Seleccione los archivos a ser repasados: " readvalue
+read -p " Seleccione los archivos a ser repasados: " readvalue
 #CRIA KEY
 [[ ! -e ${DIR}/${KEY} ]] && mkdir ${DIR}/${KEY}
 #PASSA ARQS
 [[ -z $readvalue ]] && readvalue="b"
-read -p "Nombre de usuario ( KEYS OWNER ): " nombrevalue
+read -p " Nombre de usuario ( KEYS OWNER ): " nombrevalue
 [[ -z $nombrevalue ]] && nombrevalue="SIN NOMBRE"
 if [[ $readvalue = @(b|B) ]]; then
 #ADM BASIC
@@ -157,7 +157,7 @@ if [[ $readvalue = @(b|B) ]]; then
  done
 elif [[ $readvalue = @(x|X) ]]; then
 # GERADOR KEYS
-read -p "KEY DE ACTUALIZACIÓN?: [Y/N]: " -e -i n attGEN
+read -p " KEY DE ACTUALIZACIÓN?: [Y/N]: " -e -i n attGEN
 [[ $(echo $nombrevalue|grep -w "FIXA") ]] && nombrevalue+=[GERADOR]
  for arqx in `ls $SCPT_DIR`; do
   [[ -e ${DIR}/${KEY}/$arqx ]] && continue #ANULA ARQUIVO CASO EXISTA
@@ -183,7 +183,7 @@ rm ${SCPT_DIR}/*.x.c &> /dev/null
 echo "$nombrevalue" > ${DIR}/${KEY}.name
 [[ ! -z $IPFIX ]] && echo "$IPFIX" > ${DIR}/${KEY}/keyfixa
 echo -e "$BARRA"
-echo -e "Key Activa, y Esperando Instalacion!"
+echo -e " Key Activa, y Esperando Instalacion!"
 echo -e "$BARRA"
 }
 
@@ -216,13 +216,13 @@ valuekey="$(date | md5sum | head -c10)"
 valuekey+="$(echo $(($RANDOM*10))|head -c 5)"
 fun_list "$valuekey"
 keyfinal=$(ofus "$IP:8888/$valuekey/$LIST")
-echo -e "\033[1;37mCopie su Llave de instalación !!!\033[0m"
+echo -e "\033[1;37mbCopie su Llave de instalación !!!\033[0m"
 echo -e "KEY ➾ \033[47;91m$keyfinal\033[0m"
 echo -e "$BARRA"
 echo -e "SCRIPT"
-echo -e "rm -rf instalscript.sh; apt-get update -y && apt-get upgrade -y; wget https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/instalscript.sh; chmod 777 instalscript.sh && ./instalscript.sh"
+echo -e " rm -rf instalscript.sh; apt-get update -y && apt-get upgrade -y; wget https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/instalscript.sh; chmod 777 instalscript.sh && ./instalscript.sh"
 echo -e "$BARRA"
-read -p "Enter para Finalizar"
+read -p " Enter para Finalizar"
 }
 
 att_gen_key () {
@@ -243,7 +243,7 @@ done
 keys=($keys)
 echo -e "$BARRA"
 while [[ -z ${keys[$value]} || -z $value ]]; do
-read -p "Seleccione qué Actualizar[t=todos]: " -e -i 0 value
+read -p " Seleccione qué Actualizar[t=todos]: " -e -i 0 value
 done
 [[ $value = 0 ]] && return
 if [[ $value = @(t|T) ]]; then
@@ -261,7 +261,7 @@ rm $KEYDIR/*.x.c &> /dev/null
     rm $KEYDIR/*.x.c &> /dev/null
    done
  arqsx=$(ofus "$IP:8888/$arqs/$LIST")
- echo -e "\033[1;33m[KEY]: $arqsx \033[1;32m(ACTUALIZADA!)\033[0m"
+ echo -e "\033[1;33m [KEY]: $arqsx \033[1;32m(ACTUALIZADA!)\033[0m"
  fi
 let i++
 done
@@ -281,8 +281,8 @@ rm ${KEYDIR}/${LIST}
   rm $KEYDIR/*.x.c &> /dev/null
   done
  arqsx=$(ofus "$IP:8888/${keys[$value]}/$LIST")
- echo -e "\033[1;33m[KEY]: $arqsx \033[1;32m(ACTUALIZADA!)\033[0m"
- read -p "Enter"
+ echo -e "\033[1;33m [KEY]: $arqsx \033[1;32m(ACTUALIZADA!)\033[0m"
+ read -p " Enter"
  rm ${SCPT_DIR}/*.x.c &> /dev/null
  }
 }
@@ -306,7 +306,7 @@ done
 keys=($keys)
 echo -e "$BARRA"
 while [[ -z ${keys[$value]} || -z $value ]]; do
-read -p "Elija cual eliminar: " -e -i 0 value
+read -p " Elija cual eliminar: " -e -i 0 value
 done
 [[ -d "$DIR/${keys[$value]}" ]] && rm -rf $DIR/${keys[$value]}* || return
 }
@@ -319,17 +319,17 @@ arqsx=$(ofus "$IP:8888/$arqs/$LIST")
  if [[ -e ${DIR}/${arqs}/used.date ]]; then #KEY USADA
   if [[ $(ls -l -c ${DIR}/${arqs}/used.date|cut -d' ' -f7) != $(date|cut -d' ' -f3) ]]; then
   rm -rf ${DIR}/${arqs}*
-  echo -e "\033[1;31m[KEY]: $arqsx \033[1;32m(ELIMINADA!)\033[0m" 
+  echo -e "\033[1;31m [KEY]: $arqsx \033[1;32m(ELIMINADA!)\033[0m" 
   else
-  echo -e "\033[1;32m[KEY]: $arqsx \033[1;32m(AÚN VÁLIDA!)\033[0m"
+  echo -e "\033[1;32m [KEY]: $arqsx \033[1;32m(AÚN VÁLIDA!)\033[0m"
   fi
  else
- echo -e "\033[1;32m[KEY]: $arqsx \033[1;32m(AÚN VÁLIDA!)\033[0m"
+ echo -e "\033[1;32m [KEY]: $arqsx \033[1;32m(AÚN VÁLIDA!)\033[0m"
  fi
 let i++
 done
 echo -e "$BARRA"
-echo -ne "\033[0m" && read -p "Enter"
+echo -ne "\033[0m" && read -p " Enter"
 }
 
 start_gen () {
@@ -343,13 +343,13 @@ fi
 }
 
 message_gen () {
-read -p "NUEVO MENSAJE: " MSGNEW
+read -p " NUEVO MENSAJE: " MSGNEW
 echo "$MSGNEW" > ${SCPT_DIR}/message.txt
 echo -e "$BARRA"
 }
 
 rmv_iplib () {
-echo -e "SERVIDORES DE KEY ACTIVOS!"
+echo -e " SERVIDORES DE KEY ACTIVOS!"
 rm /var/www/html/newlib && touch /var/www/html/newlib
 rm ${SCPT_DIR}/*.x.c &> /dev/null
 [[ -z $(ls $DIR|grep -v "ERROR-KEY") ]] && return
@@ -363,7 +363,7 @@ fi
 done
 echo "104.238.135.147" >> /var/www/html/newlib
 echo -e "$BARRA"
-read -p "Enter"
+read -p " Enter"
 }
 
 desint_geb () {
@@ -407,20 +407,20 @@ echo -e "$BARRA"
 echo -e "\033[1;37m Reseller : \033[1;44m$credito\033[0m"
 echo -e "\033[1;37m Keys Instaladas : \033[1;37m[\033[1;32m $mostrariv \033[1;37m]"
 echo -e "$BARRA"
-echo -e "[1] ➳ GENERAR 1 KEY ALEATORIA"
-echo -e "[2] ➳ ELIMINAR-VERIFICAR KEYS"
-echo -e "[3] ➳ LIMPIAR REGISTRO DE KEYS USADAS"
-echo -e "[4] ➳ ALTERAR ARCHIVOS DE KEY BASICA"
-echo -e "[5] ➳ ENCENDER - APAGAR GENERADOR $PID_GEN\033[0m"
-echo -e "[6] ➳ VER REGISTRO"
-echo -e "[7] ➳ CAMBIAR CREDITOS"
-echo -e "[8] ➳ ACTUALIZAR GENERADOR   "
-echo -e "[9] ➳ DESINTALAR GENERADOR   "
-echo -e "[10]➳ MENU : BOT TELEGRAM   "
-echo -e "[11]➳ ENCRIPTADOR SHC-LITE [BY:RAZHIEL]   "
-echo -e "[0] ➳ SALIR"
+echo -e " [1] ➳ GENERAR 1 KEY ALEATORIA"
+echo -e " [2] ➳ ELIMINAR-VERIFICAR KEYS"
+echo -e " [3] ➳ LIMPIAR REGISTRO DE KEYS USADAS"
+echo -e " [4] ➳ ALTERAR ARCHIVOS DE KEY BASICA"
+echo -e " [5] ➳ ENCENDER - APAGAR GENERADOR $PID_GEN\033[0m"
+echo -e " [6] ➳ VER REGISTRO"
+echo -e " [7] ➳ CAMBIAR CREDITOS"
+echo -e " [8] ➳ ACTUALIZAR GENERADOR   "
+echo -e " [9] ➳ DESINTALAR GENERADOR   "
+echo -e " [10]➳ MENU : BOT TELEGRAM   "
+echo -e "b[11]➳ ENCRIPTADOR SHC-LITE [BY:RAZHIEL]   "
+echo -e " [0] ➳ SALIR"
 echo -e "$BARRA"
-echo -n "Opción: "
+echo -n " Opción: "
 read opcion
 case $opcion in
 1)gerar_key;;
