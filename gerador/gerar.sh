@@ -216,10 +216,10 @@ valuekey="$(date | md5sum | head -c10)"
 valuekey+="$(echo $(($RANDOM*10))|head -c 5)"
 fun_list "$valuekey"
 keyfinal=$(ofus "$IP:8888/$valuekey/$LIST")
-echo -e "\033[1;37mbCopie su Llave de instalación !!!\033[0m"
-echo -e "KEY ➾ \033[47;91m$keyfinal\033[0m"
+echo -e "\033[1;37m Copie su Llave de instalación !!!\033[0m"
+echo -e " LLAVE ➾ \033[47;91m$keyfinal\033[0m"
 echo -e "$BARRA"
-echo -e "SCRIPT"
+echo -e " SCRIPT"
 echo -e " rm -rf instalscript.sh; apt-get update -y && apt-get upgrade -y; wget https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/instalscript.sh; chmod 777 instalscript.sh && ./instalscript.sh"
 echo -e "$BARRA"
 read -p " Enter para Finalizar"
@@ -306,7 +306,7 @@ done
 keys=($keys)
 echo -e "$BARRA"
 while [[ -z ${keys[$value]} || -z $value ]]; do
-read -p " Elija cual eliminar: " -e -i 0 value
+read -p " Elije que Llave eliminar: " -e -i 0 value
 done
 [[ -d "$DIR/${keys[$value]}" ]] && rm -rf $DIR/${keys[$value]}* || return
 }
