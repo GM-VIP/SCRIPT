@@ -95,7 +95,7 @@ for arqx in `ls ${SCPT_DIR}`; do
 var[$i]="$arqx"
 let i++
 done
-echo -ne "nSeleccione el archivo [Agregar / Eliminar]: "
+echo -ne " Seleccione el archivo [Agregar / Eliminar]: "
 read value
 [[ -z ${var[$value]} ]] && return
 if [[ $(echo $BASICINST|grep -w "${var[$value]}") ]]; then
@@ -136,17 +136,17 @@ arq_list[$i]="${arqx}"
 let i++
 done
 echo -e "$BARRA"
-echo -e " [x] -> \033[0;31mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
+echo -e " [x] -> \033[0;31mGENERAR LLAVE PARA ACTUALIZACIÓN \033[0m"
 echo -e "$BARRA"
-echo -e " [b] -> \033[0;33mINSTALADOR SCRIPT (VIP_PERU) VIP\033[0m"
+echo -e " [b] -> \033[0;33mGENERAR LLAVE SCRIPT (VIP_PERU)\033[0m"
 echo -e "$BARRA"
-read -p " Seleccione los archivos a ser repasados: " readvalue
+read -p " Seleccione una opción: " readvalue
 #CRIA KEY
 [[ ! -e ${DIR}/${KEY} ]] && mkdir ${DIR}/${KEY}
 #PASSA ARQS
 [[ -z $readvalue ]] && readvalue="b"
 read -p " Nombre de usuario ( KEYS OWNER ): " nombrevalue
-[[ -z $nombrevalue ]] && nombrevalue="SIN NOMBRE"
+[[ -z $nombrevalue ]] && nombrevalue="USUARIO"
 if [[ $readvalue = @(b|B) ]]; then
 #ADM BASIC
  arqslist="$BASICINST"
@@ -157,7 +157,7 @@ if [[ $readvalue = @(b|B) ]]; then
  done
 elif [[ $readvalue = @(x|X) ]]; then
 # GERADOR KEYS
-read -p " KEY DE ACTUALIZACIÓN?: [Y/N]: " -e -i n attGEN
+read -p " LLAVE DE ACTUALIZACIÓN?: [Y/N]: " -e -i n attGEN
 [[ $(echo $nombrevalue|grep -w "FIXA") ]] && nombrevalue+=[GERADOR]
  for arqx in `ls $SCPT_DIR`; do
   [[ -e ${DIR}/${KEY}/$arqx ]] && continue #ANULA ARQUIVO CASO EXISTA
