@@ -122,6 +122,10 @@ source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/ENCRYPTOR/main/Obsf-
 
 fun_list () {
 rm ${SCPT_DIR}/*.x.c &> /dev/null
+tput Clear
+echo 
+echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
+echo 
 unset KEY
 KEY="$1"
 #CRIA DIR
