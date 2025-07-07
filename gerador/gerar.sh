@@ -1,11 +1,70 @@
 #!/bin/bash
-# MODD BY: DESARROLLADOR
+#Mods System By: Rszhiel
+#MODD BY: DESARROLLADOR
 
-clear
+tput clear
+
 [[ -e /etc/newadm-instalacao ]] && BASICINST="$(cat /etc/newadm-instalacao)" || 
 BASICINST="ADMbot.sh apacheon.sh blockBT.sh budp.sh Crear-Demo.sh C-SSR.sh dns-netflix.sh dropbear.sh fai2ban.sh gestor.sh menu message.txt openvpn.sh paysnd.sh PDirect.py PGet.py POpen.py ports.sh PPriv.py PPub.py shadowsocks.sh Shadowsocks-libev.sh Shadowsocks-R.sh sockspy.sh speed.sh speedtest.py squid.sh squidpass.sh ssl.sh sslorig.sh tcp.sh ultrahost Unlock-Pass-VULTR.sh usercodes utils.sh v2ray.sh"
-IVAR="/etc/http-instas"
 
+#Funciones integrales
+system=$(cat /etc/issue.net)
+ar=$(wget -qO- ipv4.icanhazip.com)
+credito=$(cat /etc/SCRIPT/message.txt)
+mostrariv=$(cat /etc/http-instas)
+IVAR="/etc/http-instas"
+IP=$(wget -qO- ipv4.icanhazip.com)
+
+#Visualiza tiempo
+_hora=$(printf '%(%H:%M:%S)T') 
+_fecha=$(printf '%(%D)T') 
+
+#PROCESADOR
+_core=$(printf '%-1s' "$(grep -c cpu[0-9] /proc/stat)")
+_usop=$(printf '%-1s' "$(top -bn1 | awk '/Cpu/ { cpu = "" 100 - $8 "%" }; END { print cpu }')")
+
+#SISTEMA-USO DA CPU-MEMORIA RAM
+ram1=$(free -h | grep -i mem | awk {'print $2'})
+ram2=$(free -h | grep -i mem | awk {'print $4'})
+ram3=$(free -h | grep -i mem | awk {'print $3'})
+
+_ram=$(printf ' %-9s' "$(free -h | grep -i mem | awk {'print $2'})")
+_usor=$(printf '%-8s' "$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')")
+
+memorias () {
+if [[ "$(grep -c "Ubuntu" /etc/issue.net)" = "1" ]]; then
+system=$(cut -d' ' -f1 /etc/issue.net)
+system+=$(echo ' ')
+system+=$(cut -d' ' -f2 /etc/issue.net |awk -F "." '{print $1}')
+elif [[ "$(grep -c "Debian" /etc/issue.net)" = "1" ]]; then
+system=$(cut -d' ' -f1 /etc/issue.net)
+system+=$(echo ' ')
+system+=$(cut -d' ' -f3 /etc/issue.net)
+else
+system=$(cut -d' ' -f1 /etc/issue.net)
+fi
+_ram=$(printf ' %-9s' "$(free -h | grep -i mem | awk {'print $2'})")
+_usor=$(printf '%-8s' "$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')")
+_usop=$(printf '%-1s' "$(top -bn1 | awk '/Cpu/ { cpu = "" 100 - $8 "%" }; END { print cpu }')")
+_core=$(printf '%-1s' "$(grep -c cpu[0-9] /proc/stat)")
+_system=$(printf '%-14s' "$system")
+_hora=$(printf '%(%H:%M:%S)T')
+echo -e "\033[1;37mSISTEMA            MEMORIA RAM      PROCESSADOR \033[0m"
+echo -e "\033[1;37mOS: \033[1;33m$_system \033[1;37mTotal:\033[1;33m$_ram \033[1;37mNucleos: \033[1;33m$_core\033[0m"
+echo -e "\033[1;37mHora:\033[1;33m $_hora     \033[1;37mEn uso: \033[1;33m$_usor \033[1;37mEn uso: \033[1;33m$_usop\033[0m"
+}
+
+#Visualiza Barras
+BARRA="\033[1;33m⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊\033[0m"
+BARRA1="\033[1;37m\033[0m"
+
+SCPT_DIR="/etc/SCRIPT"
+[[ ! -e ${SCPT_DIR} ]] && mkdir ${SCPT_DIR}
+INSTA_ARQUIVOS="ADMVPS.zip"
+DIR="/etc/http-shell"
+LIST="MDAKTSOHG"
+
+#Puertos
 mine_port4 () {
 PT=$(lsof -V -i tcp -P -n | grep -v "ESTABLISHED" |grep -v "COMMAND" | grep "LISTEN")
 for porta in `echo -e "$PT" | cut -d: -f2 | cut -d' ' -f1 | uniq`; do
@@ -14,26 +73,7 @@ for porta in `echo -e "$PT" | cut -d: -f2 | cut -d' ' -f1 | uniq`; do
 done
 }
 
-BARRA="\033[1;36m-----------------------------------------------------------------\033[0m"
-
-# MODIFICACIÓN PERSONAL
-echo -e "$BARRA"
-mine_port4
-echo -e "$BARRA"
-instalaciones=$(cat "$IVAR")
-[[ -z "$instalaciones" ]] && instalaciones=0
-
-cat << EOF
-           KEY GENERADOR : 🐲𝐎𝐖𝐍𝐄𝐑 : 𝐆𝐇𝐎𝐒𝐓🐲          
-           INSTALACIONES: $instalaciones          
-EOF
-SCPT_DIR="/etc/SCRIPT"
-[[ ! -e ${SCPT_DIR} ]] && mkdir ${SCPT_DIR}
-INSTA_ARQUIVOS="ADMVPS.zip"
-DIR="/etc/http-shell"
-LIST="MDAKTSOHG"
-#  🔚 FIN DE MODIFICACIÓN PERSONAL
-
+#visualiza IP
 meu_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 MIP2=$(wget -qO- ipv4.icanhazip.com)
@@ -95,19 +135,18 @@ echo -e "[$i] -> ${arqx}"
 arq_list[$i]="${arqx}"
 let i++
 done
-echo -e "[x] -> \033[0;31mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
-echo -e "[b] -> \033[0;33mINSTALADOR SCRIPT VIP (VPS-GHOST) VIP\033[0m"
 echo -e "$BARRA"
-echo
-read -p "Selecciona tu opción : " -e -i b readvalue
+echo -e "[x] -> \033[0;31mGENERADOR DE KEYS PARA ACTUALIZACIÓN\033[0m"
+echo -e "$BARRA"
+echo -e "[b] -> \033[0;33mINSTALADOR SCRIPT (VIP_PERU) VIP\033[0m"
+echo -e "$BARRA"
+read -p "Seleccione los archivos a ser repasados: " readvalue
 #CRIA KEY
 [[ ! -e ${DIR}/${KEY} ]] && mkdir ${DIR}/${KEY}
 #PASSA ARQS
 [[ -z $readvalue ]] && readvalue="b"
 read -p "Nombre de usuario ( KEYS OWNER ): " nombrevalue
 [[ -z $nombrevalue ]] && nombrevalue="SIN NOMBRE"
-read -p "Key Fija? [S/N]: " -e -i n fixakey
-[[ $fixakey = @(s|S|y|Y) ]] && read -p "Digita la IP FIJA: " IPFIX && nombrevalue+=[FIXA]
 if [[ $readvalue = @(b|B) ]]; then
 #ADM BASIC
  arqslist="$BASICINST"
@@ -177,9 +216,13 @@ valuekey="$(date | md5sum | head -c10)"
 valuekey+="$(echo $(($RANDOM*10))|head -c 5)"
 fun_list "$valuekey"
 keyfinal=$(ofus "$IP:8888/$valuekey/$LIST")
-echo -e "KEY: $keyfinal\nGenerada Con Exito!"
+echo -e "\033[1;37mCopie su Llave de instalación !!!\033[0m"
+echo -e "KEY ➾ \033[47;91m$keyfinal\033[0m"
 echo -e "$BARRA"
-read -p " Presiona [Enter] para Finalizar!!!"
+echo -e "SCRIPT"
+echo -e "rm -rf instalscript.sh; apt-get update -y && apt-get upgrade -y; wget https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/instalscript.sh; chmod 777 instalscript.sh && ./instalscript.sh"
+echo -e "$BARRA"
+read -p "Enter para Finalizar"
 }
 
 att_gen_key () {
@@ -349,12 +392,20 @@ rm $HOME/instger.sh &>/dev/null
 
 #MENU PRINCIPAL GENERADOR
 meu_ip
-
 unset PID_GEN
 PID_GEN=$(ps x|grep -v grep|grep "http-server.sh")
-[[ ! $PID_GEN ]] && PID_GEN="\033[1;31m OFFLINE" || PID_GEN="\033[1;32m ONLINE"
+[[ ! $PID_GEN ]] && PID_GEN="\033[1;31m[ OFF ]" || PID_GEN="\033[1;32m[ ON ]"
+
+#Cabecera de Panel principal
+echo
 echo -e "$BARRA"
-echo -e "Directorio de los archivos repasados \033[1;31m${SCPT_DIR}\033[0m"
+echo -e "\033[1;37m            🔱  PANEL GENERADOR DE KEYS  🔱      \033[0m"
+echo -e "\033[1;37m                VIP_PERU SYSTEM By: GHOST        \033[0m"
+echo -e "$BARRA"
+memorias
+echo -e "$BARRA"
+echo -e "\033[1;37m Reseller : \033[1;44m$credito\033[0m"
+echo -e "\033[1;37m Keys Instaladas : \033[1;37m[\033[1;32m $mostrariv \033[1;37m]"
 echo -e "$BARRA"
 echo -e "[1] ➳ GENERAR 1 KEY ALEATORIA"
 echo -e "[2] ➳ ELIMINAR-VERIFICAR KEYS"
