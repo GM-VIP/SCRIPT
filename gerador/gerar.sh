@@ -81,7 +81,7 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 }
 
 mudar_instacao () {
-tput Clear
+tput clear
 echo 
 echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
 echo 
@@ -126,7 +126,7 @@ source <(curl -sSL https://raw.githubusercontent.com/GM-VIP/ENCRYPTOR/main/Obsf-
 
 fun_list () {
 rm ${SCPT_DIR}/*.x.c &> /dev/null
-tput Clear
+tput clear
 echo 
 echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
 echo 
@@ -220,7 +220,7 @@ echo "$txtofus" | rev
 }
 
 gerar_key () {
-tput Clear
+tput clear
 echo
 echo -e "$BARRA"
 echo -e " >>> GENERADOR VIP_PERU !!! <<<"
@@ -240,7 +240,7 @@ read -p " Enter para Finalizar"
 }
 
 att_gen_key () {
-tput Clear
+tput clear
 echo 
 echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
 echo 
@@ -306,7 +306,7 @@ rm ${KEYDIR}/${LIST}
 }
 
 remover_key () {
-tput Clear
+tput clear
 echo 
 echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
 echo 
@@ -365,7 +365,7 @@ fi
 }
 
 message_gen () {
-tput Clear
+tput clear
 echo 
 echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
 echo 
@@ -396,7 +396,7 @@ read -p " Enter"
 }
 
 desint_geb () {
-tput Clear
+tput clear
 echo 
 echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
 echo 
