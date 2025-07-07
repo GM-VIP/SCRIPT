@@ -12,7 +12,8 @@ system=$(cat /etc/issue.net)
 ar=$(wget -qO- ipv4.icanhazip.com)
 credito=$(cat /etc/SCRIPT/message.txt)
 mostrariv=$(cat /etc/http-instas)
-IVAR="/etc/http-instas"
+insts=$(cat "$IVAR")
+[[ -z "$instalaciones" ]] && instalaciones=0
 IP=$(wget -qO- ipv4.icanhazip.com)
 
 #Visualiza tiempo
@@ -55,7 +56,7 @@ echo -e "\033[1;37mHora:\033[1;33m $_hora     \033[1;37mEn uso: \033[1;33m$_usor
 }
 
 #Visualiza Barras
-BARRA="\033[1;33m⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊\033[0m"
+BARRA="\033[1;33m⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊⚊\033[0m"
 BARRA1="\033[1;37m\033[0m"
 
 SCPT_DIR="/etc/SCRIPT"
@@ -405,7 +406,7 @@ echo -e "$BARRA"
 memorias
 echo -e "$BARRA"
 echo -e "\033[1;37m Reseller : \033[1;44m$credito\033[0m"
-echo -e "\033[1;37m Keys Instaladas : \033[1;37m[\033[1;32m $mostrariv \033[1;37m]"
+echo -e "\033[1;37m Keys Instaladas : \033[1;37m[\033[1;32m $insts \033[1;37m]"
 echo -e "$BARRA"
 echo -e "[1] ➳ GENERAR 1 KEY ALEATORIA"
 echo -e "[2] ➳ ELIMINAR-VERIFICAR KEYS"
