@@ -394,13 +394,13 @@ rm $HOME/instger.sh &>/dev/null
 meu_ip
 unset PID_GEN
 PID_GEN=$(ps x|grep -v grep|grep "http-server.sh")
-[[ ! $PID_GEN ]] && PID_GEN="\033[1;31m[ OFF ]" || PID_GEN="\033[1;32m[ ON ]"
+[[ ! $PID_GEN ]] && PID_GEN="\033[1;31m [ OFF ]" || PID_GEN="\033[1;32m [ ON ]"
 
 #Cabecera de Panel principal
 echo
 echo -e "$BARRA"
 echo -e "\033[1;37m            🔱  PANEL GENERADOR DE KEYS  🔱      \033[0m"
-echo -e "\033[1;37m                VIP_PERU SYSTEM By: GHOST        \033[0m"
+echo -e "\033[1;37m               VIP_PERU SYSTEM By: GHOST        \033[0m"
 echo -e "$BARRA"
 memorias
 echo -e "$BARRA"
@@ -412,13 +412,13 @@ echo -e " [2] ➳ ELIMINAR-VERIFICAR KEYS"
 echo -e " [3] ➳ LIMPIAR REGISTRO DE KEYS USADAS"
 echo -e " [4] ➳ ALTERAR ARCHIVOS DE KEY BASICA"
 echo -e " [5] ➳ ENCENDER - APAGAR GENERADOR $PID_GEN\033[0m"
-echo -e " [6] ➳ VER REGISTRO"
+echo -e " [6] ➳ VER REGISTRO "
 echo -e " [7] ➳ CAMBIAR CREDITOS"
 echo -e " [8] ➳ ACTUALIZAR GENERADOR   "
 echo -e " [9] ➳ DESINTALAR GENERADOR   "
 echo -e " [10]➳ MENU : BOT TELEGRAM   "
-echo -e "b[11]➳ ENCRIPTADOR SHC-LITE [BY:RAZHIEL]   "
-echo -e " [0] ➳ SALIR"
+echo -e " [11]➳ ENCRIPTADOR SHC-LITE  "
+echo -e " [0] ➳ CERRAR PANEL DE GENERADOR "
 echo -e "$BARRA"
 echo -n " Opción: "
 read opcion
