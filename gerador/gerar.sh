@@ -81,6 +81,10 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 }
 
 mudar_instacao () {
+tput Clear
+echo 
+echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
+echo 
 while [[ ${var[$value]} != 0 ]]; do
 [[ -e /etc/newadm-instalacao ]] && BASICINST="$(cat /etc/newadm-instalacao)" || BASICINST="menu PGet.py ports.sh ADMbot.sh message.txt usercodes sockspy.sh POpen.py PPriv.py PPub.py PDirect.py speedtest.py speed.sh utils.sh dropbear.sh apacheon.sh openvpn.sh shadowsocks.sh ssl.sh squid.sh"
 clear
@@ -216,6 +220,12 @@ echo "$txtofus" | rev
 }
 
 gerar_key () {
+tput Clear
+echo
+echo -e "$BARRA"
+echo -e " >>> GENERADOR VIP_PERU !!! <<<"
+echo -e "$BARRA"
+echo
 valuekey="$(date | md5sum | head -c10)"
 valuekey+="$(echo $(($RANDOM*10))|head -c 5)"
 fun_list "$valuekey"
@@ -230,6 +240,10 @@ read -p " Enter para Finalizar"
 }
 
 att_gen_key () {
+tput Clear
+echo 
+echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
+echo 
 i=0
 rm ${SCPT_DIR}/*.x.c &> /dev/null
 [[ -z $(ls $DIR|grep -v "ERROR-KEY") ]] && return
@@ -292,6 +306,10 @@ rm ${KEYDIR}/${LIST}
 }
 
 remover_key () {
+tput Clear
+echo 
+echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
+echo 
 i=0
 [[ -z $(ls $DIR|grep -v "ERROR-KEY") ]] && return
 echo " [$i] Retornar"
@@ -347,6 +365,10 @@ fi
 }
 
 message_gen () {
+tput Clear
+echo 
+echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
+echo 
 read -p " NUEVO MENSAJE: " MSGNEW
 echo "$MSGNEW" > ${SCPT_DIR}/message.txt
 echo -e "$BARRA"
@@ -374,7 +396,10 @@ read -p " Enter"
 }
 
 desint_geb () {
-clear
+tput Clear
+echo 
+echo -e " >>> MENU DE GENERADOR VIP_PERU !!! <<<"
+echo 
 echo -e "$BARRA"
 echo " !SEGURO DE PROCEDER A DESINTALAR GENERADOR??: "
 echo -e "$BARRA"
