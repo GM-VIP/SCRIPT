@@ -135,14 +135,14 @@ i=0
 VALUE+="gerar.sh instgerador.sh http-server.py $BASICINST"
 for arqx in `ls ${SCPT_DIR}`; do
 [[ $(echo $VALUE|grep -w "${arqx}") ]] && continue 
-echo -e "[$i] -> ${arqx}"
+echo -e " [$i] -> ${arqx}"
 arq_list[$i]="${arqx}"
 let i++
 done
 echo -e "$BARRA"
-echo -e " [x] -> \033[0;31mGENERAR LLAVE PARA ACTUALIZACIÓN \033[0m"
+echo -e " [x] -> \033[0;37mGENERAR LLAVE PARA ACTUALIZACIÓN \033[0m"
 echo -e "$BARRA"
-echo -e " [b] -> \033[0;33mGENERAR LLAVE SCRIPT (VIP_PERU)\033[0m"
+echo -e " [b] -> \033[0;32mGENERAR LLAVE SCRIPT (VIP_PERU)\033[0m"
 echo -e "$BARRA"
 read -p " Seleccione una opción: " readvalue
 #CRIA KEY
@@ -167,7 +167,7 @@ read -p " LLAVE DE ACTUALIZACIÓN?: [Y/N]: " -e -i n attGEN
   [[ -e ${DIR}/${KEY}/$arqx ]] && continue #ANULA ARQUIVO CASO EXISTA
   cp ${SCPT_DIR}/$arqx ${DIR}/${KEY}/
  echo "$arqx" >> ${DIR}/${KEY}/${LIST}
- echo "Gerador" >> ${DIR}/${KEY}/GERADOR
+ echo " Gerador" >> ${DIR}/${KEY}/GERADOR
  done
 if [[ $attGEN = @(Y|y|S|s) ]]; then
 [[ -e ${DIR}/${KEY}/gerar.sh ]] && rm ${DIR}/${KEY}/gerar.sh
@@ -181,7 +181,7 @@ else
  cp ${SCPT_DIR}/${arq_list[$arqx]} ${DIR}/${KEY}/
  echo "${arq_list[$arqx]}" >> ${DIR}/${KEY}/${LIST}
  done
-echo "TRUE" >> ${DIR}/${KEY}/FERRAMENTA
+echo " TRUE" >> ${DIR}/${KEY}/FERRAMENTA
 fi
 rm ${SCPT_DIR}/*.x.c &> /dev/null
 echo "$nombrevalue" > ${DIR}/${KEY}.name
@@ -233,13 +233,13 @@ att_gen_key () {
 i=0
 rm ${SCPT_DIR}/*.x.c &> /dev/null
 [[ -z $(ls $DIR|grep -v "ERROR-KEY") ]] && return
-echo "[$i] Retornar"
+echo " [$i] Retornar"
 keys="$keys retorno"
 let i++
 for arqs in `ls $DIR|grep -v "ERROR-KEY"|grep -v ".name"`; do
 arqsx=$(ofus "$IP:8888/$arqs/$LIST")
 if [[ $(cat ${DIR}/${arqs}.name|grep GERADOR) ]]; then
-echo -e "\033[1;31m[$i] $arqsx ($(cat ${DIR}/${arqs}.name))\033[1;32m ($(cat ${DIR}/${arqs}/keyfixa))\033[0m"
+echo -e "\033[1;31m [$i] $arqsx ($(cat ${DIR}/${arqs}.name))\033[1;32m ($(cat ${DIR}/${arqs}/keyfixa))\033[0m"
 keys="$keys $arqs"
 let i++
 fi
@@ -294,15 +294,15 @@ rm ${KEYDIR}/${LIST}
 remover_key () {
 i=0
 [[ -z $(ls $DIR|grep -v "ERROR-KEY") ]] && return
-echo "[$i] Retornar"
+echo " [$i] Retornar"
 keys="$keys retorno"
 let i++
 for arqs in `ls $DIR|grep -v "ERROR-KEY"|grep -v ".name"`; do
 arqsx=$(ofus "$IP:8888/$arqs/$LIST")
 if [[ ! -e ${DIR}/${arqs}/used.date ]]; then
-echo -e "\033[1;32m[$i] $arqsx ($(cat ${DIR}/${arqs}.name))\033[1;33m (AGUARDANDO USO)\033[0m"
+echo -e "\033[1;32m [$i] $arqsx ($(cat ${DIR}/${arqs}.name))\033[1;33m (AGUARDANDO USO)\033[0m"
 else
-echo -e "\033[1;31m[$i] $arqsx ($(cat ${DIR}/${arqs}.name))\033[1;33m ($(cat ${DIR}/${arqs}/used.date) IP: $(cat ${DIR}/${arqs}/used))\033[0m"
+echo -e "\033[1;31m [$i] $arqsx ($(cat ${DIR}/${arqs}.name))\033[1;33m ($(cat ${DIR}/${arqs}/used.date) IP: $(cat ${DIR}/${arqs}/used))\033[0m"
 fi
 keys="$keys $arqs"
 let i++
@@ -353,7 +353,10 @@ echo -e "$BARRA"
 }
 
 rmv_iplib () {
-echo -e " SERVIDORES DE KEY ACTIVOS!"
+tput clear
+echo
+echo -e " >>> SERVIDOR DE LLAVES ACTIVAS !!! <<<"
+echo
 rm /var/www/html/newlib && touch /var/www/html/newlib
 rm ${SCPT_DIR}/*.x.c &> /dev/null
 [[ -z $(ls $DIR|grep -v "ERROR-KEY") ]] && return
@@ -361,7 +364,7 @@ for arqs in `ls $DIR|grep -v "ERROR-KEY"|grep -v ".name"`; do
 if [[ $(cat ${DIR}/${arqs}.name|grep GERADOR) ]]; then
 var=$(cat ${DIR}/${arqs}.name)
 ip=$(cat ${DIR}/${arqs}/keyfixa)
-echo -ne "\033[1;31m[USUARIO]:(\033[1;32m${var%%[*}\033[1;31m) \033[1;33m[GERADOR]:\033[1;32m ($ip)\033[0m"
+echo -ne "\033[1;31m [USUARIO]:(\033[1;32m${var%%[*}\033[1;31m) \033[1;33m[GERADOR]:\033[1;32m ($ip)\033[0m"
 echo "$ip" >> /var/www/html/newlib && echo -e " \033[1;36m[ACTUALIZADO]"
 fi
 done
