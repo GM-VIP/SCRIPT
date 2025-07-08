@@ -278,8 +278,9 @@ echo 'echo "" '>> .bashrc
 tput clear
 tput cup 10 0
 msg -bar
-echo -e "   PARA ACCEDER AL PANEL DE CONTROL VIP_PERU, ESCRIBE EL COMANDO: "
-echo -e "\033[0;37m                   \033[1;41m menu ó VIP \033[0m" && msg -bar2
+echo -e "  PARA ACCEDER AL PANEL DE CONTROL VIP_PERU, ESCRIBE: "
+echo -e "\033[0;37m                  \033[1;41m  menu ó VIP  \033[0m" && msg -bar2
+echo
 
 [[ ! -e /etc/autostart ]] && {
 	echo '#!/bin/bash
