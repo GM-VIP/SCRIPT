@@ -208,16 +208,7 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
-
-  # NOTIFICADOR
-   tput clear
-   NOTIFY
-   echo -e "${cor[2]}    ESCRIBE (n) PARA CONTINUAR (🐲Default n🐲)"
-   echo -e "\033[1;34m  🚨PROCESO FINALIZANDO..."
-   msg -bar2
-   read -p " [ s | n ]: " NOTIFY   
-   [[ "$NOTIFY" = "s" || "$NOTIFY" = "S" ]] && NOTIFY
-   msg -bar2
+   echo
    [[ ${byinst} = "true" ]] && install_fim
 else
 invalid_key
@@ -228,9 +219,9 @@ install_fim () {
 echo
 msg -ama "               Finalizando Instalacion" && msg bar2
 rm -rf /etc/newadm/ger-user/nombre.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://www.dropbox.com/s/pvo7zneayjjtsgw/nombre.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name IDT.log|grep -w "IDT.log"|head -1) ]] || wget -O /etc/newadm/ger-user/IDT.log https://www.dropbox.com/s/vzsacahfbwwm0ow/IDT.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name tiemlim.log|grep -w "tiemlim.log"|head -1) ]] || wget -O /etc/newadm/ger-user/tiemlim.log https://www.dropbox.com/s/kkchh0ldtdt2yza/tiemlim.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/nombre.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name IDT.log|grep -w "IDT.log"|head -1) ]] || wget -O /etc/newadm/ger-user/IDT.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/IDT.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name tiemlim.log|grep -w "tiemlim.log"|head -1) ]] || wget -O /etc/newadm/ger-user/tiemlim.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/tiemlim.log &>/dev/null
 
 wget -O /bin/rebootnb https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/rebootnb &> /dev/null
 chmod +x /bin/rebootnb 
@@ -283,7 +274,6 @@ echo 'echo "" '>> .bashrc
 echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;37m\033[41m menu \033[0m"'>> .bashrc
 echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null'>> .bashrc
 echo 'echo "" '>> .bashrc
-echo
 echo -e "   ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL: "
 echo -e "\033[0;37m                   \033[1;41m menu \033[0m" && msg -bar2
 [[ ! -e /etc/autostart ]] && {
@@ -406,7 +396,6 @@ msg -bar2
 msg -ama "     [ VIP - PERU - SCRIPT \033[1;97m ✨MAQUINA VIRTUAL✨\033[1;33m ]"
 msg -ama "  \033[1;96m    🔰Usar Ubuntu 18 a 64 De Preferencia🔰  "
 msg -bar2
-
 [[ $1 = "" ]] && funcao_idioma || {
 [[ ${#1} -gt 2 ]] && funcao_idioma || id="$1"
  }
@@ -506,15 +495,7 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
-   # NOTIFICADOR
-   tput clear
-   NOTIFY
-   echo -e "${cor[2]}    ESCRIBE (n) PARA CONTINUAR (🐲Default n🐲)"
-   echo -e "\033[1;34m  🚨PROCESO FINALIZANDO..."
-   msg -bar2
-   read -p " [ s | n ]: " NOTIFY   
-   [[ "$NOTIFY" = "s" || "$NOTIFY" = "S" ]] && NOTIFY
-   msg -bar2
+   echo
    [[ ${byinst} = "true" ]] && install_fim
 else
 invalid_key
