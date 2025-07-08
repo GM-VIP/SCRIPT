@@ -1,6 +1,5 @@
 # SCRIPT VIP VIP_PERU ∞ Meta >>> 🇵🇪 - 🇳🇮
-# -----------------------------------------
-#![Screenshot]([VIP(VPS-PERU)].png)
+# ----------------------------------------
 ![Screenshot](IMG_20250708_102956.jpg)
 
 # SCRIPT VIP_PERU : ∞ Meta:
