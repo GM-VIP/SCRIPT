@@ -403,7 +403,7 @@ chmod +x /bin/monitor.sh
 wget -O /var/www/html/estilos.css https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/Monitor-Service/estilos.css &> /dev/null
 msg -bar2
 msg -bar2
-msg -ama "     [ VIP - GHOST - SCRIPT \033[1;97m ✨MAQUINA VIRTUAL✨\033[1;33m ]"
+msg -ama "     [ VIP - PERU - SCRIPT \033[1;97m ✨MAQUINA VIRTUAL✨\033[1;33m ]"
 msg -ama "  \033[1;96m    🔰Usar Ubuntu 18 a 64 De Preferencia🔰  "
 msg -bar2
 
