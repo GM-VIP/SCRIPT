@@ -257,6 +257,7 @@ echo 'DATE=$(date +"%d-%m-%y")' >> .bashrc
 echo 'TIME=$(date +"%T")' >> .bashrc
 sleep 1
 clear
+
 echo 'echo ""' >> .bashrc
 echo 'echo -e "\033[0;31m        __     ___ ____       ____  _____ _____  _   _          " '>> .bashrc
 echo 'echo -e "\033[0;31m        \ \   / (_)  _ \     |  _ \| ____|  _  \| | | |         " '>> .bashrc
