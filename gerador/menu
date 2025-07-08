@@ -6,7 +6,7 @@ clear
 [[ ! -e /etc/versin_script ]] && echo 1 > /etc/versin_script
 v11=$(cat /etc/versin_script_new) 
 v22=$(cat /etc/versin_script)
-[[ $v11 = $v22 ]] && vesaoSCT="\033[1;32mVPS•GHOST||Vers.$v22\033[1;97m✦҈͜͡➳👻𝕲𝔥𝔬𝔰𝔱•✓☆ۣۜۜ͜͡🌹 \033[1;31m]" || vesaoSCT="\033[1;32m$v22\033[1;32m \e[1;97m\e[0;103m\e[1;34m SCRIPT VIP \033[0m" 
+[[ $v11 = $v22 ]] && vesaoSCT="\033[1;32mVIP_PERU||Vers.$v22\033[1;97m✦҈͜͡➳👻𝕲𝔥𝔬𝔰𝔱•✓☆ۣۜۜ͜͡🌹 \033[1;31m]" || vesaoSCT="\033[1;32m$v22\033[1;32m \e[1;97m\e[0;103m\e[1;34m SCRIPT-MODS \033[0m" 
 _hora=$(printf '%(%D-%H:%M:%S)T') 
 
 sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1 > /dev/null 2>&1
@@ -43,7 +43,7 @@ fi
 cabec () {
 clear
 echo -e "\e[38m—————————————————————————————————————————————————————————\e[0m"
-echo -e "\e[1;97;41m     ►► 👻 PANEL VPS•GHOST 👻 ◄◄ | |   ✦҈͜͡➳👻𝕲𝔥𝔬𝔰𝔱•✓☆ۣۜۜ͜͡🌹       \e[0m"
+echo -e "\e[1;97;41m     ►► 👻 PANEL VIP•PERU 👻 ◄◄ | |   ✦҈͜͡➳👻𝕲𝔥𝔬𝔰𝔱•✓☆ۣۜۜ͜͡🌹       \e[0m"
 echo -e "\e[38m—————————————————————————————————————————————————————————\e[0m"
 tput sgr0
 }
@@ -90,7 +90,7 @@ SEMCOR='\e[0m'
 canbio_color () {
 clear
 cabec
-msg -ama "   Cambiar Colores del Panel \033[1;31m[\033[1;32m VPS-GHOST \033[1;31m]"
+msg -ama "   Cambiar Colores del Panel \033[1;31m[\033[1;32m VIP_PERU \033[1;31m]"
 msg -bar2
 msg -ama "$(fun_trans "Selecione 7 cores"): "
 echo -e '\033[1;37m [1] ###\033[0m'
@@ -1312,7 +1312,7 @@ echo -e "\e[97m                  FIN DEL MONITOR"
 msg -bar
 }
 
-#########VISUALIZACION DE MENU
+# VISUALIZACION DE MENU
 
 VERY3="$(ps aux|grep "${SCPdir}/menu monitorservi"| grep -v grep)"
 [[ -z ${VERY3} ]] && monitorservi="\033[1;31m[OFF]" || monitorservi="\033[1;32m[ON]"
@@ -1321,7 +1321,7 @@ Bot=$(ps x|grep -v grep |grep "ADMbot.sh")
 on="\e[1;32m[ON]" && off="\e[1;31m[OFF]"
 
 echo -e "\e[1;97m—————————————————————————————————————————————————————\e[0m"
-echo -e "\e[97m\033[1;41m 📋PANEL DE CONTROL VPS•GHOST   | |   ✦҈͜͡➳👻𝕲𝔥𝔬𝔰𝔱•✓☆ۣۜۜ͜͡🌹   \e[0m"
+echo -e "\e[97m\033[1;41m 📋PANEL DE CONTROL VIP_PERU   | |   ✦҈͜͡➳👻𝕲𝔥𝔬𝔰𝔱•✓☆ۣۜۜ͜͡🌹   \e[0m"
 echo -e "\e[1;97m—————————————————————————————————————————————————————\e[0m"
 msg -bra " \e[1;34m OFC Vers: \033[1;32m$vesaoSCT\033[1;97m"
 echo -e "\e[1;97m—————————————————————————————————————————————————————\e[0m"
