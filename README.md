@@ -1,8 +1,8 @@
-# SCRIPT VIP VPS-GHOST ∞ Meta >>> 🇵🇪 - 🇳🇮
+# SCRIPT VIP VIP_PERU ∞ Meta >>> 🇵🇪 - 🇳🇮
 # -----------------------------------------
 ![Screenshot]([VIP(VPS-PERU)].png)
 
-# SCRIPT VPS-GHOST : ∞ Meta:
+# SCRIPT VIP_PERU : ∞ Meta:
 
 >Script Manager de VPS</em></p>
 <p style="text-align: center;"><br />&nbsp;Este es un script para la administracion de Cuentas de Tipo:</p>
