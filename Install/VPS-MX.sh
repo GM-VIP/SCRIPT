@@ -208,7 +208,11 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
-   echo -e "${cor[2]}         ESCRIBE n PARA CONTINUAR (🐲Default n🐲)"
+
+  # NOTIFICADOR
+   tput clear
+   NOTIFY
+   echo -e "${cor[2]}    ESCRIBE (n) PARA CONTINUAR (🐲Default n🐲)"
    echo -e "\033[1;34m  🚨PROCESO FINALIZANDO..."
    msg -bar2
    read -p " [ s | n ]: " NOTIFY   
@@ -221,6 +225,7 @@ fi
 }
 
 install_fim () {
+echo
 msg -ama "               Finalizando Instalacion" && msg bar2
 rm -rf /etc/newadm/ger-user/nombre.log &>/dev/null
 [[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://www.dropbox.com/s/pvo7zneayjjtsgw/nombre.log &>/dev/null
@@ -233,8 +238,10 @@ wget -O /bin/resetsshdrop https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/A
 chmod +x /bin/resetsshdrop
 wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null
 msg -bar2
+
+#CREAR SLOGAN INTRO
 tput clear
-echo
+tput cup 10 0
 msg -bar
 echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
 read -p "   RESELLER: " Ghost
@@ -307,7 +314,7 @@ sleep 3
 
 NOTIFY () {
 msg -bar
-msg -ama " Notify-BOT (Notificasion Remota)| VPS-GHOST "
+msg -ama " Notify-BOT (Notificasion Remota)| VIP_PERU "
 msg -bar
 echo -e "\033[1;94m Es una opcion para notificar cuando\n un usuario sea bloquedo o este expirado, e info de VPS."
 echo -e "\033[1;97m Debe mantenerse atento a posible actualizaciónes"
