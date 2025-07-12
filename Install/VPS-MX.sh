@@ -148,7 +148,7 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VIP_PERU-" | lolcat 
+figlet " -VPS PERU-" | lolcat 
 echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
 msg -bar2
 pv="$(echo es)"
@@ -161,7 +161,7 @@ tput clear
 unset Key > /dev/null 2>&1
 unset Key
 msg -bar2
-figlet " -VIP_PERU-" | lolcat 
+figlet " -VPS PERU-" | lolcat 
 echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<" | lolcat
 msg -bar2
 pv="$(echo es)"
@@ -208,7 +208,12 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
-   echo
+   echo -e "${cor[2]}         ESCRIBE n PARA CONTINUAR (🐲Default n🐲)"
+   echo -e "\033[1;34m  🚨PROCESO FINALIZANDO..."
+   msg -bar2
+   read -p " [ s | n ]: " NOTIFY   
+   [[ "$NOTIFY" = "s" || "$NOTIFY" = "S" ]] && NOTIFY
+   msg -bar2
    [[ ${byinst} = "true" ]] && install_fim
 else
 invalid_key
@@ -216,12 +221,11 @@ fi
 }
 
 install_fim () {
-echo
 msg -ama "               Finalizando Instalacion" && msg bar2
 rm -rf /etc/newadm/ger-user/nombre.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/nombre.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name IDT.log|grep -w "IDT.log"|head -1) ]] || wget -O /etc/newadm/ger-user/IDT.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/IDT.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name tiemlim.log|grep -w "tiemlim.log"|head -1) ]] || wget -O /etc/newadm/ger-user/tiemlim.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/tiemlim.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://www.dropbox.com/s/pvo7zneayjjtsgw/nombre.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name IDT.log|grep -w "IDT.log"|head -1) ]] || wget -O /etc/newadm/ger-user/IDT.log https://www.dropbox.com/s/vzsacahfbwwm0ow/IDT.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name tiemlim.log|grep -w "tiemlim.log"|head -1) ]] || wget -O /etc/newadm/ger-user/tiemlim.log https://www.dropbox.com/s/kkchh0ldtdt2yza/tiemlim.log &>/dev/null
 
 wget -O /bin/rebootnb https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/rebootnb &> /dev/null
 chmod +x /bin/rebootnb 
@@ -229,10 +233,8 @@ wget -O /bin/resetsshdrop https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/A
 chmod +x /bin/resetsshdrop
 wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null
 msg -bar2
-
-#CREAR SLOGAN INTRO
 tput clear
-tput cup 10 0
+echo
 msg -bar
 echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
 read -p "   RESELLER: " Ghost
@@ -255,13 +257,12 @@ echo 'DATE=$(date +"%d-%m-%y")' >> .bashrc
 echo 'TIME=$(date +"%T")' >> .bashrc
 sleep 1
 clear
-
 echo 'echo ""' >> .bashrc
-echo 'echo -e "\033[0;31m        __     ___ ____       ____  _____ _____  _   _          " '>> .bashrc
-echo 'echo -e "\033[0;31m        \ \   / (_)  _ \     |  _ \| ____|  _  \| | | |         " '>> .bashrc
-echo 'echo -e "\033[0;31m  _______\ \ / /| | |_) |    | |_) |  _| | |_)  | | | |_______  " '>> .bashrc
-echo 'echo -e "\033[0;31m |________\ V / | |  __/  🚀 |  __/| |___|  _  <| |_| |_______| " '>> .bashrc
-echo 'echo -e "\033[0;31m           \_/  |_|_|        |_|   |_____|_|  \_\\____/         " '>> .bashrc 
+echo 'echo -e "\033[0;31m        __     ______  ____       ____  _____ _____  _   _          " '>> .bashrc
+echo 'echo -e "\033[0;31m        \ \   / /  _ \/ ___|     |  _ \| ____|  _  \| | | |         " '>> .bashrc
+echo 'echo -e "\033[0;31m  _______\ \ / /| |_) \___ \     | |_) |  _| | |_)  | | | |_______  " '>> .bashrc
+echo 'echo -e "\033[0;31m |________\ V / |  __/ ___) | 🚀 |  __/| |___|  _  <| |_| |_______| " '>> .bashrc
+echo 'echo -e "\033[0;31m           \_/  |_|   |____/     |_|   |_____|_|  \_\\____/         " '>> .bashrc 
 echo 'echo "" '>> .bashrc
 echo 'mess1="$(cat /etc/newadm/message.txt)" ' >> .bashrc
 echo 'echo "" '>> .bashrc
@@ -274,14 +275,9 @@ echo 'echo "" '>> .bashrc
 echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;37m\033[41m menu \033[0m"'>> .bashrc
 echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null'>> .bashrc
 echo 'echo "" '>> .bashrc
-
-tput clear
-tput cup 10 0
-msg -bar
-echo -e "  PARA ACCEDER AL PANEL DE CONTROL VIP_PERU, ESCRIBE: "
-echo -e "\033[0;37m                  \033[1;41m  menu ó VIP  \033[0m" && msg -bar2
 echo
-
+echo -e "   ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL: "
+echo -e "\033[0;37m                   \033[1;41m menu \033[0m" && msg -bar2
 [[ ! -e /etc/autostart ]] && {
 	echo '#!/bin/bash
 clear
@@ -310,7 +306,7 @@ sleep 3
 
 NOTIFY () {
 msg -bar
-msg -ama " Notify-BOT (Notificasion Remota)| VIP_PERU "
+msg -ama " Notify-BOT (Notificasion Remota)| VPS-GHOST "
 msg -bar
 echo -e "\033[1;94m Es una opcion para notificar cuando\n un usuario sea bloquedo o este expirado, e info de VPS."
 echo -e "\033[1;97m Debe mantenerse atento a posible actualizaciónes"
@@ -399,9 +395,10 @@ chmod +x /bin/monitor.sh
 wget -O /var/www/html/estilos.css https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/Monitor-Service/estilos.css &> /dev/null
 msg -bar2
 msg -bar2
-msg -ama "     [ VIP - PERU - SCRIPT \033[1;97m ✨MAQUINA VIRTUAL✨\033[1;33m ]"
+msg -ama "     [ VPS - GHOST - SCRIPT \033[1;97m ✨MAQUINA VIRTUAL✨\033[1;33m ]"
 msg -ama "  \033[1;96m    🔰Usar Ubuntu 18 a 64 De Preferencia🔰  "
 msg -bar2
+
 [[ $1 = "" ]] && funcao_idioma || {
 [[ ${#1} -gt 2 ]] && funcao_idioma || id="$1"
  }
@@ -416,12 +413,12 @@ echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "n" x
 [[ $x = @(s|S|y|Y) ]] && retry_fun || 
 clear && clear
-msg -bar2
-msg -bar2
+msgi -bar2
+msgi -bar2
 rm -rf lista-arq
 echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
-msg -bar2
-msg -bar2
+msgi -bar2
+msgi -bar2
 exit 1
 }
 
@@ -434,12 +431,12 @@ echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "n" x
 [[ $x = @(s|S|y|Y) ]] && retry_fun || 
 clear && clear
-msg -bar2
-msg -bar2
+msgi -bar2
+msgi -bar2
 rm -rf lista-arq
 echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
-msg -bar2
-msg -bar2
+msgi -bar2
+msgi -bar2
 exit 1
 }
 
@@ -501,7 +498,12 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
-   echo
+   echo -e "${cor[2]}         ESCRIBE n PARA CONTINUAR (🐲Default n🐲)"
+   echo -e "\033[1;34m  🚨PROCESO FINALIZANDO..."
+   msg -bar2
+   read -p " [ s | n ]: " NOTIFY   
+   [[ "$NOTIFY" = "s" || "$NOTIFY" = "S" ]] && NOTIFY
+   msg -bar2
    [[ ${byinst} = "true" ]] && install_fim
 else
 invalid_key
