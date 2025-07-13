@@ -39,10 +39,20 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  esac
 }
 
+os_system() {
+  if [ -f /etc/os-release ]; then
+    distro=$(grep "^NAME=" /etc/os-release | cut -d= -f2 | tr -d '"')
+    vercion=$(grep "^VERSION_ID=" /etc/os-release | cut -d= -f2 | tr -d '"')
+  else
+    distro=$(lsb_release -si)
+    vercion=$(lsb_release -sr)
+  fi
+}
+
 dependencias() {
   # Mostrar info del sistema (distro + IP)
   os_system
-  MI=$(wget -qO- ifconfig.me)
+  MI=$(curl -s ipv4.icanhazip.com)
   echo "$distro $vercion" >/tmp/distro
   echo -e "\e[1;31m\t🖥SISTEMA: \e[33m$distro $vercion"
   echo -e "\e[1;31m\t🖥IP: \e[33m$MI"
@@ -137,6 +147,7 @@ function barra_animada() {
   done
   printf "\r\e[1;92m✅ Terminado\n\e[0m"
 }
+
 
 
 ### PAQUETES PRINCIPALES 
