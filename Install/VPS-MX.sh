@@ -39,55 +39,18 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  esac
 }
 
-
-
-
 dependencias() {
-  # Generar nueva sources.list silenciosamente
-  echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
-  echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-updates main restricted universe multiverse" >> /etc/apt/sources.list
-  echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-security main restricted universe multiverse" >> /etc/apt/sources.list
-
-  # Reparar y actualizar silenciosamente
-  dpkg --configure -a &>/dev/null
-  apt -f install -y &>/dev/null
-  apt update -y &>/dev/null
-
-  # Lista de paquetes a instalar
-  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less"
-
-  echo -e "\n\033[1;36m🔧 Instalando dependencias...\033[0m"
-
+  dpkg --configure -a >/dev/null 2>&1
+  apt -f install -y >/dev/null 2>&1
+  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less "
   for i in $soft; do
-    if dpkg --get-selections | grep -w "$i" &>/dev/null; then
-      ESTATUS="\033[92m✓ INSTALADO"
-    else
-      apt-get install "$i" -y &>/dev/null
-      if dpkg --get-selections | grep -w "$i" &>/dev/null; then
-        ESTATUS="\033[92m✓ INSTALADO"
-      else
-        # Segundo intento con reparación y regeneración de sources.list
-        echo -e "\033[93m⚠️  $i falló. Reparando e intentando nuevamente...\033[0m"
-        echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
-        echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-updates main restricted universe multiverse" >> /etc/apt/sources.list
-        echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-security main restricted universe multiverse" >> /etc/apt/sources.list
-        dpkg --configure -a &>/dev/null
-        apt -f install -y &>/dev/null
-        apt update -y &>/dev/null
-        apt-get install "$i" -y &>/dev/null
-
-        if dpkg --get-selections | grep -w "$i" &>/dev/null; then
-          ESTATUS="\033[92m✓ INSTALADO (2° intento)"
-        else
-          ESTATUS="\033[91m✗ ERROR"
-        fi
-      fi
-    fi
-    echo -e "\033[97m       $ESTATUS \033[90m................. $i"
+    paquete="$i"
+    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || apt-get install $i -y &>/dev/null
+    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
+    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
+   echo -e "\033[97m       $ESTATUS................. $i "
   done
 }
-
-
 
 ### PAQUETES PRINCIPALES 
 tput clear
