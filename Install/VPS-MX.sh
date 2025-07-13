@@ -61,7 +61,7 @@ dependencias() {
     else
       apt-get install "$i" -y &>/dev/null
       if [[ $(dpkg --get-selections | grep -w "$i" | head -1) ]]; then
-        ESTATUS="\033[92mINSTALADO"
+        ESTATUS="\033[92mINSTALADOO"
       else
         ESTATUS="\033[91mFALLO DE INSTALACION"
       fi
