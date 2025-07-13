@@ -40,68 +40,52 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 }
 
 
+
+
 dependencias() {
-  # Obtener datos del sistema
-  if [ -f /etc/os-release ]; then
-    distro=$(grep "^NAME=" /etc/os-release | cut -d= -f2 | tr -d '"')
-    vercion=$(grep "^VERSION_ID=" /etc/os-release | cut -d= -f2 | tr -d '"')
-  else
-    distro=$(lsb_release -si)
-    vercion=$(lsb_release -sr)
-  fi
-
-  MI=$(curl -s ipv4.icanhazip.com)
-  echo "$distro $vercion" >/tmp/distro
-
-  echo -e "\e[1;31m\t🖥 SISTEMA: \e[33m$distro $vercion"
-  echo -e "\e[1;31m\t🖥 IP: \e[33m$MI"
-  echo ""
-  echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
-  echo ""
-
-  # Reparar sources.list (sin mostrar texto)
+  # Generar nueva sources.list silenciosamente
   echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
   echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-updates main restricted universe multiverse" >> /etc/apt/sources.list
   echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-security main restricted universe multiverse" >> /etc/apt/sources.list
 
-  # Reparar y actualizar sistema (sin mostrar texto)
+  # Reparar y actualizar silenciosamente
   dpkg --configure -a &>/dev/null
   apt -f install -y &>/dev/null
   apt update -y &>/dev/null
 
-  # Lista de paquetes
+  # Lista de paquetes a instalar
   soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less"
 
-  for i in $soft; do
-    puntos="\033[91m.\033[92m.\033[93m.\033[94m.\033[95m.\033[96m.\033[91m.\033[92m.\033[93m.\033[94m.\033[95m.\033[96m."
-    echo -ne "\033[97m       \033[96mINSTALANDO$puntos $i \033[0m\r"
-    sleep 0.3
+  echo -e "\n\033[1;36m🔧 Instalando dependencias...\033[0m"
 
+  for i in $soft; do
     if dpkg --get-selections | grep -w "$i" &>/dev/null; then
-      ESTATUS="\033[92mINSTALADO"
+      ESTATUS="\033[92m✓ INSTALADO"
     else
       apt-get install "$i" -y &>/dev/null
       if dpkg --get-selections | grep -w "$i" &>/dev/null; then
-        ESTATUS="\033[92mINSTALADO"
+        ESTATUS="\033[92m✓ INSTALADO"
       else
-        echo -e "\n\033[93m       ❗ $i falló. Intentando nuevamente con reparación...\033[0m"
+        # Segundo intento con reparación y regeneración de sources.list
+        echo -e "\033[93m⚠️  $i falló. Reparando e intentando nuevamente...\033[0m"
+        echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
+        echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-updates main restricted universe multiverse" >> /etc/apt/sources.list
+        echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-security main restricted universe multiverse" >> /etc/apt/sources.list
         dpkg --configure -a &>/dev/null
         apt -f install -y &>/dev/null
         apt update -y &>/dev/null
         apt-get install "$i" -y &>/dev/null
+
         if dpkg --get-selections | grep -w "$i" &>/dev/null; then
-          ESTATUS="\033[92mINSTALADO (2° INTENTO)"
+          ESTATUS="\033[92m✓ INSTALADO (2° intento)"
         else
-          ESTATUS="\033[91mFALLO DE INSTALACION"
+          ESTATUS="\033[91m✗ ERROR"
         fi
       fi
     fi
-
-    echo -e "\033[97m       $ESTATUS................. $i"
+    echo -e "\033[97m       $ESTATUS \033[90m................. $i"
   done
 }
-
-
 
 
 
