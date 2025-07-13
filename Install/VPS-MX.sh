@@ -40,17 +40,36 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 }
 
 dependencias() {
-  dpkg --configure -a >/dev/null 2>&1
-  apt -f install -y >/dev/null 2>&1
   soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less "
+
   for i in $soft; do
-    paquete="$i"
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || apt-get install $i -y &>/dev/null
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-   echo -e "\033[97m       $ESTATUS................. $i "
+    # Comprobar y reparar sources.list si está dañado o vacío
+    if [[ ! -s /etc/apt/sources.list ]]; then
+      echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
+      echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-updates main restricted universe multiverse" >> /etc/apt/sources.list
+      echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-security main restricted universe multiverse" >> /etc/apt/sources.list
+    fi
+
+    # Reparaciones antes de instalar cada paquete
+    dpkg --configure -a &>/dev/null
+    apt -f install -y &>/dev/null
+    apt update -y &>/dev/null
+
+    # Intentar instalar el paquete
+    if [[ $(dpkg --get-selections | grep -w "$i" | head -1) ]]; then
+      ESTATUS="\033[92mINSTALADO"
+    else
+      apt-get install "$i" -y &>/dev/null
+      if [[ $(dpkg --get-selections | grep -w "$i" | head -1) ]]; then
+        ESTATUS="\033[92mINSTALADO"
+      else
+        ESTATUS="\033[91mFALLO DE INSTALACION"
+      fi
+    fi
+    echo -e "\033[97m       $ESTATUS................. $i "
   done
 }
+
 
 ### PAQUETES PRINCIPALES 
 tput clear
