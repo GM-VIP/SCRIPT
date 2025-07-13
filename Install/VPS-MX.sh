@@ -39,7 +39,9 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  esac
 }
 
-os_system() {
+
+dependencias() {
+  # Obtener datos del sistema
   if [ -f /etc/os-release ]; then
     distro=$(grep "^NAME=" /etc/os-release | cut -d= -f2 | tr -d '"')
     vercion=$(grep "^VERSION_ID=" /etc/os-release | cut -d= -f2 | tr -d '"')
@@ -47,106 +49,59 @@ os_system() {
     distro=$(lsb_release -si)
     vercion=$(lsb_release -sr)
   fi
-}
 
-dependencias() {
-  # Mostrar info del sistema (distro + IP)
-  os_system
   MI=$(curl -s ipv4.icanhazip.com)
   echo "$distro $vercion" >/tmp/distro
-  echo -e "\e[1;31m\t🖥SISTEMA: \e[33m$distro $vercion"
-  echo -e "\e[1;31m\t🖥IP: \e[33m$MI"
 
-  msg -bar
+  echo -e "\e[1;31m\t🖥 SISTEMA: \e[33m$distro $vercion"
+  echo -e "\e[1;31m\t🖥 IP: \e[33m$MI"
+  echo ""
   echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
-  msg -bar
+  echo ""
 
-  # Reparar y generar sources.list SIEMPRE al inicio (una sola vez)
-  echo -e "\n\e[36m➤ Verificando sources.list...\e[0m"
+  # Reparar sources.list (sin mostrar texto)
   echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
   echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-updates main restricted universe multiverse" >> /etc/apt/sources.list
   echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-security main restricted universe multiverse" >> /etc/apt/sources.list
 
-  # Reparar y actualizar solo una vez antes de iniciar
+  # Reparar y actualizar sistema (sin mostrar texto)
   dpkg --configure -a &>/dev/null
   apt -f install -y &>/dev/null
   apt update -y &>/dev/null
 
+  # Lista de paquetes
   soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less"
 
   for i in $soft; do
-    echo -ne "\033[97m       \033[96mInstalando................. $i \033[0m"
-    (
+    puntos="\033[91m.\033[92m.\033[93m.\033[94m.\033[95m.\033[96m.\033[91m.\033[92m.\033[93m.\033[94m.\033[95m.\033[96m."
+    echo -ne "\033[97m       \033[96mINSTALANDO$puntos $i \033[0m\r"
+    sleep 0.3
+
+    if dpkg --get-selections | grep -w "$i" &>/dev/null; then
+      ESTATUS="\033[92mINSTALADO"
+    else
+      apt-get install "$i" -y &>/dev/null
       if dpkg --get-selections | grep -w "$i" &>/dev/null; then
         ESTATUS="\033[92mINSTALADO"
       else
+        echo -e "\n\033[93m       ❗ $i falló. Intentando nuevamente con reparación...\033[0m"
+        dpkg --configure -a &>/dev/null
+        apt -f install -y &>/dev/null
+        apt update -y &>/dev/null
         apt-get install "$i" -y &>/dev/null
         if dpkg --get-selections | grep -w "$i" &>/dev/null; then
-          ESTATUS="\033[92mINSTALADO"
+          ESTATUS="\033[92mINSTALADO (2° INTENTO)"
         else
-          echo -e "\n\033[93m       ❗ $i falló. Intentando nuevamente con reparación...\033[0m"
-          dpkg --configure -a &>/dev/null
-          apt -f install -y &>/dev/null
-          apt update -y &>/dev/null
-          apt-get install "$i" -y &>/dev/null
-          if dpkg --get-selections | grep -w "$i" &>/dev/null; then
-            ESTATUS="\033[92mINSTALADO (2° INTENTO)"
-          else
-            ESTATUS="\033[91mFALLO DE INSTALACION"
-          fi
+          ESTATUS="\033[91mFALLO DE INSTALACION"
         fi
       fi
-    ) & barra_animada
+    fi
+
     echo -e "\033[97m       $ESTATUS................. $i"
   done
-
-  # INSTALAR iptables-persistent
-  echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
-  echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
-  if dpkg --get-selections | grep -w "iptables-persistent" &>/dev/null; then
-    ESTATUS="\033[92mINSTALADO"
-  else
-    apt-get install iptables-persistent -y &>/dev/null
-    if dpkg --get-selections | grep -w "iptables-persistent" &>/dev/null; then
-      ESTATUS="\033[92mINSTALADO"
-    else
-      ESTATUS="\033[91mPAQ ERROR"
-    fi
-  fi
-  echo -e "\033[97m       $ESTATUS................. Iptables"
-
-  # INSTALAR apache2
-  if dpkg --get-selections | grep -w "apache2" &>/dev/null; then
-    ESTATUS="\033[92mINSTALADO"
-  else
-    apt-get install apache2 -y &>/dev/null
-    sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
-    service apache2 restart &>/dev/null
-    if dpkg --get-selections | grep -w "apache2" &>/dev/null; then
-      ESTATUS="\033[92mINSTALADO"
-    else
-      ESTATUS="\033[91mFALLO DE INSTALACION"
-    fi
-  fi
-  echo -e "\033[97m       $ESTATUS................. apache2"
-  msg -bar2
-  echo -e "\033[1;39m Presiona Enter Para continuar" && read enter
 }
 
-function barra_animada() {
-  pid=$!
-  frames=('▖' '▘' '▝' '▗')
-  colors=(91 92 93 94 95 96)
-  i=0
-  while kill -0 $pid 2>/dev/null; do
-    color=${colors[$((i % ${#colors[@]}))]}
-    frame=${frames[$((i % ${#frames[@]}))]}
-    printf "\r\e[1;${color}m⏳ Espera... $frame\e[0m"
-    sleep 0.1
-    ((i++))
-  done
-  printf "\r\e[1;92m✅ Terminado\n\e[0m"
-}
+
 
 
 
