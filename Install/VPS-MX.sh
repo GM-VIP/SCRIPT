@@ -40,36 +40,48 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 }
 
 dependencias() {
-  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less "
+  # Reparar y generar sources.list SIEMPRE al inicio (una sola vez)
+  echo "➤ Verificando sources.list..."
+  echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
+  echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-updates main restricted universe multiverse" >> /etc/apt/sources.list
+  echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-security main restricted universe multiverse" >> /etc/apt/sources.list
+
+  # Reparar y actualizar solo una vez antes de iniciar
+  echo -e "\n📦 Reparando y actualizando sistema..."
+  dpkg --configure -a &>/dev/null
+  apt -f install -y &>/dev/null
+  apt update -y &>/dev/null
+
+  # Lista de paquetes
+  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less"
 
   for i in $soft; do
-    # Comprobar y reparar sources.list si está dañado o vacío
-    if [[ ! -s /etc/apt/sources.list ]]; then
-      echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main restricted universe multiverse" > /etc/apt/sources.list
-      echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-updates main restricted universe multiverse" >> /etc/apt/sources.list
-      echo "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc)-security main restricted universe multiverse" >> /etc/apt/sources.list
-    fi
-
-    # Reparaciones antes de instalar cada paquete
-    dpkg --configure -a &>/dev/null
-    apt -f install -y &>/dev/null
-    apt update -y &>/dev/null
-
-    # Intentar instalar el paquete
-    if [[ $(dpkg --get-selections | grep -w "$i" | head -1) ]]; then
+    # Comprobar si ya está instalado
+    if dpkg --get-selections | grep -w "$i" &>/dev/null; then
       ESTATUS="\033[92mINSTALADO"
     else
+      # Primer intento
       apt-get install "$i" -y &>/dev/null
-      if [[ $(dpkg --get-selections | grep -w "$i" | head -1) ]]; then
-        ESTATUS="\033[92mINSTALADOO"
+      if dpkg --get-selections | grep -w "$i" &>/dev/null; then
+        ESTATUS="\033[92mINSTALADO"
       else
-        ESTATUS="\033[91mFALLO DE INSTALACION"
+        echo -e "\033[93m       ❗ $i falló. Intentando nuevamente con reparación...\033[0m"
+        # Reparar y actualizar solo si falla
+        dpkg --configure -a &>/dev/null
+        apt -f install -y &>/dev/null
+        apt update -y &>/dev/null
+        apt-get install "$i" -y &>/dev/null
+
+        if dpkg --get-selections | grep -w "$i" &>/dev/null; then
+          ESTATUS="\033[92mINSTALADO (2° INTENTO)"
+        else
+          ESTATUS="\033[91mFALLO DE INSTALACION"
+        fi
       fi
     fi
-    echo -e "\033[97m       $ESTATUS................. $i "
+    echo -e "\033[97m       $ESTATUS................. $i"
   done
 }
-
 
 ### PAQUETES PRINCIPALES 
 tput clear
