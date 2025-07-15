@@ -150,7 +150,15 @@ ConfigurarReposVIP() {
       return
       ;;
   esac
-
+echo -e "\e[1;33m"
+  echo "sudo bash -c \"cat > /etc/apt/sources.list <<EOF"
+  echo "deb http://archive.ubuntu.com/ubuntu $CODENAME main universe restricted multiverse"
+  echo "deb http://archive.ubuntu.com/ubuntu $CODENAME-updates main universe restricted multiverse"
+  echo "deb http://archive.ubuntu.com/ubuntu $CODENAME-backports main universe restricted multiverse"
+  echo "deb http://security.ubuntu.com/ubuntu $CODENAME-security main universe restricted multiverse"
+  echo "EOF\""
+  echo -e "\e[0m"
+  
   sudo bash -c "cat > /etc/apt/sources.list <<EOF
 deb http://archive.ubuntu.com/ubuntu $CODENAME main universe restricted multiverse
 deb http://archive.ubuntu.com/ubuntu $CODENAME-updates main universe restricted multiverse
