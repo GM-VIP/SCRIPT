@@ -271,6 +271,26 @@ tput clear
 msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
 msg -bar
+# Obtener información del sistema
+distro=$(lsb_release -is)
+version=$(lsb_release -rs)
+codename=$(lsb_release -cs)
+description=$(lsb_release -d | cut -d':' -f2- | xargs)
+ip=$(curl -s ipv4.icanhazip.com)
+
+# Centrar texto calculando el ancho del terminal
+width=$(tput cols)
+
+sistema="🖥 SISTEMA: $description"
+ipinfo="🌐 IP: $ip"
+
+padding_sistema=$(( (width - ${#sistema}) / 2 ))
+padding_ip=$(( (width - ${#ipinfo}) / 2 ))
+
+# Mostrar centrado
+printf "%*s\n" $padding_sistema "$sistema"
+printf "%*s\n" $padding_ip "$ipinfo"
+msg -bar
 dependencias
 #IpTables
 echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections 
