@@ -221,15 +221,44 @@ RepararDPKG() {
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
-  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq curl npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less "
-  for i in $soft; do
-    paquete="$i"
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || apt-get install $i -y &>/dev/null
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] || ESTATUS=`echo -e "\033[91mFALLO DE INSTALACION"` &>/dev/null
-    [[ $(dpkg --get-selections|grep -w "$i"|head -1) ]] && ESTATUS=`echo -e "\033[92mINSTALADO"` &>/dev/null
-   echo -e "\033[97m       $ESTATUS................. $i "
+
+  > errores.txt
+  > exitos.txt
+
+  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less"
+
+  for paquete in $soft; do
+    # Verifica si ya está instalado
+    if dpkg --get-selections | grep -qw "$paquete"; then
+      ESTATUS="\033[92mINSTALADO"
+      echo "$paquete" >> exitos.txt
+    else
+      # Primer intento de instalación
+      apt-get install "$paquete" -y &>/dev/null
+
+      if dpkg --get-selections | grep -qw "$paquete"; then
+        ESTATUS="\033[92mINSTALADO"
+        echo "$paquete" >> exitos.txt
+      else
+        # Si falla el primer intento, aplicar funciones de reparación antes de reintentar
+        ConfigurarReposVIP >/dev/null 2>&1
+        ActualizarSistemaVIP >/dev/null 2>&1
+        apt-get install "$paquete" -y &>/dev/null
+
+        if dpkg --get-selections | grep -qw "$paquete"; then
+          ESTATUS="\033[92mINSTALADO"
+          echo "$paquete" >> exitos.txt
+        else
+          ESTATUS="\033[91m❌ FALLO DE INSTALACION"
+          echo "$paquete" >> errores.txt
+        fi
+      fi
+    fi
+
+    echo -e "\033[97m       $ESTATUS ................. $paquete"
   done
 }
+
 
 ### PAQUETES PRINCIPALES
 AptVIP
