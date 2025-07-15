@@ -192,6 +192,32 @@ ActualizarSistemaVIP() {
   read -p "🔁 Presiona Enter para continuar..."
 }
 
+RepararDPKG() {
+ echo ""
+  msg -bar2
+  echo -e "\n\033[1;100;97m 🛠 REPARAR INTERRUPCIONES DE DPKG/APT - VPS PERU \033[0m"
+  msg -bar2
+
+  echo -e "\n\033[1;36m🛠 Restaurando dpkg tras interrupciones previas...\033[0m"
+  if sudo dpkg --configure -a &> /dev/null; then
+    echo -e "\033[1;32m✅ dpkg restaurado correctamente.\033[0m"
+  else
+    echo -e "\033[1;31m❌ Error al restaurar dpkg.\033[0m"
+  fi
+
+  echo -e "\n\033[1;36m🔧 Reparando instalaciones rotas si existen...\033[0m"
+  if sudo apt --fix-broken install -y &> /dev/null; then
+    echo -e "\033[1;32m✅ Reparación de paquetes completada.\033[0m"
+  else
+    echo -e "\033[1;31m❌ No se pudo reparar completamente.\033[0m"
+  fi
+
+  msg -bar2
+  echo -e "🔁 Presiona Enter para continuar..."
+  read
+  echo ""
+}
+
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
@@ -211,6 +237,7 @@ ProxyVIP
 DPKG
 ConfigurarReposVIP
 ActualizarSistemaVIP
+RepararDPKG
 tput clear
 msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
