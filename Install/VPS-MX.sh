@@ -195,7 +195,7 @@ ActualizarSistemaVIP() {
 RepararDPKG() {
  echo ""
   msg -bar2
-  echo -e "\n\033[1;100;97m 🛠 REPARAR INTERRUPCIONES DE DPKG/APT - VPS PERU \033[0m"
+  echo -e "\033[1;100;97m 🛠 REPARAR INTERRUPCIONES DE DPKG/APT - VPS PERU \033[0m"
   msg -bar2
 
   echo -e "\n\033[1;36m🛠 Restaurando dpkg tras interrupciones previas...\033[0m"
@@ -240,7 +240,7 @@ dependencias() {
         echo "$paquete" >> exitos.txt
       else
         # Mostrar línea de reparación
-        echo -ne "\e[1;33m       Reparando .................. $paquete\r"
+        echo -ne "\e[1;33m       REPARANDO .................. $paquete\r"
 
         # Aplicar reparación silenciosa
         echo "" | ConfigurarReposVIP >/dev/null 2>&1
@@ -265,8 +265,6 @@ dependencias() {
 AptVIP
 ProxyVIP
 DPKG
-ConfigurarReposVIP
-ActualizarSistemaVIP
 RepararDPKG
 tput clear
 msg -bar
