@@ -166,12 +166,31 @@ deb http://archive.ubuntu.com/ubuntu $CODENAME-backports main universe restricte
 deb http://security.ubuntu.com/ubuntu $CODENAME-security main universe restricted multiverse
 EOF"
 
-  echo -e "\n✅ Repositorios para \e[1;36mUbuntu $VERSION ($CODENAME)\e[0m configurados correctamente."
+  echo -e "\n✅ Repositorios para \e[1;36mUbuntu $VERSION ($CODENAME) LTS\e[0m configurados correctamente."
   msg -bar2
   read -p "🔁 Presiona Enter para continuar..." 
 }
 
+ActualizarSistemaVIP() {
+  echo ""
+  msg -bar2
+  echo -e "\e[1;100;97m 📡 ACTUALIZACIÓN DE PAQUETES - VPS PERU \e[0m"
+  msg -bar2
 
+  echo -e "\n📡 Ejecutando actualización del sistema (apt update)...\n"
+
+  # Ejecutar apt update y forzar color amarillo
+  echo -e "\033[1;33m" # ← Empieza amarillo brillante
+
+  script -q -c "sudo apt update" /dev/null
+
+  echo -e "\033[0m" # ← Restablece color normal
+
+  msg -bar2
+  echo -e "✅ \e[1;32mSistema actualizado correctamente.\e[0m"
+  msg -bar2
+  read -p "🔁 Presiona Enter para continuar..."
+}
 
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
@@ -191,6 +210,7 @@ AptVIP
 ProxyVIP
 DPKG
 ConfigurarReposVIP
+ActualizarSistemaVIP
 tput clear
 msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
