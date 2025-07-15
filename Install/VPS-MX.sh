@@ -271,25 +271,25 @@ tput clear
 msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
 msg -bar
-# Obtener información del sistema
+
+# Obtener datos del sistema
 distro=$(lsb_release -is)
 version=$(lsb_release -rs)
-codename=$(lsb_release -cs)
-description=$(lsb_release -d | cut -d':' -f2- | xargs)
+lts=$(lsb_release -d | grep -o 'LTS')
 ip=$(curl -s ipv4.icanhazip.com)
 
-# Centrar texto calculando el ancho del terminal
-width=$(tput cols)
-
-sistema="🖥 SISTEMA: $description"
+# Construir texto
+sistema="🖥 SISTEMA: $distro $version $lts"
 ipinfo="🌐 IP: $ip"
 
-padding_sistema=$(( (width - ${#sistema}) / 2 ))
-padding_ip=$(( (width - ${#ipinfo}) / 2 ))
+# Calcular ancho para centrar
+ancho_terminal=$(tput cols)
+padding_sistema=$(( (ancho_terminal - ${#sistema}) / 2 ))
+padding_ip=$(( (ancho_terminal - ${#ipinfo}) / 2 ))
 
-# Mostrar centrado
-printf "%*s\n" $padding_sistema "$sistema"
-printf "%*s\n" $padding_ip "$ipinfo"
+# Imprimir centrado
+printf "%*s\n" $((padding_sistema + ${#sistema})) "$sistema"
+printf "%*s\n" $((padding_ip + ${#ipinfo})) "$ipinfo"
 msg -bar
 dependencias
 #IpTables
