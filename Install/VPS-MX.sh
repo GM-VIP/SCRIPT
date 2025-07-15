@@ -42,7 +42,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 AptVIP() {
   clear
   msg -bar2
-  echo -e "\e[1;100;97m 🔧 LLIMPIEZA GLOBAL DE PROXIES APT - VPS PERU \e[0m"
+  echo -e "\e[1;100;97m 🔧 LIMPIEZA GLOBAL DE PROXIES APT - VPS PERU \e[0m"
   msg -bar2
 
   echo -e "\n\033[1;36m🔍 Verificando configuración de proxy en APT...\033[0m"
@@ -89,6 +89,32 @@ ProxyVIP() {
   read -p "🔁 Presiona Enter para finalizar..." enter
 }
 
+DPKG() {
+  echo -e "\n\033[1;100;97m 🔓 DESBLOQUEAR DPKG SI ESTÁ BLOQUEADO - VPS PERU \033[0m"
+  msg -bar2
+
+  echo -e "\n\033[1;36m🔍 Verificando bloqueos de APT...\033[0m"
+  if pgrep -x apt >/dev/null || pgrep -x apt-get >/dev/null || pgrep -x dpkg >/dev/null; then
+    echo -e "\033[1;33m⚠️  Detectados procesos activos de apt/dpkg. Terminando...\033[0m"
+    sudo killall -9 apt apt-get dpkg 2>/dev/null
+    sleep 1
+  fi
+
+  if sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1; then
+    echo -e "\033[1;33m⚠️  Eliminando locks de APT (forzado)...\033[0m"
+    sudo rm -f /var/lib/dpkg/lock
+    sudo rm -f /var/lib/apt/lists/lock
+    sudo rm -f /var/cache/apt/archives/lock
+    sudo dpkg --configure -a
+    sleep 1
+  else
+    echo -e "\033[1;32m✅ No se encontraron bloqueos activos.\033[0m"
+  fi
+
+  msg -bar2
+  read -p "🔁 Presiona Enter para continuar..." enter
+}
+
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
@@ -105,6 +131,7 @@ dependencias() {
 ### PAQUETES PRINCIPALES
 AptVIP
 ProxyVIP
+DPKG
 tput clear
 msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
