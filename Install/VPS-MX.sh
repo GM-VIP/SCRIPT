@@ -67,7 +67,6 @@ fi
 
   msg -bar2
   read -p "🔁 Presiona Enter para continuar..." enter
-  clear
 }
 
 ProxyVIP() {
