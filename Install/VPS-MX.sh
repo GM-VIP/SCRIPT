@@ -228,37 +228,38 @@ dependencias() {
   soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less"
 
   for paquete in $soft; do
-    # Verifica si ya está instalado
     if dpkg --get-selections | grep -qw "$paquete"; then
-      ESTATUS="\033[92mINSTALADO"
+      echo -e "\e[1;32m       INSTALADO .................. $paquete\e[0m"
       echo "$paquete" >> exitos.txt
     else
       # Primer intento de instalación
       apt-get install "$paquete" -y &>/dev/null
 
       if dpkg --get-selections | grep -qw "$paquete"; then
-        ESTATUS="\033[92mINSTALADO"
+        echo -e "\e[1;32m       INSTALADO .................. $paquete\e[0m"
         echo "$paquete" >> exitos.txt
       else
-        # Si falla el primer intento, aplicar funciones de reparación antes de reintentar
-        ConfigurarReposVIP >/dev/null 2>&1
-        ActualizarSistemaVIP >/dev/null 2>&1
+        # Mostrar línea de reparación
+        echo -ne "\e[1;33m       Reparando .................. $paquete\r"
+
+        # Aplicar reparación silenciosa
+        echo "" | ConfigurarReposVIP >/dev/null 2>&1
+        echo "" | ActualizarSistemaVIP >/dev/null 2>&1
+
+        # Segundo intento
         apt-get install "$paquete" -y &>/dev/null
 
         if dpkg --get-selections | grep -qw "$paquete"; then
-          ESTATUS="\033[92mINSTALADO"
+          echo -e "\e[1;32m       INSTALADO .................. $paquete\e[0m"
           echo "$paquete" >> exitos.txt
         else
-          ESTATUS="\033[91m❌ FALLO DE INSTALACION"
+          echo -e "\e[1;91m       ❌ FALLO DE INSTALACIÓN .... $paquete\e[0m"
           echo "$paquete" >> errores.txt
         fi
       fi
     fi
-
-    echo -e "\033[97m       $ESTATUS ................. $paquete"
   done
 }
-
 
 ### PAQUETES PRINCIPALES
 AptVIP
