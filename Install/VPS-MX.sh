@@ -39,6 +39,38 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  esac
 }
 
+FixVIP() {
+  clear
+  msg -bar2
+  echo -e "\e[1;100;97m 🔧 LIMPIEZA GLOBAL DE PROXIES APT - VPS PERU \e[0m"
+  msg -bar2
+
+  echo -e "\n\033[1;36m🔍 Verificando configuración de proxy en APT...\033[0m"
+  found_proxy=0
+  proxy_patterns=("Acquire::http::Proxy" "Acquire::https::Proxy" "Acquire::ftp::Proxy")
+  proxy_dirs=(/etc/apt/apt.conf /etc/apt/apt.conf.d/* /etc/apt/preferences.d/*)
+
+  for proxyfile in "${proxy_dirs[@]}"; do
+    [[ -f "$proxyfile" ]] || continue
+    for pattern in "${proxy_patterns[@]}"; do
+      if grep -q "$pattern" "$proxyfile"; then
+        found_proxy=1
+        echo -e "\033[1;31m🧹 Eliminando proxy en:\033[0m $proxyfile"
+        sudo sed -i "/$pattern/d" "$proxyfile"
+      fi
+    done
+  done
+  
+if [[ $found_proxy -eq 0 ]]; then
+  echo -e "\033[1;32m✅ Configuración de proxy limpia.\033[0m"
+fi
+
+  msg -bar2
+  read -p "🔁 Presiona Enter para continuar..." enter
+  clear
+}
+
+
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
@@ -52,7 +84,8 @@ dependencias() {
   done
 }
 
-### PAQUETES PRINCIPALES 
+### PAQUETES PRINCIPALES
+FixVIP
 tput clear
 msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
