@@ -180,11 +180,10 @@ ActualizarSistemaVIP() {
   echo -e "\n📡 Ejecutando actualización del sistema (apt update)...\n"
 
   # Ejecutar apt update y forzar color amarillo
-  echo -e "\033[1;33m" # ← Empieza amarillo brillante
 
-  script -q -c "sudo apt update" /dev/null
-
-  echo -e "\033[0m" # ← Restablece color normal
+echo -e "\033[1;33m"  # Inicia amarillo
+apt update 2>&1 | cat
+echo -e "\033[0m"      # Fin de amarillo
 
   msg -bar2
   echo -e "✅ \e[1;32mSistema actualizado correctamente.\e[0m"
