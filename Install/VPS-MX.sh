@@ -72,7 +72,7 @@ fi
 
 ProxyVIP() {
   msg -bar2
-  echo -e "\n\e[1;100;97m # ─── BLOQUEO PERMANENTE DE PROXY - VPS PERU \e[0m"
+  echo -e "\e[1;100;97m # ─── BLOQUEO PERMANENTE DE PROXY - VPS PERU \e[0m"
   msg -bar2
 
   BLOCKFILE="/etc/apt/apt.conf.d/99force-no-proxy"
@@ -95,7 +95,7 @@ ProxyVIP() {
 DPKG() {
   
   msg -bar2
-  echo -e "\n\033[1;100;97m 🔓 DESBLOQUEAR DPKG SI ESTÁ BLOQUEADO - VPS PERU \033[0m"
+  echo -e "\033[1;100;97m 🔓 DESBLOQUEAR DPKG SI ESTÁ BLOQUEADO - VPS PERU \033[0m"
   msg -bar2
 
   echo -e "\n\033[1;36m🔍 Verificando bloqueos de APT...\033[0m"
