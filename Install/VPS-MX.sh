@@ -70,6 +70,8 @@ fi
 }
 
 ProxyVIP() {
+  echo ""
+  msg -bar2
   echo -e "\n\e[1;100;97m # ─── BLOQUEO PERMANENTE DE PROXY - VPS PERU \e[0m"
   msg -bar2
 
@@ -90,6 +92,8 @@ ProxyVIP() {
 }
 
 DPKG() {
+  echo ""
+  msg -bar2
   echo -e "\n\033[1;100;97m 🔓 DESBLOQUEAR DPKG SI ESTÁ BLOQUEADO - VPS PERU \033[0m"
   msg -bar2
 
