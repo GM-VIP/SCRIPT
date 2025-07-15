@@ -265,6 +265,8 @@ dependencias() {
 AptVIP
 ProxyVIP
 DPKG
+ConfigurarReposVIP
+ActualizarSistemaVIP
 RepararDPKG
 tput clear
 msg -bar
