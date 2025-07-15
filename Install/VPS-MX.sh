@@ -67,10 +67,10 @@ fi
 
   msg -bar2
   read -p "🔁 Presiona Enter para continuar..." enter
+  echo ""
 }
 
 ProxyVIP() {
-  echo ""
   msg -bar2
   echo -e "\n\e[1;100;97m # ─── BLOQUEO PERMANENTE DE PROXY - VPS PERU \e[0m"
   msg -bar2
@@ -89,12 +89,13 @@ ProxyVIP() {
 
   msg -bar2
   read -p "🔁 Presiona Enter para finalizar..." enter
+  echo -e ""
 }
 
 DPKG() {
-  echo -e ""
+  
   msg -bar2
-  echo -e "\n\033[1;100;97m 🔓 DeESBLOQUEAR DPKG SI ESTÁ BLOQUEADO - VPS PERU \033[0m"
+  echo -e "\n\033[1;100;97m 🔓 DESBLOQUEAR DPKG SI ESTÁ BLOQUEADO - VPS PERU \033[0m"
   msg -bar2
 
   echo -e "\n\033[1;36m🔍 Verificando bloqueos de APT...\033[0m"
