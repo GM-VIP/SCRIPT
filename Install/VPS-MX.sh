@@ -39,7 +39,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  esac
 }
 
-FixVIP() {
+AptVIP() {
   clear
   msg -bar2
   echo -e "\e[1;100;97m 🔧 LIMPIEZA GLOBAL DE PROXIES APT - VPS PERU \e[0m"
@@ -70,6 +70,25 @@ fi
   clear
 }
 
+ProxyVIP() {
+  echo -e "\n\e[1;100;97m # ─── BLOQUEO PERMANENTE DE PROXY - VPS PERU \e[0m"
+  msg -bar2
+
+  BLOCKFILE="/etc/apt/apt.conf.d/99force-no-proxy"
+
+  if [[ ! -f "$BLOCKFILE" || -z $(grep 'Acquire::http::Proxy "false";' "$BLOCKFILE") ]]; then
+    echo 'Acquire::http::Proxy "false";' | sudo tee "$BLOCKFILE" > /dev/null
+    echo -e "\033[1;32m🔒 Proxy bloqueado permanentemente en:\033[0m $BLOCKFILE"
+  else
+    echo -e "\033[1;33m⚠️  Proxy ya estaba bloqueado permanentemente.\033[0m"
+  fi
+
+  # Limpiar variables de entorno de proxy
+  unset http_proxy https_proxy ftp_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY
+
+  msg -bar2
+  read -p "🔁 Presiona Enter para finalizar..." enter
+}
 
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
@@ -85,7 +104,8 @@ dependencias() {
 }
 
 ### PAQUETES PRINCIPALES
-FixVIP
+AptVIP
+ProxyVIP
 tput clear
 msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
