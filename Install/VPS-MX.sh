@@ -92,9 +92,9 @@ ProxyVIP() {
 }
 
 DPKG() {
-  echo ""
+  echo -e ""
   msg -bar2
-  echo -e "\n\033[1;100;97m 🔓 DESBLOQUEAR DPKG SI ESTÁ BLOQUEADO - VPS PERU \033[0m"
+  echo -e "\n\033[1;100;97m 🔓 DeESBLOQUEAR DPKG SI ESTÁ BLOQUEADO - VPS PERU \033[0m"
   msg -bar2
 
   echo -e "\n\033[1;36m🔍 Verificando bloqueos de APT...\033[0m"
