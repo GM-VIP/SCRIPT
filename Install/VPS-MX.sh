@@ -253,7 +253,7 @@ dependencias() {
           echo -e "\e[1;32m       INSTALADO .................. $paquete\e[0m"
           echo "$paquete" >> exitos.txt
         else
-          echo -e "\e[1;91m       ❌ FALLO DE INSTALACIÓN .... $paquete\e[0m"
+          echo -e "\e[1;91m        FALLO DE INSTALACIÓN .... $paquete\e[0m"
           echo "$paquete" >> errores.txt
         fi
       fi
