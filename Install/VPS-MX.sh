@@ -120,6 +120,51 @@ DPKG() {
   read -p "🔁 Presiona Enter para continuar..." enter
 }
 
+ConfigurarReposVIP() {
+  echo ""
+  msg -bar2
+  echo -e "\e[1;100;97m 🛍 CONFIGURAR REPOSITORIOS DE UBUNTU - VPS PERU \e[0m"
+  msg -bar2
+
+  VERSION=$(lsb_release -rs | cut -d. -f1,2)
+  echo -e "\n🔎 Detectando versión de Ubuntu: \e[1;36m$VERSION\e[0m"
+  echo -e "\n🔧 Configurando repositorios para Ubuntu $VERSION...\n"
+
+  case "$VERSION" in
+    "18.04")
+      CODENAME="bionic"
+      ;;
+    "20.04")
+      CODENAME="focal"
+      ;;
+    "22.04")
+      CODENAME="jammy"
+      ;;
+    "24.04")
+      CODENAME="noble"
+      ;;
+    *)
+      echo -e "\n❌ Versión de Ubuntu no soportada automáticamente."
+      msg -bar2
+      read -p "🔁 Presiona Enter para finalizar..." 
+      return
+      ;;
+  esac
+
+  sudo bash -c "cat > /etc/apt/sources.list <<EOF
+deb http://archive.ubuntu.com/ubuntu $CODENAME main universe restricted multiverse
+deb http://archive.ubuntu.com/ubuntu $CODENAME-updates main universe restricted multiverse
+deb http://archive.ubuntu.com/ubuntu $CODENAME-backports main universe restricted multiverse
+deb http://security.ubuntu.com/ubuntu $CODENAME-security main universe restricted multiverse
+EOF"
+
+  echo -e "\n✅ Repositorios para \e[1;36mUbuntu $VERSION ($CODENAME)\e[0m configurados correctamente."
+  msg -bar2
+  read -p "🔁 Presiona Enter para continuar..." 
+}
+
+
+
 dependencias() {
   dpkg --configure -a >/dev/null 2>&1
   apt -f install -y >/dev/null 2>&1
@@ -137,6 +182,7 @@ dependencias() {
 AptVIP
 ProxyVIP
 DPKG
+ConfigurarReposVIP
 tput clear
 msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
