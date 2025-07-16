@@ -268,24 +268,26 @@ ConfigurarReposVIP
 ActualizarSistemaVIP
 RepararDPKG
 tput clear
-msg -bar
-echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
-msg -bar
+center() {
+  local term_width=$(tput cols)
+  local text="$1"
+  local clean_text=$(echo -e "$text" | sed 's/\x1b\[[0-9;]*m//g') # Elimina colores ANSI
+  local text_length=${#clean_text}
+  local padding=$(( (term_width - text_length) / 2 ))
+  printf "%*s%s\n" "$padding" "" "$text"
+}
 
 distro=$(lsb_release -is)
 version=$(lsb_release -rs)
 lts=$(lsb_release -d | grep -o 'LTS')
 ip=$(curl -s ipv4.icanhazip.com)
 
-sistema="🖥 SISTEMA: $distro $version $lts"
-ipinfo="🌐 IP: $ip"
+msg -bar
+echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
+msg -bar
 
-ancho_terminal=$(tput cols)
-padding_sistema=$(( (ancho_terminal - ${#sistema}) / 2 ))
-padding_ip=$(( (ancho_terminal - ${#ipinfo}) / 2 ))
-
-printf "%*s\n" $((padding_sistema + ${#sistema})) "$sistema"
-printf "%*s\n" $((padding_ip + ${#ipinfo})) "$ipinfo"
+center "\033[1;37m🖥 SISTEMA: \033[33m$distro $version $lts"
+center "\033[1;37m🌐 IP: \033[33m$ip"
 
 msg -bar
 dependencias
