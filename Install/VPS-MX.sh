@@ -272,24 +272,21 @@ msg -bar
 echo -e "\e[1;100;93m -------  INSTALACION DE PAQUETES NECESARIOS -------- \e[0m"
 msg -bar
 
-# Obtener datos del sistema
 distro=$(lsb_release -is)
 version=$(lsb_release -rs)
 lts=$(lsb_release -d | grep -o 'LTS')
 ip=$(curl -s ipv4.icanhazip.com)
 
-# Construir texto
 sistema="🖥 SISTEMA: $distro $version $lts"
 ipinfo="🌐 IP: $ip"
 
-# Calcular ancho para centrar
 ancho_terminal=$(tput cols)
 padding_sistema=$(( (ancho_terminal - ${#sistema}) / 2 ))
 padding_ip=$(( (ancho_terminal - ${#ipinfo}) / 2 ))
 
-# Imprimir centrado
 printf "%*s\n" $((padding_sistema + ${#sistema})) "$sistema"
 printf "%*s\n" $((padding_ip + ${#ipinfo})) "$ipinfo"
+
 msg -bar
 dependencias
 #IpTables
