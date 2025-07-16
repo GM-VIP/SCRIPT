@@ -453,16 +453,16 @@ fi
 install_fim () {
 msg -ama "               Finalizando Instalacion" && msg bar2
 rm -rf /etc/newadm/ger-user/nombre.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://www.dropbox.com/s/pvo7zneayjjtsgw/nombre.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name IDT.log|grep -w "IDT.log"|head -1) ]] || wget -O /etc/newadm/ger-user/IDT.log https://www.dropbox.com/s/vzsacahfbwwm0ow/IDT.log &>/dev/null
-[[ $(find /etc/newadm/ger-user -name tiemlim.log|grep -w "tiemlim.log"|head -1) ]] || wget -O /etc/newadm/ger-user/tiemlim.log https://www.dropbox.com/s/kkchh0ldtdt2yza/tiemlim.log &>/dev/null
-
-wget -O /bin/rebootnb https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/rebootnb &> /dev/null
+[[ $(find /etc/newadm/ger-user -name nombre.log|grep -w "nombre.log"|head -1) ]] || wget -O /etc/newadm/ger-user/nombre.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/nombre.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name IDT.log|grep -w "IDT.log"|head -1) ]] || wget -O /etc/newadm/ger-user/IDT.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/idt.log &>/dev/null
+[[ $(find /etc/newadm/ger-user -name tiemlim.log|grep -w "tiemlim.log"|head -1) ]] || wget -O /etc/newadm/ger-user/tiemlim.log https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/tiemlim.log &>/dev/null
+wget -O /bin/rebootnb https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/rebootnb &> /dev/null
 chmod +x /bin/rebootnb 
-wget -O /bin/resetsshdrop https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/ArchUt/resetsshdrop &> /dev/null
+wget -O /bin/resetsshdrop https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/Install/resetsshdrop &> /dev/null
 chmod +x /bin/resetsshdrop
-wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null
+wget -O /etc/versin_script https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/vercion &>/dev/null
 msg -bar2
+
 tput clear
 echo
 msg -bar
