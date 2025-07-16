@@ -352,12 +352,12 @@ clear
 
 fun_ip () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
-MIP2=$(wget -qO- ifconfig.me)
+MIP2=$(wget -qO- ipv4.icanhazip.com)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
 }  
 
 fun_ipe () { 
- MIP2=$(wget -qO- ifconfig.me) 
+ MIP2=$(wget -qO- ipv4.icanhazip.com) 
  MIP=$(wget -qO- whatismyip.akamai.com) 
  if [ $? -eq 0 ]; then 
  IP="$MIP" 
@@ -700,7 +700,7 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    pontos+="."
    done
    
-   wget -qO- ifconfig.me > /etc/newadm/IP.log
+   wget -qO- ipv4.icanhazip.com > /etc/newadm/IP.log
    userid="${SCPdir}/ID" 
    TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
    URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
