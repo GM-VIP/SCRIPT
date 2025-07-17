@@ -643,12 +643,12 @@ echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "n" x
 [[ $x = @(s|S|y|Y) ]] && retry_fun || 
 clear && clear
-msgi -bar2
-msgi -bar2
+msg -bar2
+msg -bar2
 rm -rf lista-arq
 echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
-msgi -bar2
-msgi -bar2
+msg -bar2
+msg -bar2
 exit 1
 }
 
@@ -661,12 +661,12 @@ echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "n" x
 [[ $x = @(s|S|y|Y) ]] && retry_fun || 
 clear && clear
-msgi -bar2
-msgi -bar2
+msg -bar2
+msg -bar2
 rm -rf lista-arq
 echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
-msgi -bar2
-msgi -bar2
+msg -bar2
+msg -bar2
 exit 1
 }
 
