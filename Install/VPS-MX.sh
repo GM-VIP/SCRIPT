@@ -704,8 +704,8 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    userid="${SCPdir}/ID" 
    TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
    URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
-   OK_COUNT=$(grep -c '^✅' "$HOME/exito")
-   FAIL_COUNT=$(grep -c '^❌' "$HOME/exito")
+   OK_COUNT=$(wc -l < "$HOME/exitos.txt")
+   FAIL_COUNT=$(wc -l < "$HOME/errores.txt")
    MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
    🆔 ID: ${SCPdir}/ID
