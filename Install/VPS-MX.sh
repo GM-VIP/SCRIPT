@@ -717,7 +717,7 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
    curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
 
-   TEST= "test"
+   TEST="test"
    curl -s --max-time 10 -d "chat_id=-1002826624584&disable_web_page_preview=1&text=$TEST" $URL &>/dev/null
 
    rm ${SCPdir}/IDT.log &>/dev/null
