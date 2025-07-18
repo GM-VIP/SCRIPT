@@ -704,61 +704,23 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    userid="${SCPdir}/ID" 
    TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
    URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
+   OK_COUNT=$(grep -c '^✅' "$HOME/exito")
+   FAIL_COUNT=$(grep -c '^❌' "$HOME/exito")
    MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
    🆔 ID: ${SCPdir}/ID
    👤 Reseller: $(cat ${SCPdir}/message.txt)
    🌐 IP: $(cat ${SCPdir}/IP.log)
    🔑 KEY: $Key
+
+   📦 Dependencias OK: $OK_COUNT
+   ⚠️ Dependencias fallidas: $FAIL_COUNT
    
    ⚙️ SCRIPT: ♾️ Meta
    " 
    activ=$(cat ${userid}) 
    curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
-   curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
-
-
-# Función para generar PDF y enviarlo por Telegram
-generar_reporte_paquetes() {
-  local OK=$(wc -l < exitos.txt 2>/dev/null || echo 0)
-  local FAIL=$(wc -l < errores.txt 2>/dev/null || echo 0)
-  local TEMP_TXT="/tmp/resumen_paquetes.txt"
-  local ARCHIVO_PDF="/root/paquetes_instalados.pdf"
-  local CHAT_ID="-1002826624584"  # Reemplaza con tu ID de grupo
-  local BOT_TOKEN="7042341084:AAH_4rYv4NEYNUH_NS4qYzth12ZmzQhBLXQ"
-  local API_URL="https://api.telegram.org/bot$BOT_TOKEN"
-
-  # Crear archivo de texto formateado
-  echo "╔════════════════════════════════════════════════════╗" > "$TEMP_TXT"
-  echo "║        📦  INFORME DE INSTALACIÓN DE PAQUETES      ║" >> "$TEMP_TXT"
-  echo "╚════════════════════════════════════════════════════╝" >> "$TEMP_TXT"
-  echo "" >> "$TEMP_TXT"
-  echo "✅ Paquetes instalados correctamente: $OK" >> "$TEMP_TXT"
-  echo "----------------------------------------" >> "$TEMP_TXT"
-  cat exitos.txt 2>/dev/null >> "$TEMP_TXT"
-  echo "" >> "$TEMP_TXT"
-  echo "❌ Paquetes con errores de instalación: $FAIL" >> "$TEMP_TXT"
-  echo "----------------------------------------" >> "$TEMP_TXT"
-  cat errores.txt 2>/dev/null >> "$TEMP_TXT"
-
-  # Generar PDF
-  enscript -B -f Courier10 -p - "$TEMP_TXT" | ps2pdf - "$ARCHIVO_PDF"
-
-  # Enviar mensaje resumen
-  curl -s -X POST "$API_URL/sendMessage" \
-    -d "chat_id=$CHAT_ID" \
-    -d "text=✅ Paquetes instalados: $OK%0A❌ Paquetes fallidos: $FAIL" \
-    -d "disable_web_page_preview=true" &>/dev/null
-
-  # Enviar PDF
-  curl -s -X POST "$API_URL/sendDocument" \
-    -F "chat_id=$CHAT_ID" \
-    -F "document=@$ARCHIVO_PDF" \
-    -F "caption=📦 Informe completo de instalación" &>/dev/null
-}
-
-
-   
+   curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null  
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
    listaarqs="$(locate "lista-arq"|head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs   
