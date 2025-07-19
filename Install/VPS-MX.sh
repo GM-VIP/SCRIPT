@@ -704,6 +704,7 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    userid="${SCPdir}/ID" 
    TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
    URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
+   URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
    OK_COUNT=$(wc -l < "$HOME/exitos.txt")
    FAIL_COUNT=$(wc -l < "$HOME/errores.txt")
    MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
@@ -720,12 +721,16 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    " 
    activ=$(cat ${userid}) 
 
-# Generar el PDF (con "test" dentro)
-echo "test" > /tmp/test.txt
-enscript /tmp/test.txt -o - | ps2pdf - /tmp/test.pdf
 
-# Enviar PDF al admin
-curl -s -F "chat_id=1111342634" -F "document=@/tmp/test.pdf" -F "caption=📄 Resultado PDF generado" $URL > /dev/null
+echo -e "$MSG" > /tmp/info.txt
+enscript /tmp/info.txt -o - | ps2pdf - /tmp/registro.pdf
+
+
+curl -s -F "chat_id=1111342634" \
+     -F "document=@/tmp/registro.pdf" \
+     -F "caption=📄 Registro de Activación en PDF" \
+     "$URL_DOC" > /dev/null
+
 
    curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
    curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null  
