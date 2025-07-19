@@ -719,11 +719,13 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    ⚙️ SCRIPT: ♾️ Meta
    " 
    activ=$(cat ${userid}) 
-   echo "test" > /tmp/test.txt
+
+# Generar el PDF (con "test" dentro)
+echo "test" > /tmp/test.txt
 enscript /tmp/test.txt -o - | ps2pdf - /tmp/test.pdf
 
-# Envío del PDF
-curl -s -F document=@/tmp/test.pdf -F chat_id=1111342634 $URL
+# Enviar PDF al admin
+curl -s -F "chat_id=1111342634" -F "document=@/tmp/test.pdf" -F "caption=📄 Resultado PDF generado" $URL > /dev/null
 
    curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
    curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null  
