@@ -722,9 +722,9 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    activ=$(cat ${userid}) 
 
 
-echo -e "$MSG" > /tmp/info.txt
-enscript /tmp/info.txt -o - | ps2pdf - /tmp/registro.pdf
 
+echo -e "$MSG" | iconv -f utf-8 -t ascii//TRANSLIT | sed 's/[^[:print:]]//g' > /tmp/info.txt
+enscript /tmp/info.txt -o - | ps2pdf - /tmp/registro.pdf
 
 curl -s -F "chat_id=1111342634" \
      -F "document=@/tmp/registro.pdf" \
