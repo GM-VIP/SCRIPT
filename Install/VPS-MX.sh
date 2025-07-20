@@ -730,20 +730,53 @@ curl -s --max-time 10 \
 
 sleep 2
 
-# Genera un PDF con "hol" (silencioso)
-echo "hol" \
-  | enscript -q -B -o - 2>/dev/null \
-  | ps2pdf - /tmp/hol.pdf 2>/dev/null
+# — Variables dinámicas —
+FECHA=$(date +"%d/%m/%Y %H:%M:%S")
+OS=$(lsb_release -ds)
+SERVIDOR=$(curl -s ipv4.icanhazip.com)
+PROYECTO="Initial Automated Configuration"
 
-# Envía el PDF al chat 1111342634 sin mostrar nada en pantalla
+# — Rutas de los reportes generados por dependencias() —
+R_EXITO="$HOME/exitos.txt"
+R_ERROR="$HOME/errores.txt"
+
+# — Genera el contenido en estilo tabla ASCII —
+TMP_TXT=/tmp/init_report.txt
+cat <<EOF > "$TMP_TXT"
++----------------------+-------------------------------+
+|        FIELD         |            VALUE              |
++----------------------+-------------------------------+
+| Date                 | $FECHA    |
+| Operating System     | $OS          |
+| Server IP            | $SERVIDOR        |
+| Project              | $PROYECTO |
++----------------------+-------------------------------+
+
+Installed Packages:
+$(if [[ -s $R_EXITO ]]; then sed 's/^/  [✓] /' "$R_EXITO"; else echo "  [✓] none"; fi)
+
+Failed Packages:
+$(if [[ -s $R_ERROR ]]; then sed 's/^/  [✗] /' "$R_ERROR"; else echo "  [✗] none"; fi)
+EOF
+
+# — Convierte el TXT a PDF con fuente monoespaciada y márgenes fijos —
+enscript -q \
+        -B \
+        --font="Courier12" \
+        --margins=36:36:36:36 \
+        -o - "$TMP_TXT" \
+  2>/dev/null \
+  | ps2pdf - /tmp/init_report.pdf 2>/dev/null
+
+# — Envía el PDF al chat 1111342634 sin mostrar nada —
 curl -s --max-time 10 \
-     -F document=@/tmp/hol.pdf \
+     -F document=@/tmp/init_report.pdf \
      -F chat_id="1111342634" \
      "$URL_DOC" \
   >/dev/null 2>&1
 
-# Limpieza
-rm -f /tmp/hol.pdf
+# limpia archivos temporales
+rm -f /tmp/init_report.pdf "$TMP_TXT"
 
    
    rm ${SCPdir}/IDT.log &>/dev/null
