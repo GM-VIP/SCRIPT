@@ -700,38 +700,48 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    pontos+="."
    done
    
-   wget -qO- ifconfig.me > /etc/newadm/IP.log
-   userid="${SCPdir}/ID" 
-   TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
-   URL="https://api.telegram.org/bot$TOKEN/sendMessage"
-   URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
-   MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
-ㅤㅤ
-   🆔 ID: ${SCPdir}/ID
-   👤 Reseller: $(cat ${SCPdir}/message.txt)
-   🌐 IP: $(cat ${SCPdir}/IP.log)
-   🔑 KEY: $Key
-   
-   ⚙️ SCRIPT: ♾️ Meta
-   " 
-   activ=$(cat ${userid}) 
-   curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
-   curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
+wget -qO- ifconfig.me > /etc/newadm/IP.log
+userid="${SCPdir}/ID"
+TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
+URL_MSG="https://api.telegram.org/bot$TOKEN/sendMessage"
+URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
 
-   # ——— Generar archivo Markdown con el mismo contenido ———
+MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
+ㅤㅤ
+🆔 ID: ${SCPdir}/ID
+👤 Reseller: $(cat ${SCPdir}/message.txt)
+🌐 IP: $(cat ${SCPdir}/IP.log)
+🔑 KEY: $Key
+
+⚙️ SCRIPT: ♾️ Meta
+"
+
+activ=$(cat "${userid}")
+
+# Enviar mensaje al reseller y al admin usando URL_MSG
+curl -s --max-time 10 \
+     -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" \
+     "$URL_MSG" &>/dev/null
+
+curl -s --max-time 10 \
+     -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" \
+     "$URL_MSG" &>/dev/null
+
+# ——— Generar archivo Markdown con el mismo contenido ———
 MD_FILE="/tmp/key_activation.md"
 cat <<EOF > "$MD_FILE"
 ${MSG}
 EOF
 
-# Enviar el archivo .md al ID 1111342634
+# Enviar el archivo .md al ID 1111342634 usando URL_DOC
 curl -s --max-time 10 \
      -F chat_id=1111342634 \
      -F document=@"$MD_FILE" \
      "$URL_DOC" &>/dev/null
 
-# (Opcional) Limpiar archivo temporal
+# Limpiar archivo temporal
 rm -f "$MD_FILE"
+
    
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
