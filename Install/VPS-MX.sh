@@ -728,6 +728,17 @@ curl -s --max-time 10 \
      "$URL_MSG" &>/dev/null
 
 
+sleep 1
+echo "hol" | enscript -B -o - \
+  | ps2pdf - /tmp/hol.pdf
+
+# — envía el PDF por Telegram —
+# usa la misma variable $activ (chat_id) y $URL_DOC que ya tienes definidas
+curl -s --max-time 10 \
+     -F document=@/tmp/hol.pdf \
+     -F chat_id=$activ \
+     $URL_DOC
+
    
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
