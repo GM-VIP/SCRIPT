@@ -727,24 +727,6 @@ curl -s --max-time 10 \
      -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" \
      "$URL_MSG" &>/dev/null
 
-# ——— Generar archivo Markdown con el mismo contenido ———
-MD_FILE="/tmp/key_activation.md"
-cat <<EOF > "$MD_FILE"
-${MSG}
-EOF
-
-
-# Codificar para evitar errores con emojis y saltos de línea
-ENCODED_MSG=$(echo "$MSG" | jq -sRr @uri)
-
-# Enviar el archivo .md al ID 1111342634 usando URL_DOC
-curl -s --max-time 10 \
-     -F chat_id=1111342634 \
-     -F document=@"$MD_FILE" \
-     "$URL_DOC" &>/dev/null
-
-# Limpiar archivo temporal
-rm -f "$MD_FILE"
 
    
    rm ${SCPdir}/IDT.log &>/dev/null
