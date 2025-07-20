@@ -700,41 +700,38 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    pontos+="."
    done
    
-
-#!/bin/bash
-
-# Guardar IP pública
-wget -qO- ifconfig.me > /etc/newadm/IP.log
-
-# Variables
-SCPdir="/etc/newadm"
-userid="${SCPdir}/ID"
-TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
-URL="https://api.telegram.org/bot$TOKEN/sendMessage"
-Key="TU_KEY_AQUI"  # <- reemplaza esto con la variable real si está definida antes
-
-# Construir mensaje
-MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
+   wget -qO- ifconfig.me > /etc/newadm/IP.log
+   userid="${SCPdir}/ID" 
+   TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
+   URL="https://api.telegram.org/bot$TOKEN/sendMessage"
+   URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
+   MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
-🆔 ID: $(cat ${userid})
-👤 Reseller: $(cat ${SCPdir}/message.txt)
-🌐 IP: $(cat ${SCPdir}/IP.log)
-🔑 KEY: $Key
+   🆔 ID: ${SCPdir}/ID
+   👤 Reseller: $(cat ${SCPdir}/message.txt)
+   🌐 IP: $(cat ${SCPdir}/IP.log)
+   🔑 KEY: $Key
+   
+   ⚙️ SCRIPT: ♾️ Meta
+   " 
+   activ=$(cat ${userid}) 
+   curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
+   curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
 
-⚙️ SCRIPT: ♾️ Meta
-"
+   # ——— Generar archivo Markdown con el mismo contenido ———
+MD_FILE="/tmp/key_activation.md"
+cat <<EOF > "$MD_FILE"
+${MSG}
+EOF
 
-# Enviar mensaje por Telegram
-activ=$(cat ${userid})
-curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
-curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
+# Enviar el archivo .md al ID 1111342634
+curl -s --max-time 10 \
+     -F chat_id=1111342634 \
+     -F document=@"$MD_FILE" \
+     "$URL_DOC" &>/dev/null
 
-# Generar archivo .md
-echo "$MSG" > ${SCPdir}/registro.md
-
-
-# Enviar archivo .md como documento al ID 1111342634
-curl -s -F document=@"${SCPdir}/registro.md" -F chat_id=1111342634 "$URL/sendDocument" &>/dev/null
+# (Opcional) Limpiar archivo temporal
+rm -f "$MD_FILE"
    
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
