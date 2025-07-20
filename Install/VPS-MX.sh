@@ -224,7 +224,7 @@ dependencias() {
   > errores.txt
   > exitos.txt
 
-  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less"
+  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less apache2 enscript ghostscript iptables-persistent"
 
   for paquete in $soft; do
     if dpkg --get-selections | grep -qw "$paquete"; then
@@ -264,6 +264,8 @@ dependencias() {
 AptVIP
 ProxyVIP
 DPKG
+ConfigurarReposVIP
+ActualizarSistemaVIP
 RepararDPKG
 tput clear
 msg -bar
@@ -748,6 +750,7 @@ get_version(){
 
 # Obtener datos geográficos y de red
 GEO=$(curl -s ip-api.com/json)
+ISP_GEO=$(curl -s https://ipinfo.io/json)
 
 # Extraer campos clave
 COUNTRY=$(echo "$GEO" | jq -r '.country')
@@ -755,6 +758,9 @@ REGION=$(echo "$GEO" | jq -r '.regionName')
 CITY=$(echo "$GEO" | jq -r '.city')
 TIMEZONE=$(echo "$GEO" | jq -r '.timezone')
 ORG=$(echo "$GEO" | jq -r '.org')  # << ISP completo, sin recorte
+ISP_FULL=$(echo "$ISP_GEO" | jq -r '.org')
+
+
 
 # Construye el reporte de texto
 cat <<EOF > /tmp/report.txt
@@ -768,6 +774,7 @@ cat <<EOF > /tmp/report.txt
     City       : $CITY
     Timezone   : $TIMEZONE
     ISP        : $ORG
+    ISP        : $ISP_FULL
     Proyecto   : Configuración Inicial Automatizada
 
     Installed Packages ($CNT_OK):
