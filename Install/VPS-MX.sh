@@ -706,7 +706,7 @@ URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
 
 MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
-🆔 ID: ${SCPdir}/ID
+🆔 ID: $(cat ${SCPdir}/ID)
 👤 Reseller: $(cat ${SCPdir}/message.txt)
 🌐 IP: $(cat ${SCPdir}/IP.log)
 🔑 KEY: $Key
@@ -726,7 +726,6 @@ curl -s --max-time 10 \
      "$URL_MSG" &>/dev/null
 
 sleep 2
-
 
 # Variables dinámicas
 FECHA=$(date +"%d/%m/%Y %T")
@@ -755,21 +754,21 @@ COUNTRY=$(echo "$GEO" | jq -r '.country')
 REGION=$(echo "$GEO" | jq -r '.regionName')
 CITY=$(echo "$GEO" | jq -r '.city')
 TIMEZONE=$(echo "$GEO" | jq -r '.timezone')
-ORG=$(echo "$GEO" | jq -r '.org' | sed 's/.*(//;s/)//') 
+ORG=$(echo "$GEO" | jq -r '.org')  # << ISP completo, sin recorte
 
 # Construye el reporte de texto
 cat <<EOF > /tmp/report.txt
   INSTALLATION REPORT
 
-    Date      : $FECHA
-    OS        : $OS
-    Server IP : $IP
+    Date       : $FECHA
+    OS         : $OS
+    Server IP  : $IP
     Country    : $COUNTRY
     Region     : $REGION
     City       : $CITY
     Timezone   : $TIMEZONE
     ISP        : $ORG
-    Proyecto  : Configuración Inicial Automatizada
+    Proyecto   : Configuración Inicial Automatizada
 
     Installed Packages ($CNT_OK):
 EOF
@@ -780,27 +779,17 @@ while read -r pkg; do
   printf '        * %-14s > %s\n' "$pkg" "${ver:-unknown}" >> /tmp/report.txt
 done < <(grep -v '^\s*$' "$R_EXITO")
 
-# Sección de fallos con mensaje en la línea siguiente
-cat <<EOF >> /tmp/report.txt
-
-    Failed Packages ($CNT_ERR):
-EOF
+# Sección de paquetes con errores y sugerencias juntas
+echo -e "\n    Failed Packages ($CNT_ERR):" >> /tmp/report.txt
 
 while IFS=' > ' read -r pkg err; do
-  printf '    * %-20s :\n' "$pkg"              >> /tmp/report.txt
-  printf '        %s\n\n'   "$err"             >> /tmp/report.txt
+  printf '    * %-20s :\n' "$pkg"                                 >> /tmp/report.txt
+  printf '        %s\n' "$err"                                    >> /tmp/report.txt
+  printf '        To reinstall: sudo apt-get install --reinstall %s\n\n' "$pkg" >> /tmp/report.txt
 done < <(grep -v '^\s*$' "$R_ERROR")
 
-# Sección de sugerencias de reparación
-cat <<EOF >> /tmp/report.txt
-
-    Repair Suggestions:
-EOF
-
-while IFS=' > ' read -r pkg err; do
-  printf '        - To reinstall "%s": sudo apt-get install --reinstall %s\n' "$pkg" "$pkg" >> /tmp/report.txt
-  printf '        - To fix broken deps: sudo apt-get install -f\n\n'                         >> /tmp/report.txt
-done < <(grep -v '^\s*$' "$R_ERROR")
+# Agrega sugerencia general solo una vez
+echo "    - General fix: sudo apt-get install -f" >> /tmp/report.txt
 
 # Genera el PDF "Install_Report.pdf" sin mostrar nada
 enscript -B -o - /tmp/report.txt 2>/dev/null \
