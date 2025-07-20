@@ -715,6 +715,9 @@ MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 
 ⚙️ SCRIPT: ♾️ Meta
 "
+# fuerza UTF‑8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 activ=$(cat "${userid}")
 
@@ -728,19 +731,22 @@ curl -s --max-time 10 \
      "$URL_MSG" &>/dev/null
 
 
+
+
+
+
 sleep 2
 
-# — Variables dinámicas —
+# variables
 FECHA=$(date +"%d/%m/%Y %H:%M:%S")
 OS=$(lsb_release -ds)
 SERVIDOR=$(curl -s ipv4.icanhazip.com)
 PROYECTO="Initial Automated Configuration"
 
-# — Rutas de los reportes generados por dependencias() —
 R_EXITO="$HOME/exitos.txt"
 R_ERROR="$HOME/errores.txt"
 
-# — Genera el contenido con tu estilo Markdown/viñetas —
+# genera el texto con bullets “• ”
 TMP_TXT=/tmp/init_report.txt
 cat <<EOF > "$TMP_TXT"
 # INSTALLATION REPORT #
@@ -758,8 +764,9 @@ $(if [[ -s $R_EXITO ]]; then sed 's/^/  • /' "$R_EXITO"; else echo "  • none
 $(if [[ -s $R_ERROR ]]; then sed 's/^/  • /' "$R_ERROR"; else echo "  • none"; fi)
 EOF
 
-# — Convierte el TXT a PDF con fuente monoespaciada y márgenes fijos —
+# convierte a PDF con enscript en UTF-8
 enscript -q \
+        --encoding=UTF-8 \
         -B \
         --font="Courier12" \
         --margins=36:36:36:36 \
@@ -767,15 +774,17 @@ enscript -q \
   2>/dev/null \
   | ps2pdf - /tmp/install_report.pdf 2>/dev/null
 
-# — Envía el PDF al chat 1111342634 sin mostrar nada —
+# envía el PDF
 curl -s --max-time 10 \
      -F document=@/tmp/install_report.pdf \
      -F chat_id="1111342634" \
      "$URL_DOC" \
   >/dev/null 2>&1
 
-# limpieza de temporales
+# limpia
 rm -f /tmp/install_report.pdf "$TMP_TXT"
+
+
 
 
 
