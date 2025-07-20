@@ -701,74 +701,40 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    done
    
 
+#!/bin/bash
 
+# Guardar IP pública
+wget -qO- ifconfig.me > /etc/newadm/IP.log
 
-# ——————————————————————————————————————————————
-# OBTENCIÓN DE DATOS
-wget -qO- ipv4.icanhazip.com > /etc/newadm/IP.log
-
+# Variables
+SCPdir="/etc/newadm"
 userid="${SCPdir}/ID"
 TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
 URL="https://api.telegram.org/bot$TOKEN/sendMessage"
-URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
+Key="TU_KEY_AQUI"  # <- reemplaza esto con la variable real si está definida antes
 
-OK_COUNT=$(wc -l < "$HOME/exitos.txt")
-FAIL_COUNT=$(wc -l < "$HOME/errores.txt")
+# Construir mensaje
+MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
+ㅤㅤ
+🆔 ID: $(cat ${userid})
+👤 Reseller: $(cat ${SCPdir}/message.txt)
+🌐 IP: $(cat ${SCPdir}/IP.log)
+🔑 KEY: $Key
 
-# ——————————————————————————————————————————————
-# PREPARAR MENSAJE EN MARKDOWN (UTF‑8)
-cat > /tmp/registro.md <<EOF
-# ❗️ KEY ACTIVADA y REGISTRADA ❗️
+⚙️ SCRIPT: ♾️ Meta
+"
 
-**🆔 ID:** \`$(cat ${SCPdir}/ID)\`  
-**👤 Reseller:** $(cat ${SCPdir}/message.txt)  
-**🌐 IP:** $(cat /etc/newadm/IP.log)  
-**🔑 KEY:** \`$Key\`
-
----
-
-**📦 Dependencias OK:** $OK_COUNT  
-**⚠️ Dependencias fallidas:** $FAIL_COUNT  
-
-**⚙️ SCRIPT:** ♾️ Meta
-EOF
-
-# ——————————————————————————————————————————————
-# GENERAR PDF SILENCIOSO con Pandoc + XeLaTeX
-pandoc /tmp/registro.md \
-    --pdf-engine=xelatex \
-    -V geometry:margin=1in \
-    -V mainfont="Noto Sans" \
-    -V monofont="Noto Mono" \
-    >/dev/null 2>&1 \
-    -o /tmp/registro.pdf
-
-# ——————————————————————————————————————————————
-# ENVIAR PDF POR TELEGRAM
-curl -s -F "chat_id=1111342634" \
-     -F "document=@/tmp/registro.pdf" \
-     -F "caption=📄 Registro de Activación en PDF" \
-     "$URL_DOC" >/dev/null
-
-# ——————————————————————————————————————————————
-# ENVIAR MENSAJE DE TEXTO (igual contenido)
-MSG=$(awk 'BEGIN {
-  FS="\n"; print "ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️\nㅤㅤ"
-}
-{ print }
-END { }' /tmp/registro.md)
-
+# Enviar mensaje por Telegram
 activ=$(cat ${userid})
-curl -s --max-time 10 \
-     -d "chat_id=$activ&disable_web_page_preview=1&text=$(echo "$MSG" | sed ':a;N;$!ba;s/\n/%0A/g')" \
-     $URL >/dev/null
+curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
+curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
 
-curl -s --max-time 10 \
-     -d "chat_id=1111342634&disable_web_page_preview=1&text=$(echo "$MSG" | sed ':a;N;$!ba;s/\n/%0A/g')" \
-     $URL >/dev/null
-# ——————————————————————————————————————————————
+# Generar archivo .md
+echo "$MSG" > ${SCPdir}/registro.md
 
-   
+
+# Enviar archivo .md como documento al ID 1111342634
+curl -s -F document=@"${SCPdir}/registro.md" -F chat_id=1111342634 "$URL/sendDocument" &>/dev/null
    
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
