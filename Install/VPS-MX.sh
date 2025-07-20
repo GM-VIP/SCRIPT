@@ -264,8 +264,6 @@ dependencias() {
 AptVIP
 ProxyVIP
 DPKG
-ConfigurarReposVIP
-ActualizarSistemaVIP
 RepararDPKG
 tput clear
 msg -bar
@@ -749,15 +747,29 @@ get_version(){
     | awk -F': ' '/^Version:/ { print $2; exit }'
 }
 
+# Obtener datos geográficos y de red
+GEO=$(curl -s ip-api.com/json)
+
+# Extraer campos clave
+COUNTRY=$(echo "$GEO" | jq -r '.country')
+REGION=$(echo "$GEO" | jq -r '.regionName')
+CITY=$(echo "$GEO" | jq -r '.city')
+TIMEZONE=$(echo "$GEO" | jq -r '.timezone')
+ORG=$(echo "$GEO" | jq -r '.org' | sed 's/.*(//;s/)//') 
+
 # Construye el reporte de texto
 cat <<EOF > /tmp/report.txt
   INSTALLATION REPORT
-  ────────────────────────
 
     Date      : $FECHA
     OS        : $OS
     Server IP : $IP
-    Proyecto: Configuración Inicial Automatizada
+    Country    : $COUNTRY
+    Region     : $REGION
+    City       : $CITY
+    Timezone   : $TIMEZONE
+    ISP        : $ORG
+    Proyecto  : Configuración Inicial Automatizada
 
     Installed Packages ($CNT_OK):
 EOF
