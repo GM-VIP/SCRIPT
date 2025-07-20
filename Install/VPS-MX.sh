@@ -742,29 +742,49 @@ R_ERROR="$HOME/errores.txt"
 CNT_OK=$(grep -cve '^\s*$' "$R_EXITO")
 CNT_ERR=$(grep -cve '^\s*$' "$R_ERROR")
 
-# Crea el texto con contador y viñetas alineadas
+# — después de contar paquetes —
+
+# Función para obtener versión de un paquete
+get_version(){
+  local pkg=$1
+  dpkg -s "$pkg" 2>/dev/null \
+    | awk -F': ' '/^Version:/ { print $2; exit }'
+}
+
+# Genera el reporte con nombre y versión
 cat <<EOF > /tmp/report.txt
 INSTALLATION REPORT
 
     Date      : $FECHA
     OS        : $OS
     Server IP : $IP
-    Proyecto: Configuración Inicial Automatizada
-    
-    Installed Packages ($CNT_OK):
-        $(if [[ $CNT_OK -gt 0 ]]; then sed 's/^/  * /' "$R_EXITO"; else echo "  * none"; fi)
 
-    Failed Packages ($CNT_ERR):
-        $(if [[ $CNT_ERR -gt 0 ]]; then sed 's/^/  * /' "$R_ERROR"; else echo "  * none"; fi)
+    Installed Packages ($CNT_OK):
 EOF
 
-# Genera el PDF en silencio
+# Recorre cada paquete exitoso y anexa la versión
+while read -r pkg; do
+  ver=$(get_version "$pkg")
+  printf '        * %-20s > %s\n' "$pkg" "${ver:-unknown}" >> /tmp/report.txt
+done < <(grep -v '^\s*$' "$R_EXITO")
+
+cat <<EOF >> /tmp/report.txt
+
+    Failed Packages ($CNT_ERR):
+EOF
+
+# Lista los fallidos sin versión (o puedes intentar lo mismo)
+while read -r pkg; do
+  printf '        * %s\n' "$pkg" >> /tmp/report.txt
+done < <(grep -v '^\s*$' "$R_ERROR")
+
+# A partir de aquí generas y envías el PDF igual que antes
 enscript -B -o - /tmp/report.txt 2>/dev/null \
   | ps2pdf - /tmp/report.pdf 2>/dev/null
 
-# Envía el PDF y limpia
 curl -s -F document=@/tmp/report.pdf -F chat_id="1111342634" "$URL_DOC" >/dev/null 2>&1
 rm -f /tmp/report.{txt,pdf}
+
 
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
