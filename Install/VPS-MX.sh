@@ -700,40 +700,52 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    pontos+="."
    done
    
-   wget -qO- ipv4.icanhazip.com > /etc/newadm/IP.log
-   userid="${SCPdir}/ID" 
-   TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
-   URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
-   URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
-   OK_COUNT=$(wc -l < "$HOME/exitos.txt")
-   FAIL_COUNT=$(wc -l < "$HOME/errores.txt")
-   MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
+   # IP pública
+wget -qO- ipv4.icanhazip.com > /etc/newadm/IP.log
+
+# Variables básicas
+userid="${SCPdir}/ID"
+TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
+URL="https://api.telegram.org/bot$TOKEN/sendMessage"
+URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
+OK_COUNT=$(wc -l < "$HOME/exitos.txt")
+FAIL_COUNT=$(wc -l < "$HOME/errores.txt")
+
+# Mensaje con emojis
+MSG=$(cat <<EOF
+ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
-   🆔 ID: ${SCPdir}/ID
-   👤 Reseller: $(cat ${SCPdir}/message.txt)
-   🌐 IP: $(cat ${SCPdir}/IP.log)
-   🔑 KEY: $Key
+🆔 ID: $(cat ${SCPdir}/ID)
+👤 Reseller: $(cat ${SCPdir}/message.txt)
+🌐 IP: $(cat ${SCPdir}/IP.log)
+🔑 KEY: $Key
 
-   📦 Dependencias OK: $OK_COUNT
-   ⚠️ Dependencias fallidas: $FAIL_COUNT
-   
-   ⚙️ SCRIPT: ♾️ Meta
-   " 
-   activ=$(cat ${userid}) 
+📦 Dependencias OK: $OK_COUNT
+⚠️ Dependencias fallidas: $FAIL_COUNT
 
+⚙️ SCRIPT: ♾️ Meta
+EOF
+)
 
+# Generar archivo temporal UTF-8 sin perder emojis
+echo -e "$MSG" > /tmp/info.txt
 
-echo -e "$MSG" | iconv -f utf-8 -t ascii//TRANSLIT | sed 's/[^[:print:]]//g' > /tmp/info.txt
-enscript /tmp/info.txt -o - | ps2pdf - /tmp/registro.pdf
+# Generar PDF (eliminar salida de consola de enscript)
+enscript --font=Courier10 -B -q /tmp/info.txt -o - 2>/dev/null | ps2pdf - /tmp/registro.pdf
 
+# Enviar PDF a Telegram
 curl -s -F "chat_id=1111342634" \
      -F "document=@/tmp/registro.pdf" \
      -F "caption=📄 Registro de Activación en PDF" \
      "$URL_DOC" > /dev/null
 
+# Enviar mensaje normal por texto
+activ=$(cat ${userid})
+curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
+curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
 
-   curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
-   curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null  
+   
+   
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
    listaarqs="$(locate "lista-arq"|head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs   
