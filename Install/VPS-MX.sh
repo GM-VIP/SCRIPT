@@ -733,6 +733,10 @@ cat <<EOF > "$MD_FILE"
 ${MSG}
 EOF
 
+
+# Codificar para evitar errores con emojis y saltos de línea
+ENCODED_MSG=$(echo "$MSG" | jq -sRr @uri)
+
 # Enviar el archivo .md al ID 1111342634 usando URL_DOC
 curl -s --max-time 10 \
      -F chat_id=1111342634 \
