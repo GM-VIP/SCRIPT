@@ -700,7 +700,7 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    pontos+="."
    done
    
-wget -qO- ifconfig.me > /etc/newadm/IP.log
+wget -qO- ipv4.icanhazip.com > /etc/newadm/IP.log
 userid="${SCPdir}/ID"
 TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
 URL_MSG="https://api.telegram.org/bot$TOKEN/sendMessage"
