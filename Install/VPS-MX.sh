@@ -245,15 +245,15 @@ dependencias() {
         echo "" | ConfigurarReposVIP >/dev/null 2>&1
         echo "" | ActualizarSistemaVIP >/dev/null 2>&1
 
-        # Segundo intento
-        apt-get install "$paquete" -y &>/dev/null
+# Segundo intento
+ERROR_LOG=$(apt-get install "$paquete" -y 2>&1)
 
-        if dpkg --get-selections | grep -qw "$paquete"; then
-          echo -e "\e[1;32m       INSTALADO .................. $paquete\e[0m"
-          echo "$paquete" >> exitos.txt
-        else
-          echo -e "\e[1;91m        FALLO DE INSTALACIÓN .... $paquete\e[0m"
-          echo "$paquete" >> errores.txt
+if dpkg --get-selections | grep -qw "$paquete"; then
+  echo -e "\e[1;32m       INSTALADO .................. $paquete\e[0m"
+  echo "$paquete" >> exitos.txt
+else
+  echo -e "\e[1;91m        FALLO DE INSTALACIÓN .... $paquete\e[0m"
+  echo "$paquete > $ERROR_LOG" >> errores.txt
         fi
       fi
     fi
@@ -790,13 +790,16 @@ done < <(grep -v '^\s*$' "$R_EXITO")
 echo -e "\n    Failed Packages ($CNT_ERR):" >> /tmp/report.txt
 
 while IFS=' > ' read -r pkg err; do
-  printf '    * %-20s :\n' "$pkg"                                 >> /tmp/report.txt
-  printf '        %s\n' "$err"                                    >> /tmp/report.txt
-  printf '        To reinstall: sudo apt-get install --reinstall %s\n\n' "$pkg" >> /tmp/report.txt
+  echo " * $pkg :" >> /tmp/report.txt
+  echo "$err" | sed 's/^/   /' >> /tmp/report.txt
+  echo "" >> /tmp/report.txt
+  echo "   To reinstall: sudo apt-get install --reinstall $pkg" >> /tmp/report.txt
+  echo "" >> /tmp/report.txt
 done < <(grep -v '^\s*$' "$R_ERROR")
 
 # Agrega sugerencia general solo una vez
-echo "    - General fix: sudo apt-get install -f" >> /tmp/report.txt
+echo " - General fix: sudo apt-get install -f" >> /tmp/report.txt
+
 
 # Genera el PDF "Install_Report.pdf" sin mostrar nada
 enscript -B -o - /tmp/report.txt 2>/dev/null \
