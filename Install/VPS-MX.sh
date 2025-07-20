@@ -224,7 +224,7 @@ dependencias() {
   > errores.txt
   > exitos.txt
 
-  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less apache2 enscript ghostscript iptables-persistent"
+  soft="sudo bsdmainutils zip unzip ufw curl python python3 python3-pip screen openssl cron iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat netcat netcat-traditional net-tools cowsay figlet lolcat build-essential netstat vnstat less apache2 enscript ghostscript"
 
   for paquete in $soft; do
     if dpkg --get-selections | grep -qw "$paquete"; then
