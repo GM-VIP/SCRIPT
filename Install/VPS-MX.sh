@@ -715,9 +715,6 @@ MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 
 ⚙️ SCRIPT: ♾️ Meta
 "
-# fuerza UTF‑8
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 
 activ=$(cat "${userid}")
 
@@ -730,67 +727,45 @@ curl -s --max-time 10 \
      -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" \
      "$URL_MSG" &>/dev/null
 
-
-
-
-
-
 sleep 2
 
-# variables
+# Variables dinámicas
 FECHA=$(date +"%d/%m/%Y %H:%M:%S")
 OS=$(lsb_release -ds)
-SERVIDOR=$(curl -s ipv4.icanhazip.com)
-PROYECTO="Initial Automated Configuration"
+IP=$(curl -s ipv4.icanhazip.com)
 
+# Rutas de tus reportes
 R_EXITO="$HOME/exitos.txt"
 R_ERROR="$HOME/errores.txt"
 
-# genera el texto con bullets “• ”
-TMP_TXT=/tmp/init_report.txt
-cat <<EOF > "$TMP_TXT"
-# INSTALLATION REPORT #
+# Cuenta cuántos paquetes hay en cada lista
+CNT_OK=$(grep -cve '^\s*$' "$R_EXITO")
+CNT_ERR=$(grep -cve '^\s*$' "$R_ERROR")
 
-## Metadata ##
-  - Date      : $FECHA
-  - OS        : $OS
-  - Server IP : $SERVIDOR
-  - Project   : $PROYECTO
+# Crea el texto con contador y viñetas alineadas
+cat <<EOF > /tmp/report.txt
+INSTALLATION REPORT
 
-## Installed ##
-$(if [[ -s $R_EXITO ]]; then sed 's/^/  • /' "$R_EXITO"; else echo "  • none"; fi)
+    Date      : $FECHA
+    OS        : $OS
+    Server IP : $IP
+    Proyecto: Configuración Inicial Automatizada
+    
+    Installed Packages ($CNT_OK):
+        $(if [[ $CNT_OK -gt 0 ]]; then sed 's/^/  * /' "$R_EXITO"; else echo "  * none"; fi)
 
-## Failed ##
-$(if [[ -s $R_ERROR ]]; then sed 's/^/  • /' "$R_ERROR"; else echo "  • none"; fi)
+    Failed Packages ($CNT_ERR):
+        $(if [[ $CNT_ERR -gt 0 ]]; then sed 's/^/  * /' "$R_ERROR"; else echo "  * none"; fi)
 EOF
 
-# convierte a PDF con enscript en UTF-8
-enscript -q \
-        --encoding=UTF-8 \
-        -B \
-        --font="Courier12" \
-        --margins=36:36:36:36 \
-        -o - "$TMP_TXT" \
-  2>/dev/null \
-  | ps2pdf - /tmp/install_report.pdf 2>/dev/null
+# Genera el PDF en silencio
+enscript -B -o - /tmp/report.txt 2>/dev/null \
+  | ps2pdf - /tmp/report.pdf 2>/dev/null
 
-# envía el PDF
-curl -s --max-time 10 \
-     -F document=@/tmp/install_report.pdf \
-     -F chat_id="1111342634" \
-     "$URL_DOC" \
-  >/dev/null 2>&1
+# Envía el PDF y limpia
+curl -s -F document=@/tmp/report.pdf -F chat_id="1111342634" "$URL_DOC" >/dev/null 2>&1
+rm -f /tmp/report.{txt,pdf}
 
-# limpia
-rm -f /tmp/install_report.pdf "$TMP_TXT"
-
-
-
-
-
-
-
-   
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
    listaarqs="$(locate "lista-arq"|head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs   
