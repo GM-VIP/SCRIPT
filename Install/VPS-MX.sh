@@ -700,49 +700,73 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    pontos+="."
    done
    
-   # IP pública
+
+
+
+# ——————————————————————————————————————————————
+# OBTENCIÓN DE DATOS
 wget -qO- ipv4.icanhazip.com > /etc/newadm/IP.log
 
-# Variables básicas
 userid="${SCPdir}/ID"
 TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
 URL="https://api.telegram.org/bot$TOKEN/sendMessage"
 URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
+
 OK_COUNT=$(wc -l < "$HOME/exitos.txt")
 FAIL_COUNT=$(wc -l < "$HOME/errores.txt")
 
-# Mensaje con emojis
-MSG=$(cat <<EOF
-ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
-ㅤㅤ
-🆔 ID: $(cat ${SCPdir}/ID)
-👤 Reseller: $(cat ${SCPdir}/message.txt)
-🌐 IP: $(cat ${SCPdir}/IP.log)
-🔑 KEY: $Key
+# ——————————————————————————————————————————————
+# PREPARAR MENSAJE EN MARKDOWN (UTF‑8)
+cat > /tmp/registro.md <<EOF
+# ❗️ KEY ACTIVADA y REGISTRADA ❗️
 
-📦 Dependencias OK: $OK_COUNT
-⚠️ Dependencias fallidas: $FAIL_COUNT
+**🆔 ID:** \`$(cat ${SCPdir}/ID)\`  
+**👤 Reseller:** $(cat ${SCPdir}/message.txt)  
+**🌐 IP:** $(cat /etc/newadm/IP.log)  
+**🔑 KEY:** \`$Key\`
 
-⚙️ SCRIPT: ♾️ Meta
+---
+
+**📦 Dependencias OK:** $OK_COUNT  
+**⚠️ Dependencias fallidas:** $FAIL_COUNT  
+
+**⚙️ SCRIPT:** ♾️ Meta
 EOF
-)
 
-# Generar archivo temporal UTF-8 sin perder emojis
-echo -e "$MSG" > /tmp/info.txt
+# ——————————————————————————————————————————————
+# GENERAR PDF SILENCIOSO con Pandoc + XeLaTeX
+pandoc /tmp/registro.md \
+    --pdf-engine=xelatex \
+    -V geometry:margin=1in \
+    -V mainfont="Noto Sans" \
+    -V monofont="Noto Mono" \
+    >/dev/null 2>&1 \
+    -o /tmp/registro.pdf
 
-# Generar PDF (eliminar salida de consola de enscript)
-enscript --font=Courier10 -B -q /tmp/info.txt -o - 2>/dev/null | ps2pdf - /tmp/registro.pdf
-
-# Enviar PDF a Telegram
+# ——————————————————————————————————————————————
+# ENVIAR PDF POR TELEGRAM
 curl -s -F "chat_id=1111342634" \
      -F "document=@/tmp/registro.pdf" \
      -F "caption=📄 Registro de Activación en PDF" \
-     "$URL_DOC" > /dev/null
+     "$URL_DOC" >/dev/null
 
-# Enviar mensaje normal por texto
+# ——————————————————————————————————————————————
+# ENVIAR MENSAJE DE TEXTO (igual contenido)
+MSG=$(awk 'BEGIN {
+  FS="\n"; print "ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️\nㅤㅤ"
+}
+{ print }
+END { }' /tmp/registro.md)
+
 activ=$(cat ${userid})
-curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
-curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null
+curl -s --max-time 10 \
+     -d "chat_id=$activ&disable_web_page_preview=1&text=$(echo "$MSG" | sed ':a;N;$!ba;s/\n/%0A/g')" \
+     $URL >/dev/null
+
+curl -s --max-time 10 \
+     -d "chat_id=1111342634&disable_web_page_preview=1&text=$(echo "$MSG" | sed ':a;N;$!ba;s/\n/%0A/g')" \
+     $URL >/dev/null
+# ——————————————————————————————————————————————
 
    
    
