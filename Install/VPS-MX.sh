@@ -729,8 +729,9 @@ curl -s --max-time 10 \
 
 sleep 2
 
+
 # Variables dinámicas
-FECHA=$(date +"%d/%m/%Y %H:%M:%S")
+FECHA=$(date +"%d/%m/%Y %T")
 OS=$(lsb_release -ds)
 IP=$(curl -s ipv4.icanhazip.com)
 
@@ -742,81 +743,64 @@ R_ERROR="$HOME/errores.txt"
 CNT_OK=$(grep -cve '^\s*$' "$R_EXITO")
 CNT_ERR=$(grep -cve '^\s*$' "$R_ERROR")
 
+# Función para obtener versión de un paquete
+get_version(){
+  dpkg -s "$1" 2>/dev/null \
+    | awk -F': ' '/^Version:/ { print $2; exit }'
+}
 
+# Construye el reporte de texto
+cat <<EOF > /tmp/report.txt
+  INSTALLATION REPORT
+  ────────────────────────
 
-# — Variables previas (FECHA, OS, IP, R_EXITO, R_ERROR, CNT_OK, CNT_ERR) —
+    Date      : $FECHA
+    OS        : $OS
+    Server IP : $IP
+    Proyecto: Configuración Inicial Automatizada
 
-# Genera el .tex
-cat <<‘EOF’ > /tmp/report.tex
-\documentclass[12pt]{article}
-\usepackage[margin=1in]{geometry}
-\usepackage{times}            % Times New Roman
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-
-\begin{document}
-
-% Título en negrita y grande
-\begin{center}
-  {\bfseries\LARGE INSTALLATION REPORT}\\[0.2em]
-  \rule{\linewidth}{0.5pt}
-\end{center}
-
-\vspace{1em}
-
-\textbf{Date:}       FECHA_PLACEHOLDER\\
-\textbf{OS:}         OS_PLACEHOLDER\\
-\textbf{Server IP:}  IP_PLACEHOLDER\\[1em]
-
-\textbf{Installed Packages ($CNT_OK$):}\\
-\begin{itemize}
-INSTALLED_ITEMS
-\end{itemize}
-
-\textbf{Failed Packages ($CNT_ERR$):}\\
-\begin{itemize}
-FAILED_ITEMS
-\end{itemize}
-
-\end{document}
+    Installed Packages ($CNT_OK):
 EOF
 
-# Rellena los placeholders
-sed -i "s|FECHA_PLACEHOLDER|$FECHA|" /tmp/report.tex
-sed -i "s|OS_PLACEHOLDER|$OS|"     /tmp/report.tex
-sed -i "s|IP_PLACEHOLDER|$IP|"     /tmp/report.tex
-sed -i "s|CNT_OK|$CNT_OK|"         /tmp/report.tex
-sed -i "s|CNT_ERR|$CNT_ERR|"       /tmp/report.tex
-
-# Monta la lista de Installed con versión
-INST=""
+# Anexa cada paquete instalado con su versión
 while read -r pkg; do
-  ver=$(dpkg -s "$pkg" 2>/dev/null | awk -F': ' '/^Version:/ {print $2; exit}')
-  INST+="  \\item ${pkg} > ${ver:-unknown}\n"
+  ver=$(get_version "$pkg")
+  printf '        * %-14s > %s\n' "$pkg" "${ver:-unknown}" >> /tmp/report.txt
 done < <(grep -v '^\s*$' "$R_EXITO")
-[[ -z "$INST" ]] && INST="  \\item none\n"
-sed -i "s|INSTALLED_ITEMS|$INST|" /tmp/report.tex
 
-# Monta la lista de Failed
-FAIL=""
-while read -r pkg; do
-  FAIL+="  \\item $pkg\n"
+# Sección de fallos con mensaje en la línea siguiente
+cat <<EOF >> /tmp/report.txt
+
+    Failed Packages ($CNT_ERR):
+EOF
+
+while IFS=' > ' read -r pkg err; do
+  printf '    * %-20s :\n' "$pkg"              >> /tmp/report.txt
+  printf '        %s\n\n'   "$err"             >> /tmp/report.txt
 done < <(grep -v '^\s*$' "$R_ERROR")
-[[ -z "$FAIL" ]] && FAIL="  \\item none\n"
-sed -i "s|FAILED_ITEMS|$FAIL|" /tmp/report.tex
 
-# Compila silenciado
-pdflatex -interaction=batchmode -output-directory=/tmp /tmp/report.tex >/dev/null 2>&1
+# Sección de sugerencias de reparación
+cat <<EOF >> /tmp/report.txt
 
-# Envía y limpia
-curl -s --max-time 10 \
-     -F document=@/tmp/report.pdf \
+    Repair Suggestions:
+EOF
+
+while IFS=' > ' read -r pkg err; do
+  printf '        - To reinstall "%s": sudo apt-get install --reinstall %s\n' "$pkg" "$pkg" >> /tmp/report.txt
+  printf '        - To fix broken deps: sudo apt-get install -f\n\n'                         >> /tmp/report.txt
+done < <(grep -v '^\s*$' "$R_ERROR")
+
+# Genera el PDF "Install_Report.pdf" sin mostrar nada
+enscript -B -o - /tmp/report.txt 2>/dev/null \
+  | ps2pdf - /tmp/Install_Report.pdf 2>/dev/null
+
+# Envía el PDF y limpia archivos temporales
+curl -s \
+     -F document=@/tmp/Install_Report.pdf \
      -F chat_id="1111342634" \
      "$URL_DOC" >/dev/null 2>&1
 
-rm -f /tmp/report.{aux,log,tex,pdf}
-
-
+rm -f /tmp/report.txt /tmp/Install_Report.pdf
 
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
