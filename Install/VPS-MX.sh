@@ -253,8 +253,11 @@ if dpkg --get-selections | grep -qw "$paquete"; then
   echo "$paquete" >> exitos.txt
 else
   echo -e "\e[1;91m        FALLO DE INSTALACIÓN .... $paquete\e[0m"
-  echo "$paquete > $ERROR_LOG" >> errores.txt
-        fi
+  {
+    echo "$paquete >"
+    echo "$ERROR_LOG"
+  } >> errores.txt
+       fi
       fi
     fi
   done
@@ -789,16 +792,34 @@ done < <(grep -v '^\s*$' "$R_EXITO")
 # Sección de paquetes con errores y sugerencias juntas
 echo -e "\n    Failed Packages ($CNT_ERR):" >> /tmp/report.txt
 
-while IFS=' > ' read -r pkg err; do
-  echo " * $pkg :" >> /tmp/report.txt
-  echo "$err" | sed 's/^/   /' >> /tmp/report.txt
-  echo "" >> /tmp/report.txt
-  echo "   To reinstall: sudo apt-get install --reinstall $pkg" >> /tmp/report.txt
-  echo "" >> /tmp/report.txt
-done < <(grep -v '^\s*$' "$R_ERROR")
+# Leer errores agrupados por paquete
+awk '
+  /^[^ ]+ >/ {
+    if (pkg) print "";           # Salto entre paquetes
+    pkg = $1;
+    print "    * " pkg "              :";
+    next;
+  }
+  {
+    print "        " $0;
+  }
+  END {
+    print "";
+  }
+' "$R_ERROR" >> /tmp/report.txt
 
-# Agrega sugerencia general solo una vez
-echo " - General fix: sudo apt-get install -f" >> /tmp/report.txt
+# Volver a agregar comandos "To reinstall" para cada paquete
+awk '
+  /^[^ ]+ >/ {
+    pkg = $1;
+    gsub(/>/, "", pkg);
+    print "        To reinstall: sudo apt-get install --reinstall " pkg "\n";
+  }
+' "$R_ERROR" >> /tmp/report.txt
+
+# Agrega sugerencia general una sola vez
+echo "    - General fix: sudo apt-get install -f" >> /tmp/report.txt
+
 
 
 # Genera el PDF "Install_Report.pdf" sin mostrar nada
