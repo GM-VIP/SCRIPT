@@ -788,35 +788,35 @@ while read -r pkg; do
 done < <(grep -v '^\s*$' "$R_EXITO")
 
 # Sección de paquetes con errores y sugerencias juntas
-echo -e "\n    Failed Packages ($CNT_ERR):" >> /tmp/report.txt
+R_ERROR="errores.txt"
+CNT_ERR=$(grep -c '^[^ ]\+ >' "$R_ERROR")
 
-# Leer errores agrupados por paquete
+echo -e "\n    Failed Packages ($CNT_ERR):" > /tmp/report.txt
+
 awk '
   /^[^ ]+ >/ {
-    if (pkg) print "";           # Salto entre paquetes
+    if (pkg) {
+      print "";
+      print "        To reinstall: sudo apt-get install --reinstall " pkg "\n";
+    }
     pkg = $1;
-    print "    * " pkg "              :";
+    gsub(/>/, "", pkg);
+    printf "    * %-20s :\n", pkg;
     next;
   }
   {
     print "        " $0;
   }
   END {
-    print "";
+    if (pkg) {
+      print "";
+      print "        To reinstall: sudo apt-get install --reinstall " pkg "\n";
+    }
   }
 ' "$R_ERROR" >> /tmp/report.txt
 
-# Volver a agregar comandos "To reinstall" para cada paquete
-awk '
-  /^[^ ]+ >/ {
-    pkg = $1;
-    gsub(/>/, "", pkg);
-    print "        To reinstall: sudo apt-get install --reinstall " pkg "\n";
-  }
-' "$R_ERROR" >> /tmp/report.txt
-
-# Agrega sugerencia general una sola vez
 echo "    - General fix: sudo apt-get install -f" >> /tmp/report.txt
+
 
 
 
