@@ -791,7 +791,8 @@ done < <(grep -v '^\s*$' "$R_EXITO")
 R_ERROR="errores.txt"
 CNT_ERR=$(grep -c '^[^ ]\+ >' "$R_ERROR")
 
-echo -e "\n    Failed Packages ($CNT_ERR):" > /tmp/report.txt
+# ¡No usar ">" para no sobrescribir el archivo!
+echo -e "\n    Failed Packages ($CNT_ERR):" >> /tmp/report.txt
 
 awk '
   /^[^ ]+ >/ {
@@ -805,7 +806,8 @@ awk '
     next;
   }
   {
-    print "        " $0;
+    if ($0 ~ /\S/)  # Solo líneas con texto
+      print "        " $0;
   }
   END {
     if (pkg) {
@@ -816,6 +818,7 @@ awk '
 ' "$R_ERROR" >> /tmp/report.txt
 
 echo "    - General fix: sudo apt-get install -f" >> /tmp/report.txt
+
 
 
 
