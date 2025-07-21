@@ -253,10 +253,8 @@ if dpkg --get-selections | grep -qw "$paquete"; then
   echo "$paquete" >> exitos.txt
 else
   echo -e "\e[1;91m        FALLO DE INSTALACIÓN .... $paquete\e[0m"
-  {
-    echo "$paquete >"
-    echo "$ERROR_LOG"
-  } >> errores.txt
+  echo "$paquete >" >> errores.txt
+  echo "$ERROR_LOG" >> errores.txt
        fi
       fi
     fi
