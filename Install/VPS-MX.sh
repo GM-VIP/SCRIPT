@@ -848,17 +848,15 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
    
-   
-   
-   echo -e "${cor[2]}         ESCRIBE n PARA CONTINUAR (🐲Default n🐲)"
-   echo -e "\033[1;34m  🚨PROCESO FINALIZANDO..."
+   echo -e "${cor[2]}         DESEAS INSTALAR NOTI-BOT?(Default n)"
+   echo -e "\033[1;34m  (Deves tener Telegram y acceso al BOT oficial)"
    msg -bar2
    read -p " [ s | n ]: " NOTIFY   
    [[ "$NOTIFY" = "s" || "$NOTIFY" = "S" ]] && NOTIFY
    msg -bar2
-   [[ ${byinst} = "true" ]] && install_fim
+[[ ${byinst} = "true" ]] && install_fim
 else
 invalid_key
-fi
+fi   
 rm -rf instalscript.sh
 rm -rf VPS-MX.sh
