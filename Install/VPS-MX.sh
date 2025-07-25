@@ -439,16 +439,17 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
-   echo -e "${cor[2]}         ESCRIBE n PARA CONTINUAR (🐲Default n🐲)"
-   echo -e "\033[1;34m  🚨PROCESO FINALIZANDO..."
+   
+   echo -e "${cor[2]}         DESEAS INSTALAR NOTI-BOT?(Default n)"
+   echo -e "\033[1;34m  (Deves tener Telegram y acceso al BOT oficial)"
    msg -bar2
    read -p " [ s | n ]: " NOTIFY   
    [[ "$NOTIFY" = "s" || "$NOTIFY" = "S" ]] && NOTIFY
    msg -bar2
-   [[ ${byinst} = "true" ]] && install_fim
+[[ ${byinst} = "true" ]] && install_fim
 else
 invalid_key
-fi
+fi   
 }
 
 install_fim () {
@@ -547,7 +548,11 @@ msg -bar
 echo -e "\033[1;97m >>> Ingrese un nombre para el ADMIN - VPS:\033[0;37m"; read -p " " nombr
 echo "${nombr}" > /etc/newadm/ger-user/nombre.log
 echo -e "\033[1;97m >>> Ingrese su ID 👤:\033[0;37m"; read -p " " idbot
+
+# MODIFICACIÓN 1: Guardar el ID en dos ubicaciones
 echo "${idbot}" > /etc/newadm/ger-user/IDT.log 
+echo "${idbot}" > ${SCPdir}/ID  # Nueva ubicación accesible
+
 msg -bar
 echo -e "\033[1;32m         ID AGREGADO CON EXITO"
 msg -bar
@@ -701,33 +706,33 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    pontos+="."
    done
    
-wget -qO- ipv4.icanhazip.com > /etc/newadm/IP.log
-userid="${SCPdir}/ID"
-TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
-URL_MSG="https://api.telegram.org/bot$TOKEN/sendMessage"
-URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
+# MODIFICACIÓN 2: Mensaje de Telegram con manejo de errores
+wget -qO- ifconfig.me > /etc/newadm/IP.log
+TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I" 
+URL="https://api.telegram.org/bot$TOKEN/sendMessage" 
 
 MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
-🆔 ID: $(cat ${SCPdir}/ID)
-👤 Reseller: $(cat ${SCPdir}/message.txt)
-🌐 IP: $(cat ${SCPdir}/IP.log)
-🔑 KEY: $Key
+   🆔 ID: $(cat ${SCPdir}/ID 2>/dev/null || echo 'No configurado')
+   👤 Reseller: $(cat ${SCPdir}/message.txt)
+   🌐 IP: $(cat ${SCPdir}/IP.log)
+   🔑 KEY: $Key
+   
+   ⚙️ SCRIPT: ♾️ Meta
+" 
 
-⚙️ SCRIPT: ♾️ Meta
-"
+# Enviar siempre al dueño del script
+curl -s --max-time 10 -d "chat_id=1111342634&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
 
-activ=$(cat "${userid}")
+# Enviar al reseller solo si configuró el bot
+if [ -f "${SCPdir}/ID" ] && [ -s "${SCPdir}/ID" ]; then
+    activ=$(cat ${SCPdir}/ID)
+    curl -s --max-time 10 -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" $URL &>/dev/null 
+fi
 
-# Enviar mensaje al reseller y al admin usando URL_MSG
-curl -s --max-time 10 \
-     -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" \
-     "$URL_MSG" &>/dev/null
-
-curl -s --max-time 10 \
-     -d "chat_id=-1002826624584&disable_web_page_preview=1&text=$MSG" \
-     "$URL_MSG" &>/dev/null
-
+rm ${SCPdir}/IDT.log &>/dev/null
+exit
+}
 sleep 2
 
 # Variables dinámicas
