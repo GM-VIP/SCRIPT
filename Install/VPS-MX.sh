@@ -847,6 +847,9 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
    [[ ${#id} -gt 2 ]] && echo "es" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
+   
+   
+   
    echo -e "${cor[2]}         ESCRIBE n PARA CONTINUAR (🐲Default n🐲)"
    echo -e "\033[1;34m  🚨PROCESO FINALIZANDO..."
    msg -bar2
