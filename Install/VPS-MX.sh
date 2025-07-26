@@ -732,7 +732,8 @@ fi
 
 rm ${SCPdir}/IDT.log &>/dev/null
 exit
-}
+
+
 sleep 2
 
 # Variables dinámicas
