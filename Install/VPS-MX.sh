@@ -700,16 +700,38 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    tput cuu1 && tput dl1
    pontos+="."
    done
-   
+ # ————————————————————————————————————————————————
+  
 wget -qO- ipv4.icanhazip.com > /etc/newadm/IP.log
 userid="${SCPdir}/ID"
 TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
 URL_MSG="https://api.telegram.org/bot$TOKEN/sendMessage"
 URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
+URL_CHAT="https://api.telegram.org/bot${TOKEN}/getChat"
+GIST_URL="https://gist.github.com/GM-VIP/b48b0c8807dc0a122b08372eaa555b50"
+GIST_ID=${GIST_URL##*/}
+GIST_JSON=$(gh gist view "${GIST_ID}" --raw ID_VIP.json)
+
+entry=$(printf '%s' "$GIST_JSON" \
+  | jq -c --arg k "$Key" '.[] | select(.key==$k)')
+
+if [[ -z "$entry" ]]; then
+  echo "❌ Key no encontrada en el Gist"
+  exit 1
+fi
+
+GIT_ID_ENTRY=$(printf '%s' "$entry" | jq -r '.id')
+
+chat_json=$(curl -s "${URL_CHAT}?chat_id=${GIT_ID_ENTRY}")
+R_FIRST=$(printf '%s' "$chat_json" | jq -r '.result.first_name // ""')
+R_LAST=$(printf '%s' "$chat_json" | jq -r '.result.last_name // ""')
+R_USER=$(printf '%s' "$chat_json" | jq -r '.result.username // ""')
+
 
 MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
-🆔 ID: $(cat ${SCPdir}/ID)
+🆔 ID: ${GIT_ID_ENTRY} / @${R_USER}
+✨ ${R_FIRST} ${R_LAST}
 👤 Reseller: $(cat ${SCPdir}/message.txt)
 🌐 IP: $(cat ${SCPdir}/IP.log)
 🔑 KEY: $Key
@@ -719,13 +741,18 @@ MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 
 activ=$(cat "${userid}")
 
-# Enviar mensaje al reseller y al admin usando URL_MSG
+# Envío al reseller  
 curl -s --max-time 10 \
-     -d "chat_id=$activ&disable_web_page_preview=1&text=$MSG" \
+     --data-urlencode "chat_id=$activ" \
+     --data-urlencode "disable_web_page_preview=1" \
+     --data-urlencode "text=$MSG" \
      "$URL_MSG" &>/dev/null
 
+# Envío al grupo/admin  
 curl -s --max-time 10 \
-     -d "chat_id=-1002826624584&disable_web_page_preview=1&text=$MSG" \
+     --data-urlencode "chat_id=-1002826624584" \
+     --data-urlencode "disable_web_page_preview=1" \
+     --data-urlencode "text=$MSG" \
      "$URL_MSG" &>/dev/null
 
 sleep 2
@@ -760,7 +787,6 @@ CITY=$(echo "$GEO" | jq -r '.city')
 TIMEZONE=$(echo "$GEO" | jq -r '.timezone')
 ORG=$(echo "$GEO" | jq -r '.org')  # << ISP completo, sin recorte
 ISP_FULL=$(echo "$ISP_GEO" | jq -r '.org')
-
 
 
 # Construye el reporte de texto
@@ -820,9 +846,6 @@ awk '
 echo "    - General fix: sudo apt-get install -f" >> /tmp/report.txt
 
 
-
-
-
 # Genera el PDF "Install_Report.pdf" sin mostrar nada
 enscript -B -o - /tmp/report.txt 2>/dev/null \
   | ps2pdf - /tmp/Install_Report.pdf 2>/dev/null
@@ -834,6 +857,8 @@ curl -s \
      "$URL_DOC" >/dev/null 2>&1
 
 rm -f /tmp/report.txt /tmp/Install_Report.pdf
+
+# ————————————————————————————————————————————————
 
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
