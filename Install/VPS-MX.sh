@@ -710,13 +710,16 @@ URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
 URL_CHAT="https://api.telegram.org/bot${TOKEN}/getChat"
 GIST_URL="https://gist.github.com/GM-VIP/b48b0c8807dc0a122b08372eaa555b50"
 GIST_ID=${GIST_URL##*/}
-GIST_JSON=$(gh gist view "${GIST_ID}" --raw ID_VIP.json)
+RAW_URL="https://gist.githubusercontent.com/GM-VIP/${GIST_ID}/raw/ID_VIP.json"
+
+# Trae el JSON completo
+GIST_JSON=$(curl -s "$RAW_URL")
 
 entry=$(printf '%s' "$GIST_JSON" \
-  | jq -c --arg k "$Key" '.[] | select(.key==$k)')
+  | jq -c --arg k "$Key" '.[] | select(.key == $k)')
 
 if [[ -z "$entry" ]]; then
-  echo "❌ Key no encontrada en el Gist"
+  echo "❌ Key"
   exit 1
 fi
 
