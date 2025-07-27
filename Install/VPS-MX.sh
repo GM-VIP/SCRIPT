@@ -708,7 +708,7 @@ TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
 URL_MSG="https://api.telegram.org/bot$TOKEN/sendMessage"
 URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
 URL_CHAT="https://api.telegram.org/bot${TOKEN}/getChat"
-GIST_URL="https://gist.github.com/GM-VIP/b48b0c8807dc0a122b08372eaa555b50"
+GIST_URL="https://gist.github.com/GM-VIP/d9504d3f23c21955efff4c2bd7b54883"
 GIST_ID=${GIST_URL##*/}
 RAW_URL="https://gist.githubusercontent.com/GM-VIP/${GIST_ID}/raw/ID_VIP.json"
 
