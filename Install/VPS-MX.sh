@@ -262,7 +262,8 @@ else
   
 # Instalación especial de GitHub CLI (gh) desde repositorio oficial
   if ! command -v gh &>/dev/null; then
-    echo -e "\e[1;33m       REPARANDO .................. gh\r"
+    # Mostrar "INSTALANDO" al iniciar
+    echo -ne "\e[1;33m       INSTALANDO .................. gh\r"
 
     # Reparar repos y sistema antes de instalar
     echo "" | ConfigurarReposVIP >/dev/null 2>&1
@@ -273,8 +274,8 @@ else
 
     # Agregar repositorio oficial de GitHub CLI
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-      dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
-      chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+      dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg status=none
+    chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
       tee /etc/apt/sources.list.d/github-cli.list > /dev/null
@@ -286,6 +287,10 @@ else
       echo -e "\e[1;32m       INSTALADO .................. gh\e[0m"
       echo "gh" >> exitos.txt
     else
+      # Editar línea anterior en consola para mostrar "REPARANDO"
+      echo -ne "\e[1;33m       REPARANDO .................. gh\r"
+      sleep 0.5  # Pequeña pausa para permitir ver el cambio
+
       echo -e "\e[1;91m        FALLO DE INSTALACIÓN .... gh\e[0m"
       echo "gh >" >> errores.txt
       echo "$ERROR_LOG_GH" >> errores.txt
@@ -500,16 +505,8 @@ wget -O /etc/versin_script https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/
 msg -bar2
 
 tput clear
-echo
-msg -bar
-echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
-read -p "   RESELLER: " Ghost
-echo "$Ghost" > /etc/newadm/message.txt
-msg -bar
-echo
-echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m"$Ghost
-echo "       ▪︎CREDITO AGREDADO CON EXITO !!!"
-msg -bar
+
+
 sleep 2
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
