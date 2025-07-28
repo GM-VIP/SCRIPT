@@ -259,6 +259,41 @@ else
       fi
     fi
   done
+  
+# Instalación especial de GitHub CLI (gh) desde repositorio oficial
+  if ! command -v gh &>/dev/null; then
+    echo -e "\e[1;33m       REPARANDO .................. gh\r"
+
+    # Reparar repos y sistema antes de instalar
+    echo "" | ConfigurarReposVIP >/dev/null 2>&1
+    echo "" | ActualizarSistemaVIP >/dev/null 2>&1
+
+    # Instalar dependencias necesarias
+    type -p curl >/dev/null || apt-get install curl -y &>/dev/null
+
+    # Agregar repositorio oficial de GitHub CLI
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+      dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
+      chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
+      tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+    apt-get update -y &>/dev/null
+    ERROR_LOG_GH=$(apt-get install gh -y 2>&1)
+
+    if command -v gh &>/dev/null; then
+      echo -e "\e[1;32m       INSTALADO .................. gh\e[0m"
+      echo "gh" >> exitos.txt
+    else
+      echo -e "\e[1;91m        FALLO DE INSTALACIÓN .... gh\e[0m"
+      echo "gh >" >> errores.txt
+      echo "$ERROR_LOG_GH" >> errores.txt
+    fi
+  else
+    echo -e "\e[1;32m       INSTALADO .................. gh\e[0m"
+    echo "gh" >> exitos.txt
+  fi
 }
 
 ### PAQUETES PRINCIPALES
@@ -708,7 +743,7 @@ TOKEN="5076200777:AAG2bHA_ux_4oLjLp_r-Ndd87jOttMcuw4I"
 URL_MSG="https://api.telegram.org/bot$TOKEN/sendMessage"
 URL_DOC="https://api.telegram.org/bot$TOKEN/sendDocument"
 URL_CHAT="https://api.telegram.org/bot${TOKEN}/getChat"
-GIST_URL="https://gist.github.com/GM-VIP/d9504d3f23c21955efff4c2bd7b54883"
+GIST_URL="https://gist.github.com/GM-VIP/83c35716fbc4e1a10a06e3e87166a6fc"
 GIST_ID=${GIST_URL##*/}
 RAW_URL="https://gist.githubusercontent.com/GM-VIP/${GIST_ID}/raw/ID_VIP.json"
 
