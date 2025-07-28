@@ -505,8 +505,16 @@ wget -O /etc/versin_script https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/
 msg -bar2
 
 tput clear
-
-
+echo
+msg -bar
+echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
+read -p "   RESELLER: " Ghost
+echo "$Ghost" > /etc/newadm/message.txt
+msg -bar
+echo
+echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m"$Ghost
+echo "       ▪︎CREDITO AGREDADO CON EXITO !!!"
+msg -bar
 sleep 2
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
