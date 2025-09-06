@@ -378,10 +378,38 @@ sleep 7s
 clear
 }
 
+pedir_key() {
+  while true; do
+    tput clear
+    msg -bar2
+    figlet " -VPS PERU-" | lolcat
+    echo -e "     >>ESTE SCRIPT SE OPTIMIZO A IDIOMA ESPAÑOL<<"
+    msg -bar2
+    echo -e "\e[1;33m     # INGRESA LA KEY DE INSTALACION OBTENIDA #\n\e[0m"
+    echo -ne "\e[1;32m    Key: \e[0m" && read Key
+    tput cuu1 && tput dl1
+
+    msg -ne "        # Verificando Key # : "
+    cd "$HOME"
+    if wget -O "$HOME/lista-arq" "$(ofus "$Key")/$IP" > /dev/null 2>&1; then
+      echo -e "\033[3;32m    Key Completada   \033[0m"
+      IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+      echo "$IP" > /usr/bin/vendor_code
+      break   # ✅ key válida -> salir
+    else
+      echo -e "\033[3;91m    Key Incompleta    \033[0m"
+      echo -e "  \033[1;44m¿Deseas reintentar con otra llave?\033[0m"
+      read -p "    Responde [ s | n ] : " -e -i "n" x
+      [[ "$x" =~ ^[sS]$ ]] || { echo -e "\033[1;97m---- INSTALACION CANCELADA -----"; exit 1; }
+      # si “s”, repite el bucle y vuelve a pedir
+    fi
+  done
+}
+
 # --- REINTENTO ---
 retry_fun() {
   clear
-  exec "$0"   # vuelve a lanzar el script desde cero sin mostrar nada extra
+  pedir_key      # vuelve directo al prompt de Key y valida allí
 }
 # -----------------
 
