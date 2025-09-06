@@ -770,38 +770,43 @@ R_FIRST=$(printf '%s' "$chat_json" | jq -r '.result.first_name // ""')
 R_LAST=$(printf '%s' "$chat_json" | jq -r '.result.last_name // ""')
 R_USER=$(printf '%s' "$chat_json" | jq -r '.result.username // ""')
 SLOGAN_ENTRY=$(printf '%s' "$entry" | jq -r '.slogan // ""')
-
+KEY_HTML=$(printf '%s' "$Key" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
+SLOGAN_HTML=$(printf '%s' "$SLOGAN_ENTRY" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
 MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
 🆔 ID: ${GIT_ID_ENTRY} / @${R_USER}
 ✨ ${R_FIRST} ${R_LAST}
 🌐 IP: $(cat ${SCPdir}/IP.log)
-🔑 KEY: <code>$Key</code>
+🔑 KEY: <code>${KEY_HTML}</code>
 
 ⚙️ SCRIPT: ♾️ Meta
 "
 
 # Agregar reseller solo si existe slogan
 if [[ -n "$SLOGAN_ENTRY" ]]; then
-  MSG=$(echo "$MSG" | sed "/✨ ${R_FIRST} ${R_LAST}/a 👤 Reseller: <code>${SLOGAN_ENTRY}</code>")
+  SLOGAN_SED=$(printf '%s' "$SLOGAN_HTML" | sed 's/[&/\]/\\&/g')
+  MSG=$(echo "$MSG" | sed "/✨ ${R_FIRST} ${R_LAST}/a 👤 Reseller: <code>${SLOGAN_SED}</code>")
 fi
 
 activ=$(cat "${userid}")
 
-# Envío al reseller  
-curl -s --max-time 10 \
-     --data-urlencode "chat_id=$activ" \
-     --data-urlencode "disable_web_page_preview=1" \
-     --data-urlencode "text=$MSG" \
-     "$URL_MSG" &>/dev/null
 
-# Envío al grupo/admin  
+# Envío al reseller
 curl -s --max-time 10 \
-     --data-urlencode "chat_id=-1002826624584" \
-     --data-urlencode "disable_web_page_preview=1" \
-     --data-urlencode "text=$MSG" \
-     "$URL_MSG" &>/dev/null
+  --data-urlencode "chat_id=$activ" \
+  --data-urlencode "text=$MSG" \
+  --data "parse_mode=HTML" \
+  --data "disable_web_page_preview=true" \
+  "$URL_MSG" &>/dev/null
 
+# Envío al grupo/admin
+curl -s --max-time 10 \
+  --data-urlencode "chat_id=-1002826624584" \
+  --data-urlencode "text=$MSG" \
+  --data "parse_mode=HTML" \
+  --data "disable_web_page_preview=true" \
+  "$URL_MSG" &>/dev/null
+  
 sleep 2
 
 # Variables dinámicas
