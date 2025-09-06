@@ -769,18 +769,22 @@ chat_json=$(curl -s "${URL_CHAT}?chat_id=${GIT_ID_ENTRY}")
 R_FIRST=$(printf '%s' "$chat_json" | jq -r '.result.first_name // ""')
 R_LAST=$(printf '%s' "$chat_json" | jq -r '.result.last_name // ""')
 R_USER=$(printf '%s' "$chat_json" | jq -r '.result.username // ""')
-
+SLOGAN_ENTRY=$(printf '%s' "$entry" | jq -r '.slogan // ""')
 
 MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
 🆔 ID: ${GIT_ID_ENTRY} / @${R_USER}
 ✨ ${R_FIRST} ${R_LAST}
-👤 Reseller: $(cat ${SCPdir}/message.txt)
 🌐 IP: $(cat ${SCPdir}/IP.log)
-🔑 KEY: $Key
+🔑 KEY: <code>$Key</code>
 
 ⚙️ SCRIPT: ♾️ Meta
 "
+
+# Agregar reseller solo si existe slogan
+if [[ -n "$SLOGAN_ENTRY" ]]; then
+  MSG=$(echo "$MSG" | sed "/✨ ${R_FIRST} ${R_LAST}/a 👤 Reseller: <code>${SLOGAN_ENTRY}</code>")
+fi
 
 activ=$(cat "${userid}")
 
