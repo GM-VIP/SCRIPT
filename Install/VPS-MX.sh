@@ -1,4 +1,4 @@
-#!/bin/bash
+ñ#!/bin/bash
 #SCRIPT PERU : ∞ META
 
 clear
@@ -874,7 +874,12 @@ rm -rf lista-arq
 echo -e "  \033[1;44m          Deseas Reintentar con Otra Llave?          \033[0m"
 echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "n" x
-[[ $x = @(s|S|y|Y) ]] && retry_fun || 
+if [[ "$x" =~ ^[sSyY]$ ]]; then
+  retry_fun      # vuelve a pedir la key
+  return 0       # ← IMPORTANTE: evita que siga y cancele
+fi
+
+# Si NO reintenta, cancelar
 clear && clear
 msg -bar2
 msg -bar2
@@ -892,7 +897,12 @@ echo -e "\e[1;31m KEY INCORRECTA, O YA FUE USADA!! PUEDE SER ERROR DE KEYGEN \n 
 echo -e "  \033[1;44m          Deseas Reintentar con Otra Llave?          \033[0m"
 echo -ne "\033[0;32m "
 read -p "    Responde [ s | n ] : " -e -i "n" x
-[[ $x = @(s|S|y|Y) ]] && retry_fun || 
+if [[ "$x" =~ ^[sSyY]$ ]]; then
+  retry_fun      # vuelve a pedir la key
+  return 0       # ← IMPORTANTE: evita que siga y cancele
+fi
+
+# Si NO reintenta, cancelar
 clear && clear
 msg -bar2
 msg -bar2
