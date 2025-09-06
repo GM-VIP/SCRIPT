@@ -532,7 +532,7 @@ else
   echo "       ▪︎CREDITO AGREGADO CON EXITO !!!"
   msg -bar
   sleep 2
-
+fi
 # ===== Envío de MSG (una sola vez), con reseller correcto =====
 RESELLER="${SLOGAN_ENTRY:-$Ghost}"  # si no vino en la key, usa el ingresado
 MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
@@ -672,7 +672,7 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
   echo "       ▪︎CREDITO AGREGADO CON EXITO !!!"
   msg -bar
   sleep 2
-fi
+
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
 echo "sudo rebootnb" >> /etc/rc.local
