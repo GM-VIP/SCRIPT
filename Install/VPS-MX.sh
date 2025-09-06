@@ -532,7 +532,6 @@ else
   echo "       ▪︎CREDITO AGREGADO CON EXITO !!!"
   msg -bar
   sleep 2
-fi
 
 # ===== Envío de MSG (una sola vez), con reseller correcto =====
 RESELLER="${SLOGAN_ENTRY:-$Ghost}"  # si no vino en la key, usa el ingresado
