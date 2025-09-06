@@ -378,6 +378,13 @@ sleep 7s
 clear
 }
 
+# --- REINTENTO ---
+retry_fun() {
+  clear
+  exec "$0"   # vuelve a lanzar el script desde cero sin mostrar nada extra
+}
+# -----------------
+
 msg -bar2
 echo -e "\033[1;97m  ¿PRESENTO ALGUN ERROR ALGUN PAQUETE ANTERIOR?" 
 msg -bar2
