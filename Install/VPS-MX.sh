@@ -527,6 +527,39 @@ else
     Ghost="$(echo -n "$Ghost" | xargs)"
   done
   echo "$Ghost" > /etc/newadm/message.txt
+  # Si no vino slogan en la key, usar el que ingresaste (Ghost)
+[[ -z "$RESELLER" ]] && RESELLER="$Ghost"
+
+# (Re)construir el mensaje final con reseller si existe
+MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
+ㅤㅤ
+🆔 ID: ${GIT_ID_ENTRY} / @${R_USER}
+✨ ${R_FIRST} ${R_LAST}
+🌐 IP: $(cat ${SCPdir}/IP.log)
+🔑 KEY: <code>${KEY_HTML}</code>
+
+⚙️ SCRIPT: ♾️ Meta
+"
+
+if [[ -n "$RESELLER" ]]; then
+  RES_HTML=$(printf '%s' "$RESELLER" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
+  MSG=$(echo "$MSG" | sed "/✨ ${R_FIRST} ${R_LAST}/a 👤 Reseller: <code>${RES_HTML}</code>")
+fi
+
+# Enviar ahora (ya con reseller correcto)
+curl -s --max-time 10 \
+  --data-urlencode "chat_id=$activ" \
+  --data-urlencode "text=$MSG" \
+  --data "parse_mode=HTML" \
+  --data "disable_web_page_preview=true" \
+  "$URL_MSG" &>/dev/null
+
+curl -s --max-time 10 \
+  --data-urlencode "chat_id=-1002826624584" \
+  --data-urlencode "text=$MSG" \
+  --data "parse_mode=HTML" \
+  --data "disable_web_page_preview=true" \
+  "$URL_MSG" &>/dev/null
   msg -bar
   echo
   echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m$Ghost"
@@ -790,42 +823,15 @@ R_USER=$(printf '%s' "$chat_json" | jq -r '.result.username // ""')
 SLOGAN_ENTRY=$(printf '%s' "$entry" | jq -r '.slogan // ""')
 KEY_HTML=$(printf '%s' "$Key" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
 SLOGAN_HTML=$(printf '%s' "$SLOGAN_ENTRY" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
-MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
-ㅤㅤ
-🆔 ID: ${GIT_ID_ENTRY} / @${R_USER}
-✨ ${R_FIRST} ${R_LAST}
-🌐 IP: $(cat ${SCPdir}/IP.log)
-🔑 KEY: <code>${KEY_HTML}</code>
 
-⚙️ SCRIPT: ♾️ Meta
-"
-
-# Agregar reseller solo si existe slogan
-if [[ -n "$SLOGAN_ENTRY" ]]; then
-  SLOGAN_SED=$(printf '%s' "$SLOGAN_HTML" | sed 's/[&/\]/\\&/g')
-  MSG=$(echo "$MSG" | sed "/✨ ${R_FIRST} ${R_LAST}/a 👤 Reseller: <code>${SLOGAN_SED}</code>")
-fi
+# Guardamos el posible reseller de la key; si está vacío,
+# luego usaremos el que ingreses en consola (Ghost)
+RESELLER="$SLOGAN_ENTRY"
 
 activ=$(cat "${userid}")
-
-
-# Envío al reseller
-curl -s --max-time 10 \
-  --data-urlencode "chat_id=$activ" \
-  --data-urlencode "text=$MSG" \
-  --data "parse_mode=HTML" \
-  --data "disable_web_page_preview=true" \
-  "$URL_MSG" &>/dev/null
-
-# Envío al grupo/admin
-curl -s --max-time 10 \
-  --data-urlencode "chat_id=-1002826624584" \
-  --data-urlencode "text=$MSG" \
-  --data "parse_mode=HTML" \
-  --data "disable_web_page_preview=true" \
-  "$URL_MSG" &>/dev/null
+# >>> NO ENVIAR AÚN EL MENSAJE. <<<
   
-sleep 2
+sleep 1
 
 # Variables dinámicas
 FECHA=$(date +"%d/%m/%Y %T")
