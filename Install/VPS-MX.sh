@@ -518,6 +518,14 @@ else
   msg -bar
   echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
   read -p "   RESELLER: " Ghost
+  # Validar hasta que ingrese algo distinto de vacío o solo espacios
+  Ghost="$(echo -n "$Ghost" | xargs)"
+  while [[ -z "$Ghost" ]]; do
+    echo -e "\033[1;41m ❌ Debes ingresar un reseller válido \033[0m"
+    msg -bar2
+    read -p "   RESELLER: " Ghost
+    Ghost="$(echo -n "$Ghost" | xargs)"
+  done
   echo "$Ghost" > /etc/newadm/message.txt
   msg -bar
   echo
