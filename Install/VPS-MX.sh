@@ -1,4 +1,4 @@
-ñ#!/bin/bash
+#!/bin/bash
 #SCRIPT PERU : ∞ META
 
 clear
