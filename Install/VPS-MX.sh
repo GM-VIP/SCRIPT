@@ -912,13 +912,24 @@ RAW_URL="https://gist.githubusercontent.com/GM-VIP/${GIST_ID}/raw/ID_VIP.json"
 # Trae el JSON completo
 GIST_JSON=$(curl -s "$RAW_URL")
 
-entry=$(printf '%s' "$GIST_JSON" \
-  | jq -c --arg k "$Key" '.[] | select(.key == $k)')
+entry=""
+for intento in 1 2; do
+  sleep 2
+  entry=$(printf '%s' "$GIST_JSON" \
+    | jq -c --arg k "$Key" '.[] | select(.key == $k)')
+  if [[ -n "$entry" ]]; then
+    echo "✅ Key encontrada (intento $intento)"
+    break
+  else
+    echo "❌ Key no encontrada (intento $intento)"
+  fi
+done
 
 if [[ -z "$entry" ]]; then
-  echo "❌ Key"
+  echo "❌ Key no encontrada (tras 2 intentos)."
   exit 1
 fi
+
 
 GIT_ID_ENTRY=$(printf '%s' "$entry" | jq -r '.id')
 
