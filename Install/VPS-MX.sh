@@ -518,7 +518,6 @@ else
   msg -bar
   echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
   read -p "   RESELLER: " Ghost
-  # Validar hasta que ingrese algo distinto de vacío o solo espacios
   Ghost="$(echo -n "$Ghost" | xargs)"
   while [[ -z "$Ghost" ]]; do
     echo -e "\033[1;41m ❌ Debes ingresar un reseller válido \033[0m"
@@ -527,10 +526,16 @@ else
     Ghost="$(echo -n "$Ghost" | xargs)"
   done
   echo "$Ghost" > /etc/newadm/message.txt
-  # Si no vino slogan en la key, usar el que ingresaste (Ghost)
-[[ -z "$RESELLER" ]] && RESELLER="$Ghost"
+  msg -bar
+  echo
+  echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m$Ghost"
+  echo "       ▪︎CREDITO AGREGADO CON EXITO !!!"
+  msg -bar
+  sleep 2
+fi
 
-# (Re)construir el mensaje final con reseller si existe
+# ===== Envío de MSG (una sola vez), con reseller correcto =====
+RESELLER="${SLOGAN_ENTRY:-$Ghost}"  # si no vino en la key, usa el ingresado
 MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
 🆔 ID: ${GIT_ID_ENTRY} / @${R_USER}
@@ -540,13 +545,12 @@ MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 
 ⚙️ SCRIPT: ♾️ Meta
 "
-
 if [[ -n "$RESELLER" ]]; then
   RES_HTML=$(printf '%s' "$RESELLER" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
   MSG=$(echo "$MSG" | sed "/✨ ${R_FIRST} ${R_LAST}/a 👤 Reseller: <code>${RES_HTML}</code>")
 fi
 
-# Enviar ahora (ya con reseller correcto)
+# Enviar a reseller y al grupo/admin
 curl -s --max-time 10 \
   --data-urlencode "chat_id=$activ" \
   --data-urlencode "text=$MSG" \
@@ -560,6 +564,109 @@ curl -s --max-time 10 \
   --data "parse_mode=HTML" \
   --data "disable_web_page_preview=true" \
   "$URL_MSG" &>/dev/null
+
+  # Variables dinámicas
+FECHA=$(date +"%d/%m/%Y %T")
+OS=$(lsb_release -ds)
+IP=$(curl -s ipv4.icanhazip.com)
+
+# Rutas de tus reportes
+R_EXITO="$HOME/exitos.txt"
+R_ERROR="$HOME/errores.txt"
+
+# Cuenta cuántos paquetes hay en cada lista
+CNT_OK=$(grep -cve '^\s*$' "$R_EXITO")
+CNT_ERR=$(grep -cve '^\s*$' "$R_ERROR")
+
+# Función para obtener versión de un paquete
+get_version(){
+  dpkg -s "$1" 2>/dev/null \
+    | awk -F': ' '/^Version:/ { print $2; exit }'
+}
+
+# Obtener datos geográficos y de red
+GEO=$(curl -s ip-api.com/json)
+ISP_GEO=$(curl -s https://ipinfo.io/json)
+
+# Extraer campos clave
+COUNTRY=$(echo "$GEO" | jq -r '.country')
+REGION=$(echo "$GEO" | jq -r '.regionName')
+CITY=$(echo "$GEO" | jq -r '.city')
+TIMEZONE=$(echo "$GEO" | jq -r '.timezone')
+ORG=$(echo "$GEO" | jq -r '.org')  # << ISP completo, sin recorte
+ISP_FULL=$(echo "$ISP_GEO" | jq -r '.org')
+
+# Construye el reporte de texto
+cat <<EOF > /tmp/report.txt
+  INSTALLATION REPORT
+
+    Date       : $FECHA
+    OS         : $OS
+    Server IP  : $IP
+    Country    : $COUNTRY
+    Region     : $REGION
+    City       : $CITY
+    Timezone   : $TIMEZONE
+    ISP        : $ORG
+    ISP        : $ISP_FULL
+    Proyecto   : Configuración Inicial Automatizada
+
+    Installed Packages ($CNT_OK):
+EOF
+
+# Anexa cada paquete instalado con su versión
+while read -r pkg; do
+  ver=$(get_version "$pkg")
+  printf '        * %-14s > %s\n' "$pkg" "${ver:-unknown}" >> /tmp/report.txt
+done < <(grep -v '^\s*$' "$R_EXITO")
+
+# Sección de paquetes con errores y sugerencias juntas
+R_ERROR="errores.txt"
+CNT_ERR=$(grep -c '^[^ ]\+ >' "$R_ERROR")
+
+# ¡No usar ">" para no sobrescribir el archivo!
+echo -e "\n    Failed Packages ($CNT_ERR):" >> /tmp/report.txt
+
+awk '
+  /^[^ ]+ >/ {
+    if (pkg) {
+      print "";
+      print "        To reinstall: sudo apt-get install --reinstall " pkg "\n";
+    }
+    pkg = $1;
+    gsub(/>/, "", pkg);
+    printf "    * %-20s :\n", pkg;
+    next;
+  }
+  {
+    if ($0 ~ /\S/)  # Solo líneas con texto
+      print "        " $0;
+  }
+  END {
+    if (pkg) {
+      print "";
+      print "        To reinstall: sudo apt-get install --reinstall " pkg "\n";
+    }
+  }
+' "$R_ERROR" >> /tmp/report.txt
+
+echo "    - General fix: sudo apt-get install -f" >> /tmp/report.txt
+
+
+# Genera el PDF "Install_Report.pdf" sin mostrar nada
+enscript -B -o - /tmp/report.txt 2>/dev/null \
+  | ps2pdf - /tmp/Install_Report.pdf 2>/dev/null
+
+# Envía el PDF y limpia archivos temporales
+curl -s \
+     -F document=@/tmp/Install_Report.pdf \
+     -F chat_id="-1002826624584" \
+     "$URL_DOC" >/dev/null 2>&1
+
+rm -f /tmp/report.txt /tmp/Install_Report.pdf
+
+# ————————————————————————————————————————————————
+# =============================================================
   msg -bar
   echo
   echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m$Ghost"
@@ -832,109 +939,6 @@ activ=$(cat "${userid}")
 # >>> NO ENVIAR AÚN EL MENSAJE. <<<
   
 sleep 1
-
-# Variables dinámicas
-FECHA=$(date +"%d/%m/%Y %T")
-OS=$(lsb_release -ds)
-IP=$(curl -s ipv4.icanhazip.com)
-
-# Rutas de tus reportes
-R_EXITO="$HOME/exitos.txt"
-R_ERROR="$HOME/errores.txt"
-
-# Cuenta cuántos paquetes hay en cada lista
-CNT_OK=$(grep -cve '^\s*$' "$R_EXITO")
-CNT_ERR=$(grep -cve '^\s*$' "$R_ERROR")
-
-# Función para obtener versión de un paquete
-get_version(){
-  dpkg -s "$1" 2>/dev/null \
-    | awk -F': ' '/^Version:/ { print $2; exit }'
-}
-
-# Obtener datos geográficos y de red
-GEO=$(curl -s ip-api.com/json)
-ISP_GEO=$(curl -s https://ipinfo.io/json)
-
-# Extraer campos clave
-COUNTRY=$(echo "$GEO" | jq -r '.country')
-REGION=$(echo "$GEO" | jq -r '.regionName')
-CITY=$(echo "$GEO" | jq -r '.city')
-TIMEZONE=$(echo "$GEO" | jq -r '.timezone')
-ORG=$(echo "$GEO" | jq -r '.org')  # << ISP completo, sin recorte
-ISP_FULL=$(echo "$ISP_GEO" | jq -r '.org')
-
-
-# Construye el reporte de texto
-cat <<EOF > /tmp/report.txt
-  INSTALLATION REPORT
-
-    Date       : $FECHA
-    OS         : $OS
-    Server IP  : $IP
-    Country    : $COUNTRY
-    Region     : $REGION
-    City       : $CITY
-    Timezone   : $TIMEZONE
-    ISP        : $ORG
-    ISP        : $ISP_FULL
-    Proyecto   : Configuración Inicial Automatizada
-
-    Installed Packages ($CNT_OK):
-EOF
-
-# Anexa cada paquete instalado con su versión
-while read -r pkg; do
-  ver=$(get_version "$pkg")
-  printf '        * %-14s > %s\n' "$pkg" "${ver:-unknown}" >> /tmp/report.txt
-done < <(grep -v '^\s*$' "$R_EXITO")
-
-# Sección de paquetes con errores y sugerencias juntas
-R_ERROR="errores.txt"
-CNT_ERR=$(grep -c '^[^ ]\+ >' "$R_ERROR")
-
-# ¡No usar ">" para no sobrescribir el archivo!
-echo -e "\n    Failed Packages ($CNT_ERR):" >> /tmp/report.txt
-
-awk '
-  /^[^ ]+ >/ {
-    if (pkg) {
-      print "";
-      print "        To reinstall: sudo apt-get install --reinstall " pkg "\n";
-    }
-    pkg = $1;
-    gsub(/>/, "", pkg);
-    printf "    * %-20s :\n", pkg;
-    next;
-  }
-  {
-    if ($0 ~ /\S/)  # Solo líneas con texto
-      print "        " $0;
-  }
-  END {
-    if (pkg) {
-      print "";
-      print "        To reinstall: sudo apt-get install --reinstall " pkg "\n";
-    }
-  }
-' "$R_ERROR" >> /tmp/report.txt
-
-echo "    - General fix: sudo apt-get install -f" >> /tmp/report.txt
-
-
-# Genera el PDF "Install_Report.pdf" sin mostrar nada
-enscript -B -o - /tmp/report.txt 2>/dev/null \
-  | ps2pdf - /tmp/Install_Report.pdf 2>/dev/null
-
-# Envía el PDF y limpia archivos temporales
-curl -s \
-     -F document=@/tmp/Install_Report.pdf \
-     -F chat_id="-1002826624584" \
-     "$URL_DOC" >/dev/null 2>&1
-
-rm -f /tmp/report.txt /tmp/Install_Report.pdf
-
-# ————————————————————————————————————————————————
 
    rm ${SCPdir}/IDT.log &>/dev/null
    msg -bar2
