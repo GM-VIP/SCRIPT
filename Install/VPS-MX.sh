@@ -541,19 +541,20 @@ wget -O /etc/versin_script https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/
 msg -bar2
 tput clear
 
-# ——— Resolver el SLOGAN una sola vez (sin imprimir confirmación aquí) ———
+# ——— Resolver el SLOGAN una sola vez (centrado) ———
 cols=$(tput cols 2>/dev/null || echo 60)
 
-center() { # centra cualquier string en 'cols'
+center() {            # centra cualquier string en 'cols'
   local s="$1"
   local w=${#s}
   local pad=$(( (cols - w) / 2 )); ((pad<0)) && pad=0
   printf "%*s%s\n" "$pad" "" "$s"
 }
 
-make_line() { # genera una línea del ancho del texto más largo
-  local a="$1" b="$2" max=${#a}; [[ ${#b} -gt $max ]] && max=${#b}
-  printf '─%.0s' $(seq 1 $max)
+center_line() {       # imprime una línea roja centrada del ancho pedido
+  local w=$1
+  local line=$(printf '─%.0s' $(seq 1 "$w"))
+  center "$(printf '\e[31m%s\e[0m' "$line")"
 }
 
 if [[ -n "$SLOGAN_ENTRY" ]]; then
@@ -561,21 +562,26 @@ if [[ -n "$SLOGAN_ENTRY" ]]; then
 else
   echo
   msg -bar
-  msg_txt="Digita Reseller Autorizado Para La Instalacion!!!"
-  linea="$(make_line "$msg_txt" "RESELLER: ")"
 
-  # título + línea centrados
-  center "$(printf '\e[1;92m%s\e[0m' "$msg_txt")"
-  center "$(printf '\e[31m%s\e[0m' "$linea")"
+  title="Digita Reseller Autorizado Para La Instalacion!!!"
+  prompt_lbl="RESELLER:"
+  # ancho base para las líneas (usa el mayor entre título y prompt)
+  width=${#title}; (( ${#prompt_lbl} > width )) && width=${#prompt_lbl}
 
-  # prompt centrado
-  pad_prompt=$(( (cols - ${#REPLY} - 9) / 2 )); ((pad_prompt<0)) && pad_prompt=0
+  # título y línea centrados
+  center "$(printf '\e[1;92m%s\e[0m' "$title")"
+  center_line "$width"
+
+  # prompt centrado + validación con error centrado (amarillo brillante, negrita)
   while :; do
-    read -p "$(printf "%*s" "$pad_prompt")RESELLER: " Ghost
+    pad=$(( (cols - ${#prompt_lbl}) / 2 )); ((pad<0)) && pad=0
+    read -p "$(printf "%*s%s " "$pad" "" "$prompt_lbl")" Ghost
     Ghost="$(echo -n "$Ghost" | xargs)"
     [[ -n "$Ghost" ]] && break
-    echo -e "\033[1;41m ❌ Debes ingresar un reseller válido \033[0m"
-    msg -bar2
+
+    err="❌ Debes ingresar un reseller válido"
+    center "$(printf '\e[1;93m\e[1m%s\e[0m' "$err")"
+    center_line "$width"
   done
 fi
 
@@ -715,30 +721,26 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
 
 # ————————————————————————————————————————————————
 # =============================================================
-# ——— 5) MOSTRAR CONFIRMACIÓN EN LA CONSOLA (SOLO UNA VEZ, CENTRADO) ———
+# ——— Confirmación centrada ———
 cols=$(tput cols 2>/dev/null || echo 60)
 
-center_line() {
+center_line_text() {
   local s="$1"
   local w=${#s}
-  local pad=$(( (cols - w) / 2 ))
-  ((pad<0)) && pad=0
+  local pad=$(( (cols - w) / 2 )); ((pad<0)) && pad=0
   printf "%*s%s\n" "$pad" "" "$s"
 }
 
 titulo="RESELLER AUTORIZADO:  $Ghost"
 texto="• CREDITO AGREGADO CON EXITO !!!"
 
-# crea barras exactamente del mismo largo que el texto más ancho
-maxlen=${#titulo}
-[[ ${#texto} -gt $maxlen ]] && maxlen=${#texto}
-linea=$(printf '─%.0s' $(seq 1 $maxlen))
+maxlen=${#titulo}; [[ ${#texto} -gt $maxlen ]] && maxlen=${#texto}
+linea=$(printf '─%.0s' $(seq 1 "$maxlen"))
 
-# imprimir centrado
-center_line "$linea"
-center_line "$titulo"
-center_line "$texto"
-center_line "$linea"
+center_line_text "$(printf '\e[31m%s\e[0m' "$linea")"
+center_line_text "$titulo"
+center_line_text "$texto"
+center_line_text "$(printf '\e[31m%s\e[0m' "$linea")"
 sleep 5
 
 echo '#!/bin/sh -e' > /etc/rc.local
