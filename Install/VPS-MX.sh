@@ -573,15 +573,19 @@ line_for_text() {
   repeat_char "─" "$n"
 }
   
+
 if [[ -n "$SLOGAN_ENTRY" ]]; then
   Ghost="$(echo -n "$SLOGAN_ENTRY" | xargs)"
 else
   echo
-  msg -bar
 
   title=$'\e[1;92mDigita Reseller Autorizado Para La Instalacion!!!\e[0m'
+  line_title="$(line_for_text "$title")"
+
+  # Barra roja centrada (superior) + título + barra roja centrada (inferior)
+  center $'\e[31m'"$line_title"$'\e[0m'
   center "$title"
-  center $'\e[31m'"$(line_for_text "$title")"$'\e[0m'
+  center $'\e[31m'"$line_title"$'\e[0m'
 
   prompt="RESELLER:"
   pad_prompt=$(( (cols - $(visible_len "$prompt") - 1) / 2 )); ((pad_prompt<0)) && pad_prompt=0
@@ -590,7 +594,7 @@ else
     Ghost="$(echo -n "$Ghost" | xargs)"
     [[ -n "$Ghost" ]] && break
 
-    # error: amarillo brillante dentro de cuadro rojo, centrado
+    # Error centrado: texto amarillo brillante dentro de cuadro rojo + barra roja centrada
     err=$'\033[41m\033[1;93m ✖ Debes ingresar un reseller válido \033[0m'
     center "$err"
     center $'\e[31m'"$(line_for_text "$err")"$'\e[0m'
@@ -733,6 +737,7 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
 
 # ————————————————————————————————————————————————
 # =============================================================
+
 # ——— Confirmación centrada ———
 cols=$(tput cols 2>/dev/null || echo 60)
 
@@ -749,20 +754,24 @@ center_line_text() {
   printf "%*s%s\n" "$pad" "" "$s"
 }
 
+# ——— Confirmación centrada (reusa helpers ya definidos) ———
+
 titulo="RESELLER AUTORIZADO:  $Ghost"
 texto="• CREDITO AGREGADO CON EXITO !!!"
 
-maxlen=$(visible_len "$titulo")
-[[ $(visible_len "$texto") -gt $maxlen ]] && maxlen=$(visible_len "$texto")
+# ancho de la barra = el mayor largo visible entre título y texto
+len_titulo=$(visible_len "$titulo")
+len_texto=$(visible_len "$texto")
+(( len_titulo > len_texto )) && maxlen=$len_titulo || maxlen=$len_texto
 
-linea=$(printf '─%.0s' $(seq 1 "$maxlen"))
+linea=$(repeat_char "─" "$maxlen")   # usa el mismo char; cae a '-' si no hay UTF-8
 
-center_line_text $'\e[31m'"$linea"$'\e[0m'
-center_line_text "$titulo"
-center_line_text "$texto"
-center_line_text $'\e[31m'"$linea"$'\e[0m'
+center $'\e[31m'"$linea"$'\e[0m'
+center "$titulo"
+center "$texto"
+center $'\e[31m'"$linea"$'\e[0m'
+
 sleep 5
-
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
 echo "sudo rebootnb" >> /etc/rc.local
