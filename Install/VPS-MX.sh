@@ -24,29 +24,34 @@ rm -rf /etc/localtime &>/dev/null
 ln -s /usr/share/zoneinfo/America/Lima /etc/localtime &>/dev/null
 rm $(pwd)/$0 &> /dev/null
 
-# --- Asegurar UTF-8 globalmente (evita "�" en líneas Unicode) ---
+# --- Forzar locale en_US.UTF-8 (evita "�") ---
 apt-get update -y >/dev/null 2>&1
 apt-get install -y locales >/dev/null 2>&1
-# Habilitar en_US.UTF-8 en /etc/locale.gen (si está comentado)
 sed -i 's/^# *en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen en_US.UTF-8 >/dev/null 2>&1
 update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 >/dev/null 2>&1
-# Exportar para la sesión actual del instalador
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 ### COLORES Y BARRA 
 msg () {
 BRAN='\033[1;37m' && VERMELHO='\e[31m' && VERDE='\e[32m' && AMARELO='\e[33m'
-AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCOR='\e[0m'
+AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' && NEGRITO='\e[1m' && SEMCOR='\e[0m'
  case $1 in
-  -ne)cor="${VERMELHO}${NEGRITO}" && echo -ne "${cor}${2}${SEMCOR}";;
-  -ama)cor="${AMARELO}${NEGRITO}" && echo -e "${cor}${2}${SEMCOR}";;
-  -verm)cor="${AMARELO}${NEGRITO}[!] ${VERMELHO}" && echo -e "${cor}${2}${SEMCOR}";;
-  -azu)cor="${MAG}${NEGRITO}" && echo -e "${cor}${2}${SEMCOR}";;
-  -verd)cor="${VERDE}${NEGRITO}" && echo -e "${cor}${2}${SEMCOR}";;
-  -bra)cor="${VERMELHO}" && echo -ne "${cor}${2}${SEMCOR}";;
-  "-bar2"|"-bar")cor="${VERMELHO}————————————————————————————————————————————————————" && echo -e "${SEMCOR}${cor}${SEMCOR}";;
+  -ne)   cor="${VERMELHO}${NEGRITO}" && echo -ne "${cor}${2}${SEMCOR}";;
+  -ama)  cor="${AMARELO}${NEGRITO}" && echo -e  "${cor}${2}${SEMCOR}";;
+  -verm) cor="${AMARELO}${NEGRITO}[!] ${VERMELHO}" && echo -e "${cor}${2}${SEMCOR}";;
+  -azu)  cor="${MAG}${NEGRITO}" && echo -e   "${cor}${2}${SEMCOR}";;
+  -verd) cor="${VERDE}${NEGRITO}" && echo -e  "${cor}${2}${SEMCOR}";;
+  -bra)  cor="${VERMELHO}" && echo -ne        "${cor}${2}${SEMCOR}";;
+
+  "-bar2"|"-bar")
+    cols=$(tput cols 2>/dev/null || echo 60)
+    if locale | grep -qi 'utf-8'; then ch='─'; else ch='='; fi
+    line=$(printf '%*s' "$cols" '' | tr ' ' "$ch")
+    echo -e "${VERMELHO}${line}${SEMCOR}"
+  ;;
+
  esac
 }
 
