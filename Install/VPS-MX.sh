@@ -740,31 +740,48 @@ echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SC
 echo 'echo "" '>> .bashrc
 echo
 
-# ─────── imprime el título grande y centrado ───────
+# ─────── Banner + SLOGAN + "ESCRIBE..." centrados ───────
 cols=$(tput cols)
+rows=$(tput lines)
 
-printf "\n"
+# Empieza un poco por debajo de la mitad (ajusta OFFSET si quieres)
+OFFSET=2                              # + sube, − baja
+pad_top=$(( (rows*3)/5 + OFFSET ))    # ~60% de la pantalla
+[ $pad_top -lt 0 ] && pad_top=0
+printf '\n%.0s' $(seq 1 $pad_top)
+
+# Título grande centrado
 if command -v toilet >/dev/null 2>&1; then
   toilet -f big -w "$cols" -F border "VPS PERU" | lolcat
 else
-  figlet -w "$cols" -c "VPS PERU" | lolcat
+  figlet  -w "$cols" -c "VPS PERU" | lolcat
 fi
-printf "\n"
 
-# línea divisoria con mismo color (arcoíris)
+# Línea arcoíris bajo el título
 printf '%*s\n' "$cols" '' | tr ' ' '─' | lolcat
 
-# ─────── bloque corto intacto, centrado ───────
-msg_text="ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL:"
-menu_text="menu"
+# SLOGAN centrado (toma de variable o del archivo si existe)
+SLOGAN="${SLOGAN_ENTRY:-$(cat /etc/newadm/message.txt 2>/dev/null)}"
+[ -n "$SLOGAN" ] && {
+  slen=${#SLOGAN}
+  [ $slen -gt $cols ] && slen=$cols
+  pad_s=$(( (cols - slen) / 2 ))
+  printf "%*s%s\n" "$pad_s" "" "$SLOGAN"
+}
 
-pad_left1=$(( (cols - ${#msg_text}) / 2 ))
-pad_left2=$(( (cols - ${#menu_text} - 2) / 2 ))
+# Mensaje "ESCRIBE ..." centrado (mismos colores que ya usas)
+MSG_TXT="ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL:"
+pad_m=$(( (cols - ${#MSG_TXT}) / 2 ))
+printf "%*s" "$pad_m" ""
+echo -e "$MSG_TXT"
 
-printf "%*s%s\n" "$pad_left1" "" "$msg_text" | lolcat
-printf "%*s\033[0;37m\033[41m %s \033[0m\n" "$pad_left2" "" "$menu_text"
+# Una línea en blanco y luego el cuadro rojo "menu" centrado
+echo
+MENU_TXT="menu"
+pad_b=$(( (cols - ${#MENU_TXT} - 2) / 2 ))   # -2 por los espacios dentro del recuadro
+printf "%*s\033[0;37m\033[41m %s \033[0m\n" "$pad_b" "" "$MENU_TXT"
 
-# línea final arcoíris
+# Línea inferior arcoíris
 printf '%*s\n' "$cols" '' | tr ' ' '─' | lolcat
 [[ ! -e /etc/autostart ]] && {
 	echo '#!/bin/bash
