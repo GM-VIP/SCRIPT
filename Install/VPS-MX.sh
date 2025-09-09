@@ -744,9 +744,9 @@ echo
 cols=$(tput cols)
 rows=$(tput lines)
 
-# Posición: 80% de altura (ajusta OFFSET si quieres fino)
+# Posición: 20% de altura (ajusta OFFSET si quieres fino)
 OFFSET=0
-pad_top=$(( (rows*4)/5 + OFFSET ))   # 4/5 = 80%
+pad_top=$(( (rows*1)/5 + OFFSET ))   # 4/5 = 80%
 [ $pad_top -lt 0 ] && pad_top=0
 printf '\n%.0s' $(seq 1 $pad_top)
 
