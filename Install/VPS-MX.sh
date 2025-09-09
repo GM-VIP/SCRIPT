@@ -541,51 +541,59 @@ wget -O /etc/versin_script https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/
 msg -bar2
 tput clear
 
-# ——— Resolver el SLOGAN (todo centrado) ———
+
+# ====== helpers de centrado ======
 cols=$(tput cols 2>/dev/null || echo 60)
 
-center() { # centra cualquier string en 'cols'
-  local s="$1"
-  local w=${#s}
-  local pad=$(( (cols - w) / 2 ))
-  ((pad<0)) && pad=0
+# largo visible (sin códigos ANSI), en caracteres
+visible_len() {
+  printf "%s" "$1" | sed -r 's/\x1B\[[0-9;?]*[ -/]*[@-~]//g' | wc -m | awk '{print $1}'
+}
+
+# repetir un carácter N veces (con fallback si no hay UTF-8)
+repeat_char() {
+  local ch="$1" n="$2" out=""
+  [[ $(locale | tr 'A-Z' 'a-z') =~ utf-8 ]] || ch='-'
+  for ((i=0;i<n;i++)); do out+="$ch"; done
+  printf "%s" "$out"
+}
+
+# centra cualquier string (con o sin color)
+center() {
+  local s="$1" w pad
+  w=$(visible_len "$s")
+  pad=$(( (cols - w) / 2 )); ((pad<0)) && pad=0
   printf "%*s%s\n" "$pad" "" "$s"
 }
 
-line_of() { # genera una línea del ancho de un texto
-  local text="$1"
-  local ch
-  if locale | grep -qi 'utf-8'; then ch='─'; else ch='-'; fi
-  printf '%s' "$(printf "$ch%.0s" $(seq 1 ${#text}))"
+# línea del mismo ancho que un texto dado
+line_for_text() {
+  local text="$1" n
+  n=$(visible_len "$text")
+  repeat_char "─" "$n"
 }
-
+  
 if [[ -n "$SLOGAN_ENTRY" ]]; then
   Ghost="$(echo -n "$SLOGAN_ENTRY" | xargs)"
 else
   echo
   msg -bar
 
-  title="Digita Reseller Autorizado Para La Instalacion!!!"
-  line="$(line_of "$title")"
+  title=$'\e[1;92mDigita Reseller Autorizado Para La Instalacion!!!\e[0m'
+  center "$title"
+  center $'\e[31m'"$(line_for_text "$title")"$'\e[0m'
 
-  # título y línea roja centrados
-  center "$(printf '\e[1;92m%s\e[0m' "$title")"
-  center "$(printf '\e[31m%s\e[0m' "$line")"
-
-  # prompt centrado
   prompt="RESELLER:"
-  pad_prompt=$(( (cols - ${#prompt} - 1) / 2 ))
-  ((pad_prompt<0)) && pad_prompt=0
+  pad_prompt=$(( (cols - $(visible_len "$prompt") - 1) / 2 )); ((pad_prompt<0)) && pad_prompt=0
   while :; do
     read -p "$(printf "%*s%s " "$pad_prompt" "" "$prompt")" Ghost
     Ghost="$(echo -n "$Ghost" | xargs)"
     [[ -n "$Ghost" ]] && break
 
-    # ERROR con cuadro rojo centrado
-    err="❌ Debes ingresar un reseller válido"
-    errline="$(line_of "$err")"
-    center "$(printf '\033[1;41m\033[1;93m %s \033[0m' "$err")"
-    center "$(printf '\e[31m%s\e[0m' "$errline")"
+    # error: amarillo brillante dentro de cuadro rojo, centrado
+    err=$'\033[41m\033[1;93m ✖ Debes ingresar un reseller válido \033[0m'
+    center "$err"
+    center $'\e[31m'"$(line_for_text "$err")"$'\e[0m'
   done
 fi
 
@@ -728,23 +736,31 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
 # ——— Confirmación centrada ———
 cols=$(tput cols 2>/dev/null || echo 60)
 
+# largo visible sin códigos ANSI
+visible_len() {
+  printf "%s" "$1" | sed -r 's/\x1B\[[0-9;?]*[ -/]*[@-~]//g' | wc -m | awk '{print $1}'
+}
+
 center_line_text() {
   local s="$1"
-  local w=${#s}
-  local pad=$(( (cols - w) / 2 )); ((pad<0)) && pad=0
+  local w=$(visible_len "$s")
+  local pad=$(( (cols - w) / 2 ))
+  ((pad<0)) && pad=0
   printf "%*s%s\n" "$pad" "" "$s"
 }
 
 titulo="RESELLER AUTORIZADO:  $Ghost"
 texto="• CREDITO AGREGADO CON EXITO !!!"
 
-maxlen=${#titulo}; [[ ${#texto} -gt $maxlen ]] && maxlen=${#texto}
+maxlen=$(visible_len "$titulo")
+[[ $(visible_len "$texto") -gt $maxlen ]] && maxlen=$(visible_len "$texto")
+
 linea=$(printf '─%.0s' $(seq 1 "$maxlen"))
 
-center_line_text "$(printf '\e[31m%s\e[0m' "$linea")"
+center_line_text $'\e[31m'"$linea"$'\e[0m'
 center_line_text "$titulo"
 center_line_text "$texto"
-center_line_text "$(printf '\e[31m%s\e[0m' "$linea")"
+center_line_text $'\e[31m'"$linea"$'\e[0m'
 sleep 5
 
 echo '#!/bin/sh -e' > /etc/rc.local
