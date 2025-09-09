@@ -542,21 +542,36 @@ msg -bar2
 tput clear
 
 # ——— Resolver el SLOGAN una sola vez (sin imprimir confirmación aquí) ———
+cols=$(tput cols 2>/dev/null || echo 60)
+
+center() { # centra cualquier string en 'cols'
+  local s="$1"
+  local w=${#s}
+  local pad=$(( (cols - w) / 2 )); ((pad<0)) && pad=0
+  printf "%*s%s\n" "$pad" "" "$s"
+}
+
+make_line() { # genera una línea del ancho del texto más largo
+  local a="$1" b="$2" max=${#a}; [[ ${#b} -gt $max ]] && max=${#b}
+  printf '─%.0s' $(seq 1 $max)
+}
+
 if [[ -n "$SLOGAN_ENTRY" ]]; then
   Ghost="$(echo -n "$SLOGAN_ENTRY" | xargs)"   # usa el de la KEY
 else
-  cols=$(tput cols)
   echo
   msg -bar
-  # Mensaje centrado
   msg_txt="Digita Reseller Autorizado Para La Instalacion!!!"
-  pad=$(( (cols - ${#msg_txt}) / 2 )); [ $pad -lt 0 ] && pad=0
-  printf "%*s\e[1;92m%s\e[0m\n" "$pad" "" "$msg_txt"
+  linea="$(make_line "$msg_txt" "RESELLER: ")"
 
-  # Prompt centrado
-  prompt_pad=$(( (cols - 9) / 2 )); [ $prompt_pad -lt 0 ] && prompt_pad=0
+  # título + línea centrados
+  center "$(printf '\e[1;92m%s\e[0m' "$msg_txt")"
+  center "$(printf '\e[31m%s\e[0m' "$linea")"
+
+  # prompt centrado
+  pad_prompt=$(( (cols - ${#REPLY} - 9) / 2 )); ((pad_prompt<0)) && pad_prompt=0
   while :; do
-    read -p "$(printf "%*s" "$prompt_pad")RESELLER: " Ghost
+    read -p "$(printf "%*s" "$pad_prompt")RESELLER: " Ghost
     Ghost="$(echo -n "$Ghost" | xargs)"
     [[ -n "$Ghost" ]] && break
     echo -e "\033[1;41m ❌ Debes ingresar un reseller válido \033[0m"
@@ -703,9 +718,9 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
 # ——— 5) MOSTRAR CONFIRMACIÓN EN LA CONSOLA (SOLO UNA VEZ, CENTRADO) ———
 cols=$(tput cols 2>/dev/null || echo 60)
 
-center() {
+center_line() {
   local s="$1"
-  local w=$(printf "%s" "$s" | wc -m)
+  local w=${#s}
   local pad=$(( (cols - w) / 2 ))
   ((pad<0)) && pad=0
   printf "%*s%s\n" "$pad" "" "$s"
@@ -714,11 +729,17 @@ center() {
 titulo="RESELLER AUTORIZADO:  $Ghost"
 texto="• CREDITO AGREGADO CON EXITO !!!"
 
-msg -bar          # ← usa tu misma barra roja
-center "$titulo"
-center "$texto"
-msg -bar          # ← y la repites abajo
-sleep 4
+# crea barras exactamente del mismo largo que el texto más ancho
+maxlen=${#titulo}
+[[ ${#texto} -gt $maxlen ]] && maxlen=${#texto}
+linea=$(printf '─%.0s' $(seq 1 $maxlen))
+
+# imprimir centrado
+center_line "$linea"
+center_line "$titulo"
+center_line "$texto"
+center_line "$linea"
+sleep 5
 
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
