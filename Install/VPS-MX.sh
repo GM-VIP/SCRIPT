@@ -744,45 +744,47 @@ echo
 cols=$(tput cols)
 rows=$(tput lines)
 
-# Empieza un poco por debajo de la mitad (ajusta OFFSET si quieres)
-OFFSET=2                              # + sube, − baja
-pad_top=$(( (rows*3)/5 + OFFSET ))    # ~60% de la pantalla
+# Posición: 80% de altura (ajusta OFFSET si quieres fino)
+OFFSET=0
+pad_top=$(( (rows*4)/5 + OFFSET ))   # 4/5 = 80%
 [ $pad_top -lt 0 ] && pad_top=0
 printf '\n%.0s' $(seq 1 $pad_top)
 
-# Título grande centrado
+# --- Título grande, realmente centrado ---
 if command -v toilet >/dev/null 2>&1; then
-  toilet -f big -w "$cols" -F border "VPS PERU" | lolcat
+  toilet -f big -F border "VPS PERU" \
+  | awk -v C="$cols" '{pad=int((C - length($0))/2); if(pad<0) pad=0; printf "%*s%s\n", pad, "", $0}' \
+  | lolcat
 else
-  figlet  -w "$cols" -c "VPS PERU" | lolcat
+  figlet -w "$cols" -c "VPS PERU" | lolcat
 fi
 
 # Línea arcoíris bajo el título
 printf '%*s\n' "$cols" '' | tr ' ' '─' | lolcat
 
-# SLOGAN centrado (toma de variable o del archivo si existe)
+# --- SLOGAN centrado (color 45 celeste brillante) ---
 SLOGAN="${SLOGAN_ENTRY:-$(cat /etc/newadm/message.txt 2>/dev/null)}"
-[ -n "$SLOGAN" ] && {
-  slen=${#SLOGAN}
-  [ $slen -gt $cols ] && slen=$cols
-  pad_s=$(( (cols - slen) / 2 ))
-  printf "%*s%s\n" "$pad_s" "" "$SLOGAN"
-}
+if [ -n "$SLOGAN" ]; then
+  [ ${#SLOGAN} -gt $cols ] && SLOGAN="${SLOGAN:0:$cols}"
+  pad_s=$(( (cols - ${#SLOGAN}) / 2 ))
+  printf "%*s\e[1;38;5;45m%s\e[0m\n" "$pad_s" "" "$SLOGAN"
+fi
 
-# Mensaje "ESCRIBE ..." centrado (mismos colores que ya usas)
+# --- "ESCRIBE ..." centrado con arcoíris ---
 MSG_TXT="ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL:"
 pad_m=$(( (cols - ${#MSG_TXT}) / 2 ))
-printf "%*s" "$pad_m" ""
-echo -e "$MSG_TXT"
+printf "%*s%s\n" "$pad_m" "" "$MSG_TXT" | lolcat
 
-# Una línea en blanco y luego el cuadro rojo "menu" centrado
+# una línea en blanco y el cuadro rojo "menu" centrado (una fila más abajo)
 echo
 MENU_TXT="menu"
-pad_b=$(( (cols - ${#MENU_TXT} - 2) / 2 ))   # -2 por los espacios dentro del recuadro
+pad_b=$(( (cols - ${#MENU_TXT} - 2) / 2 ))
 printf "%*s\033[0;37m\033[41m %s \033[0m\n" "$pad_b" "" "$MENU_TXT"
 
 # Línea inferior arcoíris
 printf '%*s\n' "$cols" '' | tr ' ' '─' | lolcat
+
+
 [[ ! -e /etc/autostart ]] && {
 	echo '#!/bin/bash
 clear
