@@ -739,8 +739,33 @@ echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;
 echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null'>> .bashrc
 echo 'echo "" '>> .bashrc
 echo
-echo -e "   ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL: "
-echo -e "\033[0;37m                   \033[1;41m menu \033[0m" && msg -bar2
+
+# ─────── imprime el título grande y centrado ───────
+cols=$(tput cols)
+
+printf "\n"
+if command -v toilet >/dev/null 2>&1; then
+  toilet -f big -w "$cols" -F border "VPS PERU" | lolcat
+else
+  figlet -w "$cols" -c "VPS PERU" | lolcat
+fi
+printf "\n"
+
+# línea divisoria con mismo color (arcoíris)
+printf '%*s\n' "$cols" '' | tr ' ' '─' | lolcat
+
+# ─────── bloque corto intacto, centrado ───────
+msg_text="ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL:"
+menu_text="menu"
+
+pad_left1=$(( (cols - ${#msg_text}) / 2 ))
+pad_left2=$(( (cols - ${#menu_text} - 2) / 2 ))
+
+printf "%*s%s\n" "$pad_left1" "" "$msg_text" | lolcat
+printf "%*s\033[0;37m\033[41m %s \033[0m\n" "$pad_left2" "" "$menu_text"
+
+# línea final arcoíris
+printf '%*s\n' "$cols" '' | tr ' ' '─' | lolcat
 [[ ! -e /etc/autostart ]] && {
 	echo '#!/bin/bash
 clear
