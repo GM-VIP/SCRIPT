@@ -541,47 +541,51 @@ wget -O /etc/versin_script https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/
 msg -bar2
 tput clear
 
-# ——— Resolver el SLOGAN una sola vez (centrado) ———
+# ——— Resolver el SLOGAN (todo centrado) ———
 cols=$(tput cols 2>/dev/null || echo 60)
 
-center() {            # centra cualquier string en 'cols'
+center() { # centra cualquier string en 'cols'
   local s="$1"
   local w=${#s}
-  local pad=$(( (cols - w) / 2 )); ((pad<0)) && pad=0
+  local pad=$(( (cols - w) / 2 ))
+  ((pad<0)) && pad=0
   printf "%*s%s\n" "$pad" "" "$s"
 }
 
-center_line() {       # imprime una línea roja centrada del ancho pedido
-  local w=$1
-  local line=$(printf '─%.0s' $(seq 1 "$w"))
-  center "$(printf '\e[31m%s\e[0m' "$line")"
+line_of() { # genera una línea del ancho de un texto
+  local text="$1"
+  local ch
+  if locale | grep -qi 'utf-8'; then ch='─'; else ch='-'; fi
+  printf '%s' "$(printf "$ch%.0s" $(seq 1 ${#text}))"
 }
 
 if [[ -n "$SLOGAN_ENTRY" ]]; then
-  Ghost="$(echo -n "$SLOGAN_ENTRY" | xargs)"   # usa el de la KEY
+  Ghost="$(echo -n "$SLOGAN_ENTRY" | xargs)"
 else
   echo
   msg -bar
 
   title="Digita Reseller Autorizado Para La Instalacion!!!"
-  prompt_lbl="RESELLER:"
-  # ancho base para las líneas (usa el mayor entre título y prompt)
-  width=${#title}; (( ${#prompt_lbl} > width )) && width=${#prompt_lbl}
+  line="$(line_of "$title")"
 
-  # título y línea centrados
+  # título y línea roja centrados
   center "$(printf '\e[1;92m%s\e[0m' "$title")"
-  center_line "$width"
+  center "$(printf '\e[31m%s\e[0m' "$line")"
 
-  # prompt centrado + validación con error centrado (amarillo brillante, negrita)
+  # prompt centrado
+  prompt="RESELLER:"
+  pad_prompt=$(( (cols - ${#prompt} - 1) / 2 ))
+  ((pad_prompt<0)) && pad_prompt=0
   while :; do
-    pad=$(( (cols - ${#prompt_lbl}) / 2 )); ((pad<0)) && pad=0
-    read -p "$(printf "%*s%s " "$pad" "" "$prompt_lbl")" Ghost
+    read -p "$(printf "%*s%s " "$pad_prompt" "" "$prompt")" Ghost
     Ghost="$(echo -n "$Ghost" | xargs)"
     [[ -n "$Ghost" ]] && break
 
+    # ERROR con cuadro rojo centrado
     err="❌ Debes ingresar un reseller válido"
-    center "$(printf '\e[1;93m\e[1m%s\e[0m' "$err")"
-    center_line "$width"
+    errline="$(line_of "$err")"
+    center "$(printf '\033[1;41m\033[1;93m %s \033[0m' "$err")"
+    center "$(printf '\e[31m%s\e[0m' "$errline")"
   done
 fi
 
