@@ -739,6 +739,15 @@ echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;
 echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null'>> .bashrc
 echo 'echo "" '>> .bashrc
 echo
+# ─────── imprime SOLO el título grande arriba ───────
+printf "\n"
+figlet "VPS PERU" | lolcat
+printf "\n"
+
+# (línea divisoria opcional)
+echo -e "\033[0;33m────────────────────────────────────────────────────\033[0m"
+
+# ─────── tu bloque corto intacto ───────
 echo -e "   ESCRIBE menu PARA ACCEDER AL PANEL DE CONTROL: "
 echo -e "\033[0;37m                   \033[1;41m menu \033[0m" && msg -bar2
 [[ ! -e /etc/autostart ]] && {
