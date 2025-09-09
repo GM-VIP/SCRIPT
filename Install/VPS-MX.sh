@@ -700,21 +700,25 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
 
 # ————————————————————————————————————————————————
 # =============================================================
-  # ——— 5) MOSTRAR CONFIRMACIÓN EN LA CONSOLA (SOLO UNA VEZ, CENTRADO) ———
-cols=$(tput cols)
-linea=$(printf '%*s' "$cols" '' | tr ' ' '─')
+# ——— 5) MOSTRAR CONFIRMACIÓN EN LA CONSOLA (SOLO UNA VEZ, CENTRADO) ———
+cols=$(tput cols 2>/dev/null || echo 60)
+
+center() {
+  local s="$1"
+  local w=$(printf "%s" "$s" | wc -m)
+  local pad=$(( (cols - w) / 2 ))
+  ((pad<0)) && pad=0
+  printf "%*s%s\n" "$pad" "" "$s"
+}
 
 titulo="RESELLER AUTORIZADO:  $Ghost"
 texto="• CREDITO AGREGADO CON EXITO !!!"
 
-pad1=$(( (cols - ${#titulo}) / 2 )); [ $pad1 -lt 0 ] && pad1=0
-pad2=$(( (cols - ${#texto})  / 2 )); [ $pad2 -lt 0 ] && pad2=0
-
-echo "$linea"
-printf "%*s%s\n" "$pad1" "" "$titulo"
-printf "%*s%s\n" "$pad2" "" "$texto"
-echo "$linea"
-sleep 2
+msg -bar          # ← usa tu misma barra roja
+center "$titulo"
+center "$texto"
+msg -bar          # ← y la repites abajo
+sleep 4
 
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
