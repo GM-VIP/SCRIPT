@@ -538,38 +538,36 @@ wget -O /bin/resetsshdrop https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/A
 chmod +x /bin/resetsshdrop
 wget -O /etc/versin_script https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null
 msg -bar2
-
 tput clear
+
+# ——— Resolver el SLOGAN una sola vez (sin imprimir confirmación aquí) ———
 if [[ -n "$SLOGAN_ENTRY" ]]; then
-  Ghost="$SLOGAN_ENTRY"
-  echo "$Ghost" > /etc/newadm/message.txt
-  msg -bar
-  echo
-  echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m$Ghost"
-  echo "       ▪︎CREDITO AGREGADO CON EXITO !!!"
-  msg -bar
+  Ghost="$(echo -n "$SLOGAN_ENTRY" | xargs)"   # usa el de la KEY
 else
+  cols=$(tput cols)
   echo
   msg -bar
-  echo -e "\e[1;92m  Digita Reseller Autorizado Para La Instalacion!!!\e[0m"
-  read -p "   RESELLER: " Ghost
-  Ghost="$(echo -n "$Ghost" | xargs)"
-  while [[ -z "$Ghost" ]]; do
+  # Mensaje centrado
+  msg_txt="Digita Reseller Autorizado Para La Instalacion!!!"
+  pad=$(( (cols - ${#msg_txt}) / 2 )); [ $pad -lt 0 ] && pad=0
+  printf "%*s\e[1;92m%s\e[0m\n" "$pad" "" "$msg_txt"
+
+  # Prompt centrado
+  prompt_pad=$(( (cols - 9) / 2 )); [ $prompt_pad -lt 0 ] && prompt_pad=0
+  while :; do
+    read -p "$(printf "%*s" "$prompt_pad")RESELLER: " Ghost
+    Ghost="$(echo -n "$Ghost" | xargs)"
+    [[ -n "$Ghost" ]] && break
     echo -e "\033[1;41m ❌ Debes ingresar un reseller válido \033[0m"
     msg -bar2
-    read -p "   RESELLER: " Ghost
-    Ghost="$(echo -n "$Ghost" | xargs)"
   done
-  echo "$Ghost" > /etc/newadm/message.txt
-  msg -bar
-  echo
-  echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m$Ghost"
-  echo "       ▪︎CREDITO AGREGADO CON EXITO !!!"
-  msg -bar
-  sleep 2
 fi
+
+# Persistir para futuros logins
+echo "$Ghost" > /etc/newadm/message.txt
+
 # ===== Envío de MSG (una sola vez), con reseller correcto =====
-RESELLER="${SLOGAN_ENTRY:-$Ghost}"  # si no vino en la key, usa el ingresado
+RESELLER="$Ghost"
 MSG=" ㅤㅤ  ❗️ KEY ACTIVADA y REGISTRADA ❗️
 ㅤㅤ
 🆔 ID: ${GIT_ID_ENTRY} / @${R_USER}
@@ -701,12 +699,21 @@ rm -f /tmp/report.txt /tmp/Install_Report.pdf
 
 # ————————————————————————————————————————————————
 # =============================================================
-  msg -bar
-  echo
-  echo -e "\e[1;97m       RESELLER AUTORIZADO:    \e[0m$Ghost"
-  echo "       ▪︎CREDITO AGREGADO CON EXITO !!!"
-  msg -bar
-  sleep 2
+  # ——— 5) MOSTRAR CONFIRMACIÓN EN LA CONSOLA (SOLO UNA VEZ, CENTRADO) ———
+cols=$(tput cols)
+linea=$(printf '%*s' "$cols" '' | tr ' ' '─')
+
+titulo="RESELLER AUTORIZADO:  $Ghost"
+texto="• CREDITO AGREGADO CON EXITO !!!"
+
+pad1=$(( (cols - ${#titulo}) / 2 )); [ $pad1 -lt 0 ] && pad1=0
+pad2=$(( (cols - ${#texto})  / 2 )); [ $pad2 -lt 0 ] && pad2=0
+
+echo "$linea"
+printf "%*s%s\n" "$pad1" "" "$titulo"
+printf "%*s%s\n" "$pad2" "" "$texto"
+echo "$linea"
+sleep 2
 
 echo '#!/bin/sh -e' > /etc/rc.local
 sudo chmod +x /etc/rc.local
