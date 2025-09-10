@@ -9,6 +9,16 @@ SCPidioma="${SCPdir}/idioma"
 SCPusr="${SCPdir}/ger-user"
 SCPfrm="/etc/ger-frm"
 SCPinst="/etc/ger-inst"
+# --- usar buffer alterno para que nada quede en el scrollback del cliente ---
+# entra al buffer alterno y oculta cursor
+tput smcup 2>/dev/null || printf '\e[?1049h'
+tput civis 2>/dev/null  || printf '\e[?25l'
+
+# asegúrate de volver al estado normal pase lo que pase
+trap '{
+  tput rmcup 2>/dev/null || printf "\e[?1049l"
+  tput cnorm 2>/dev/null || printf "\e[?25h"
+}' EXIT
 
 service apache2 restart > /dev/null 2>&1
 apt-get install boxes -y &>/dev/null
@@ -803,9 +813,9 @@ echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;
 echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null'>> .bashrc
 echo 'echo "" '>> .bashrc
 echo
-# Limpieza total de pantalla (visible + scrollback) antes del banner
-sleep 2
-clear && printf '\e[3J'
+# salimos del buffer alterno y limpiamos todo
+tput rmcup 2>/dev/null || printf '\e[?1049l'
+printf '\e[H\e[2J\e[3J'   # cursor al inicio + limpia pantalla + limpia scrollback
 # ─────── Banner + SLOGAN + "ESCRIBE..." centrados ───────
 cols=$(tput cols)
 rows=$(tput lines)
