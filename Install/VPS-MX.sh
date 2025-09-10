@@ -803,7 +803,9 @@ echo 'echo -e "\033[0;36m  ✅PARA MOSTRAR EL PANEL DE CONTROL ESCRIBA:  \033[0;
 echo 'wget -O /etc/versin_script_new https://raw.githubusercontent.com/GM-VIP/SCRIPT/main/VerScrpt/VercUp &>/dev/null'>> .bashrc
 echo 'echo "" '>> .bashrc
 echo
-
+# Limpieza total de pantalla (visible + scrollback) antes del banner
+sleep 2
+clear && printf '\e[3J'
 # ─────── Banner + SLOGAN + "ESCRIBE..." centrados ───────
 cols=$(tput cols)
 rows=$(tput lines)
